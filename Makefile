@@ -6,9 +6,11 @@ SRC_PATH	= src
 INC_PATH	= include
 OBJ_PATH	= obj
 
-SRC		= main.cpp
+SRC		=	main.cpp \
+			Board.cpp
 
-HEAD	=
+HEAD	=	Board.hpp \
+			Define.hpp
 
 OBJ		= $(SRC:.cpp=.o)
 
@@ -37,7 +39,7 @@ $(NAME): $(OBJP)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(HEADP) $(OBJ_PATH)
 	@printf $(YELLOW)"-> $<\n"$(NORMAL)
-	@$(CPP) $(FLAGS) -c $< -o $@ -I includes/
+	@$(CPP) $(FLAGS) -c $< -o $@ -I $(INC_PATH)/
 
 $(OBJ_PATH):
 	@mkdir -p $(dir $(OBJP))

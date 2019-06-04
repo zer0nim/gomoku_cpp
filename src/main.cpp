@@ -1,7 +1,7 @@
 #include <iostream>
+#include "Board.hpp"
 
-int main(void)
-{
-	std::cout << "Hey !" << std::endl;
+int main(void) {
+	Board board;
 	return 0;
 }
