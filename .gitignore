@@ -5,6 +5,8 @@
 *.slo
 *.lo
 *.o
+*.swo
+*.swp
 *.obj
 
 # Precompiled Headers
@@ -30,3 +32,8 @@
 *.exe
 *.out
 *.app
+
+*.vscode
+.DS_Store
+*.vim
+gomoku
