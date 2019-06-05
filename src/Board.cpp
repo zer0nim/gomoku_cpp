@@ -2,51 +2,25 @@
 #include <iostream>
 
 Board::Board() {
-	std::cout << "content size: " << _content.size() << std::endl;
-	std::cout << "__SET_ST( 0 ) to 0:0=> stone: ";
-	SET_ST(_content, 1, 1, 0);
-	std::cout << GET_ST(_content, 1, 1) << std::endl;
-
-	std::cout << "__SET_ST( 1 ) to 0:0=> stone: ";
-	SET_ST(_content, 1, 1, 1);
-	std::cout << GET_ST(_content, 1, 1) << std::endl;
-
-	std::cout << "__SET_ST( 2 ) to 0:0=> stone: ";
-	SET_ST(_content, 1, 1, 2);
-	std::cout << GET_ST(_content, 1, 1) << std::endl;
-	std::cout << std::endl;
-
-
-	std::cout << "__SET_ST( 0 ) to 18:5=> stone: ";
-	SET_ST(_content, 18, 5, 0);
-	std::cout << GET_ST(_content, 18, 5) << std::endl;
-
-	std::cout << "__SET_ST( 1 ) to 18:5=> stone: ";
-	SET_ST(_content, 18, 5, 1);
-	std::cout << GET_ST(_content, 18, 5) << std::endl;
-
-	std::cout << "__SET_ST( 2 ) to 18:5=> stone: ";
-	SET_ST(_content, 18, 5, 2);
-	std::cout << GET_ST(_content, 18, 5) << std::endl;
-	std::cout << std::endl;
-
-
-	std::cout << "test vulnerability__________________________" << std::endl;
-	std::cout << std::endl;
-
-
-	std::cout << "__SET_VUL( 0 ) to 18:5=> vuln: ";
-	SET_VUL(_content, 18, 5, 0);
-	std::cout << GET_VUL(_content, 18, 5) << ", stone: " << GET_ST(_content, 18, 5) << std::endl;
-
-	std::cout << "__SET_VUL( 1 ) to 18:5=> vuln: ";
-	SET_VUL(_content, 18, 5, 1);
-	std::cout << GET_VUL(_content, 18, 5) << ", stone: " << GET_ST(_content, 18, 5) << std::endl;
-
-	std::cout << "__SET_VUL( 0 ) to 18:5=> vuln: ";
-	SET_VUL(_content, 18, 5, 0);
-	std::cout << GET_VUL(_content, 18, 5) << ", stone: " << GET_ST(_content, 18, 5) << std::endl;
 }
 
 Board::~Board() {
+}
+
+std::ostream & operator << (std::ostream &out, const Board &c) {
+	out << "work in progress: " << c.get(0, 0);
+	return out;
+}
+
+int Board::get(int x, int y) const {
+	return GET_ST(_content, x, y);
+}
+void Board::set(int x, int y, int stone) {
+	SET_ST(_content, x, y, stone);
+}
+bool Board::isEmpty(int x, int y) const {
+	return GET_ST(_content, x, y) == 0;
+}
+bool Board::isStone(int x, int y, int stone) const {
+	return static_cast<int>(GET_ST(_content, x, y)) == stone;
 }
