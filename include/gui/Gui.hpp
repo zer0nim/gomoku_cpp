@@ -36,6 +36,8 @@ class Gui {
 		sf::Color getColor(int stone);  // get color corresponding to the player
 		sf::Color getRevColor(int stone);  // get the reverse color corresponding to the player
 		sf::RenderWindow *win;
+
+		bool _clicked;
 };
 
 #endif

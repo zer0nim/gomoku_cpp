@@ -20,8 +20,14 @@ void Gui::event() {
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		std::cout << "clicked" << std::endl;
+		if (!_clicked){
+			sf::Vector2i localPosition = sf::Mouse::getPosition(*win);
+			std::cout << localPosition.x << " " << localPosition.y << std::endl;
+		}
+		_clicked = true;
 	}
+	else
+		_clicked = false;
 }
 
 void Gui::draw() {
