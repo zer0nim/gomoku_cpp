@@ -7,10 +7,14 @@ INC_PATH	= include
 OBJ_PATH	= obj
 
 SRC		=	main.cpp \
-			Board.cpp
+			Board.cpp \
+			gui/Gui.cpp
 
 HEAD	=	Board.hpp \
-			Define.hpp
+			Define.hpp \
+			gui/Gui.hpp
+
+LIBS_FLAGS = -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network
 
 OBJ		= $(SRC:.cpp=.o)
 
@@ -35,7 +39,7 @@ all: $(OBJ_PATH) $(NAME)
 
 $(NAME): $(OBJP)
 	@printf $(CYAN)"-> create program : $(NAME)\n"$(NORMAL)
-	@$(CPP) $(FLAGS) -o $(NAME) $(OBJP)
+	@$(CPP) $(FLAGS) -o $(NAME) $(OBJP) $(LIBS_FLAGS)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(HEADP) $(OBJ_PATH)
 	@printf $(YELLOW)"-> $<\n"$(NORMAL)
@@ -51,5 +55,8 @@ fclean: clean
 	@rm -f $(NAME)
 
 re: fclean all
+
+exec: all
+	@./$(NAME)
 
 .PHONY: all re clean fclean
