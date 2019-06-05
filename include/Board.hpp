@@ -4,6 +4,7 @@
 # include "Define.hpp"
 # include <array>
 # include <iostream>
+# include <exception>
 
 # define GET_ST(boardC, x, y) ((boardC[y] & (3ull << (x*3))) >> (x*3))
 # define SET_ST(boardC, x, y, val) (boardC[y] = (boardC[y] & (((1ull << (BOARD_SZ*3))-1) ^ (3ull << (x*3)))) | (static_cast<uint64_t>(val) << (x*3)))
@@ -17,12 +18,23 @@ class Board {
 		Board();
 		virtual	~Board();
 
-		int get(int x, int y) const;
-		void set(int x, int y, int stone);
-		bool isEmpty(int x, int y) const;
-		bool isStone(int x, int y, int stone) const;
+		int		get(int x, int y) const;
+		void	set(int x, int y, int stone);
+		bool	isEmpty(int x, int y) const;
+		bool	isStone(int x, int y, int stone) const;
+
+		void	putStone(int x, int y, int stone);
+		void	check_destroyable(int x, int y, int stone);
+
+		class OutOfRangeException: public std::exception {
+			public:
+				virtual const char* what() const throw() {
+					return "Error: x:y is out of the board range";
+				}
+		};
 	private:
-		std::array<uint64_t, BOARD_SZ> _content = {};
+		std::array<uint64_t, BOARD_SZ>	_content = {};
+		int								_remain_places;
 };
 
 std::ostream & operator << (std::ostream &out, const Board &c);
