@@ -2,10 +2,12 @@
 #define GUI_HPP
 
 #include "Define.hpp"
-#include "Board.hpp"
 #include <iostream>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+
+#define GUI_RATE 10
+#define GUI_TIME_LOOP 1000 / GUI_RATE
 
 #define GUI_WIN_W 800
 #define GUI_WIN_H (int)GUI_WIN_W * 0.7
@@ -17,16 +19,20 @@
 #define GUI_COLOR_2   0xFFFFFFFF
 #define GUI_COLOR_WIN 0x00FF00FF
 
+class Game;
+
 class Gui {
 	public:
-		Gui(MasterBoard *_board);
+		Gui(Game *_game);
 		void init();  // init the gui -> called by Gui
 		void run();  // run the Gui: handle events, draw, ...
 		virtual ~Gui();
+		void quit();
 	protected:
-		MasterBoard *board;
 		void event();  // handle events -> called by run
 		void draw();  // draw the board -> called by run
+
+		Game *game;
 		sf::Color getColor(int stone);  // get color corresponding to the player
 		sf::Color getRevColor(int stone);  // get the reverse color corresponding to the player
 		sf::RenderWindow *win;

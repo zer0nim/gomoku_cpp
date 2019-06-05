@@ -1,7 +1,8 @@
 #include "gui/Gui.hpp"
+#include "Game.hpp"
 
-Gui::Gui(MasterBoard *_board) {
-	board = _board;
+Gui::Gui(Game *_game) {
+	game = _game;
 	Gui::init();
 }
 
@@ -15,7 +16,11 @@ void Gui::event() {
 	sf::Event event;
 	while (win->pollEvent(event)) {
 		if (event.type == sf::Event::Closed)
-			win->close();
+			quit();
+	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		std::cout << "clicked" << std::endl;
 	}
 }
 
@@ -28,7 +33,7 @@ void Gui::draw() {
 	bg.setPosition(GUI_BOARD_START_X, 0);
 	win->draw(bg);
 
-	// draw all the boards lines
+	// draw all the _boards lines
 	float step = GUI_BOARD_SZ / BOARD_SZ;
 	sf::RectangleShape line(sf::Vector2f(GUI_BOARD_SZ - step + step / 10, step / 10));
 	line.setFillColor(sf::Color(0, 0, 0));
@@ -57,15 +62,15 @@ void Gui::draw() {
 	stone.setOutlineThickness(step/12);
 	for (int x=0; x < BOARD_SZ; x++) {
 		for (int y=0; y < BOARD_SZ; y++) {
-			if (!board->isEmpty(x, y)) {
+			if (!game->board->isEmpty(x, y)) {
 				float xwin = GUI_BOARD_START_X + step*0.5 - step/3 + step * x;
 				float ywin = step*0.5 - step/3 + step * y;
-				stone.setFillColor(getColor(board->get(x, y)));
+				stone.setFillColor(getColor(game->board->get(x, y)));
 				// set outline color
-				if (board->getIsWin(x, y))
+				if (game->board->getIsWin(x, y))
 					stone.setOutlineColor(sf::Color(GUI_COLOR_WIN));
 				else
-					stone.setOutlineColor(getRevColor(board->get(x, y)));
+					stone.setOutlineColor(getRevColor(game->board->get(x, y)));
 				stone.setPosition(xwin, ywin);
 				win->draw(stone);
 			}
@@ -91,11 +96,22 @@ sf::Color Gui::getRevColor(int stone) {
 }
 
 void Gui::run() {
+	sf::Clock clock;
 	while (win->isOpen()) {
 		Gui::event();
 		Gui::draw();
+
+		// wait to have a clean rate in the loop
+		sf::Time elapsed = clock.restart();
+		sf::Time slp = sf::milliseconds(GUI_TIME_LOOP) - elapsed;
+		sf::sleep(slp);
 	}
 }
 
 Gui::~Gui() {
+}
+
+void Gui::quit() {
+	game->quit();
+	win->close();
 }

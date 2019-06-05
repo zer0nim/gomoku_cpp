@@ -7,12 +7,18 @@ INC_PATH	= include
 OBJ_PATH	= obj
 
 SRC		=	main.cpp \
+			Game.cpp \
 			Board.cpp \
-			gui/Gui.cpp
+			gui/Gui.cpp \
+			players/Player.cpp \
+			players/RealPlayer.cpp
 
-HEAD	=	Board.hpp \
+HEAD	=	Game.hpp \
+			Board.hpp \
 			Define.hpp \
-			gui/Gui.hpp
+			gui/Gui.hpp \
+			players/Player.hpp \
+			players/RealPlayer.hpp
 
 LIBS_FLAGS = -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network
 
@@ -43,7 +49,7 @@ $(NAME): $(OBJP)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(HEADP) $(OBJ_PATH)
 	@printf $(YELLOW)"-> $<\n"$(NORMAL)
-	@$(CPP) $(FLAGS) -c $< -o $@ -I $(INC_PATH)/
+	@$(CPP) $(FLAGS) -c $< -o $@ $(INCP)
 
 $(OBJ_PATH):
 	@mkdir -p $(dir $(OBJP))
