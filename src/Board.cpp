@@ -21,6 +21,7 @@ bool Board::isStone(int x, int y, int stone) const {
 	return static_cast<int>(GET_ST(_content, x, y)) == stone;
 }
 
+<<<<<<< HEAD
 // print the board (with colors)
 std::ostream & operator << (std::ostream &out, const Board &c) {
 	std::array<std::string, 2> color;
@@ -47,4 +48,19 @@ std::ostream & operator << (std::ostream &out, const Board &c) {
 	out << '*' << std::endl;
 
 	return out;
+=======
+MasterBoard::MasterBoard() : Board() {
+	for (int x=0; x < BOARD_SZ; x++) {
+		for (int y=0; y < BOARD_SZ; y++) {
+			setIsWin(x, y, false);
+		}
+	}
+}
+
+void MasterBoard::setIsWin(int x, int y, bool val) {
+	_isWin[y][x] = val;
+}
+bool MasterBoard::getIsWin(int x, int y) {
+	return _isWin[y][x];
+>>>>>>> create MasterBoard
 }

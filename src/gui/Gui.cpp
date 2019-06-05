@@ -1,6 +1,6 @@
 #include "gui/Gui.hpp"
 
-Gui::Gui(Board *_board) {
+Gui::Gui(MasterBoard *_board) {
 	board = _board;
 	Gui::init();
 }
@@ -20,17 +20,13 @@ void Gui::event() {
 }
 
 void Gui::draw() {
-	sf::RenderTexture renderTexture;
-
-	if (!renderTexture.create(GUI_WIN_W, GUI_WIN_H))
-		exit(EXIT_FAILURE);
-	renderTexture.clear();
+	win->clear();
 
 	// draw background
 	sf::RectangleShape bg(sf::Vector2f(GUI_BOARD_SZ, GUI_BOARD_SZ));
 	bg.setFillColor(sf::Color(246, 170, 73));
 	bg.setPosition(GUI_BOARD_START_X, 0);
-	renderTexture.draw(bg);
+	win->draw(bg);
 
 	// draw all the boards lines
 	float step = GUI_BOARD_SZ / BOARD_SZ;
@@ -38,12 +34,12 @@ void Gui::draw() {
 	line.setFillColor(sf::Color(0, 0, 0));
 	for (int y=0; y < BOARD_SZ; y++) {
 		line.setPosition(GUI_BOARD_START_X + (step*0.5) - step / 10, (step*0.5) + y*step);
-		renderTexture.draw(line);
+		win->draw(line);
 	}
 	line.rotate(90);
 	for (int x=0; x < BOARD_SZ; x++) {
 		line.setPosition(GUI_BOARD_START_X + (step*0.5) + x*step, step / 2);
-		renderTexture.draw(line);
+		win->draw(line);
 	}
 	sf::CircleShape point(step/5);
 	point.setFillColor(sf::Color(0, 0, 0));
@@ -52,28 +48,29 @@ void Gui::draw() {
 			float xwin = GUI_BOARD_START_X + step*0.5 - step/5 + step * x;
 			float ywin = step*0.5 - step/7.5 + step * y;
 			point.setPosition(xwin, ywin);
-			renderTexture.draw(point);
+			win->draw(point);
 		}
 	}
 
 	// draw stones
 	sf::CircleShape stone(step/3);
+	stone.setOutlineThickness(step/12);
 	for (int x=0; x < BOARD_SZ; x++) {
 		for (int y=0; y < BOARD_SZ; y++) {
-			if (1) {
+			if (!board->isEmpty(x, y)) {
 				float xwin = GUI_BOARD_START_X + step*0.5 - step/3 + step * x;
 				float ywin = step*0.5 - step/3 + step * y;
-				stone.setFillColor(getColor(1));
+				stone.setFillColor(getColor(board->get(x, y)));
+				// set outline color
+				if (board->getIsWin(x, y))
+					stone.setOutlineColor(sf::Color(GUI_COLOR_WIN));
+				else
+					stone.setOutlineColor(getRevColor(board->get(x, y)));
 				stone.setPosition(xwin, ywin);
-				renderTexture.draw(stone);
+				win->draw(stone);
 			}
 		}
 	}
-
-	renderTexture.display();
-	const sf::Texture& texture = renderTexture.getTexture();
-	sf::Sprite sprite(texture);
-	win->draw(sprite);
 	win->display();
 }
 
@@ -82,6 +79,7 @@ sf::Color Gui::getColor(int stone) {
 		return sf::Color(GUI_COLOR_1);
 	else if (stone == 2)
 		return sf::Color(GUI_COLOR_2);
+	return sf::Color::Red;
 }
 
 sf::Color Gui::getRevColor(int stone) {
@@ -89,6 +87,7 @@ sf::Color Gui::getRevColor(int stone) {
 		return sf::Color(GUI_COLOR_2);
 	else if (stone == 2)
 		return sf::Color(GUI_COLOR_1);
+	return sf::Color::Red;
 }
 
 void Gui::run() {

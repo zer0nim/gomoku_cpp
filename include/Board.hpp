@@ -25,6 +25,17 @@ class Board {
 		std::array<uint64_t, BOARD_SZ> _content = {};
 };
 
+class MasterBoard : public Board {
+	public:
+		MasterBoard();
+		// setter
+		void setIsWin(int x, int y, bool val);
+		// getter
+		bool getIsWin(int x, int y);
+	private:
+		bool _isWin[BOARD_SZ][BOARD_SZ];
+};
+
 std::ostream & operator << (std::ostream &out, const Board &c);
 
 #endif

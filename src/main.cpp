@@ -3,7 +3,6 @@
 #include "gui/Gui.hpp"
 
 int main(void) {
-	Board board;
 
 	gui.run();
 	return 0;
