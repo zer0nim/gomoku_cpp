@@ -1,16 +1,26 @@
 NAME	= gomoku
 CPP		= clang++
-FLAGS	= -Wall -Wextra -Werror
+FLAGS	= -Wall -Wextra -std=c++11 # -Werror
 
 SRC_PATH	= src
 INC_PATH	= include
 OBJ_PATH	= obj
 
 SRC		=	main.cpp \
-			Board.cpp
+			Game.cpp \
+			Board.cpp \
+			gui/Gui.cpp \
+			players/Player.cpp \
+			players/RealPlayer.cpp
 
-HEAD	=	Board.hpp \
-			Define.hpp
+HEAD	=	Game.hpp \
+			Board.hpp \
+			Define.hpp \
+			gui/Gui.hpp \
+			players/Player.hpp \
+			players/RealPlayer.hpp
+
+LIBS_FLAGS = -L ~/.brew/lib -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network -rpath ~/.brew/lib
 
 OBJ		= $(SRC:.cpp=.o)
 
@@ -35,11 +45,11 @@ all: $(OBJ_PATH) $(NAME)
 
 $(NAME): $(OBJP)
 	@printf $(CYAN)"-> create program : $(NAME)\n"$(NORMAL)
-	@$(CPP) $(FLAGS) -o $(NAME) $(OBJP)
+	@$(CPP) $(FLAGS) -o $(NAME) $(OBJP) $(LIBS_FLAGS)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(HEADP) $(OBJ_PATH)
 	@printf $(YELLOW)"-> $<\n"$(NORMAL)
-	@$(CPP) $(FLAGS) -c $< -o $@ -I $(INC_PATH)/
+	@$(CPP) $(FLAGS) -c $< -o $@ $(INCP) -I ~/.brew/Cellar/sfml/2.5.1/include/
 
 $(OBJ_PATH):
 	@mkdir -p $(dir $(OBJP))
@@ -51,5 +61,8 @@ fclean: clean
 	@rm -f $(NAME)
 
 re: fclean all
+
+exec: all
+	@./$(NAME)
 
 .PHONY: all re clean fclean
