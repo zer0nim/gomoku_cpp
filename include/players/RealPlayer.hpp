@@ -4,9 +4,11 @@
 #include "players/Player.hpp"
 #include <iostream>
 
+class Game;
+
 class RealPlayer : public Player {
 	public:
-		RealPlayer();
+		RealPlayer(Game *_game);
 		~RealPlayer();
 		void move();
 };

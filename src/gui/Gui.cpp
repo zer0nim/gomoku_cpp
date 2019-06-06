@@ -22,7 +22,12 @@ void Gui::event() {
 	{
 		if (!_clicked){
 			sf::Vector2i localPosition = sf::Mouse::getPosition(*win);
-			std::cout << localPosition.x << " " << localPosition.y << std::endl;
+			if (localPosition.x > GUI_BOARD_START_X && localPosition.x < GUI_BOARD_START_X + GUI_BOARD_SZ &&
+			localPosition.y > 0 && localPosition.y < GUI_BOARD_SZ) {
+				int realX = (int)(((float)localPosition.x - GUI_BOARD_START_X) / GUI_BOARD_SZ * BOARD_SZ);
+				int realY = (int)((float)localPosition.y / GUI_BOARD_SZ * BOARD_SZ);
+				game->getPlayerAct()->click(realX, realY);
+			}
 		}
 		_clicked = true;
 	}
@@ -41,7 +46,7 @@ void Gui::draw() {
 
 	// draw all the _boards lines
 	float step = GUI_BOARD_SZ / BOARD_SZ;
-	sf::RectangleShape line(sf::Vector2f(GUI_BOARD_SZ - step + step / 10, step / 10));
+	sf::RectangleShape line(sf::Vector2f(GUI_BOARD_SZ - step, step / 10));
 	line.setFillColor(sf::Color(0, 0, 0));
 	for (int y=0; y < BOARD_SZ; y++) {
 		line.setPosition(GUI_BOARD_START_X + (step*0.5) - step / 10, (step*0.5) + y*step);

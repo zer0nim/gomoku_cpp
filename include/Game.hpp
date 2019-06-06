@@ -12,15 +12,16 @@ class Game {
 		Player *getPlayer(int id);
 		Player *getPlayerAct();
 		int getPlayerActId();
+		void nextPlayer();
 		void run();
 		void quit();
 
 		MasterBoard *board;
 		Gui *gui;
+		bool isQuit;
 	private:
 		Player *players[2];
 		int _idPlayerAct;  // 1 or 2 -> players[idPlayerAct-1]
-		bool _isQuit;
 };
 
 #endif
