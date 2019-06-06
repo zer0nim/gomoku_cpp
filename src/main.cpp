@@ -1,14 +1,24 @@
 #include <iostream>
-#include "Board.hpp"
+#include <pthread.h>
+#include "Game.hpp"
+
+void *runThread(void *gameV) {
+	Game	*game = reinterpret_cast<Game *>(gameV);
+
+	game->run();
+	pthread_exit(NULL);
+}
 
 int main(void) {
-	Board board;
+	Game game;
 
-	std::cout << std::endl;
-	board.set(10, 10, 2);
-	board.set(0, 0, 1);
+	pthread_t threadT;
+	if (pthread_create(&threadT, NULL, runThread, reinterpret_cast<void*>(&game))) {
+		std::cerr << "Fail to create thread for game" << std::endl;
+		return 1;
+	}
 
-	std::cout << board << std::endl;
-
+	game.gui->run();
+	pthread_cancel(threadT);
 	return 0;
 }
