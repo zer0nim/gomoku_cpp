@@ -70,7 +70,7 @@ return the list of destroyable stones [[x1, y1], [x2, y2], ...]
 	return ret;
 }
 
-int Board::putStone(int x, int y, int stone) {
+int Board::putStone(int x, int y, int stone, bool test) {
 /*
 put a stone at 'x' 'y' with id 'stone'
 this function put a stone and, if needed, destroy some stones
@@ -79,19 +79,21 @@ this function put a stone and, if needed, destroy some stones
 		throw OutOfRangeException();
 
 	SET_ST(_content, x, y, stone);
-	--_remain_places;
+	if (!test)
+		--_remain_places;
 
 	// destroy some stones if needed
 	std::vector< std::array<int, 2> > destroyed = check_destroyable(x, y, stone);
-
 	for (std::array<int, 2> dest : destroyed) {
 		SET_ST(_content, dest[0], dest[1], 0);
 		++_remain_places;
-		_game.getPlayer(stone).incrNbDestroyedStones();
+		if (!test)
+			_game.getPlayer(stone).incrNbDestroyedStones();
 	}
 
-	// check if there is a winner
-	// check_winner()
+	// ????
+	// if (!test)
+	// 	check_winner();
 
 	return destroyed.size();
 }

@@ -14,7 +14,7 @@ void RealPlayer::move() {
 		if (clickedPos[0] >= 0 && clickedPos[1] >= 0) {
 			int x = clickedPos[0];
 			int y = clickedPos[1];
-			_game.board->set(x, y, _game.getPlayerActId());
+			_game.board->putStone(x, y, _game.getPlayerActId());
 			break ;
 		}
 	}
