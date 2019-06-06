@@ -70,7 +70,97 @@ return the list of destroyable stones [[x1, y1], [x2, y2], ...]
 	return ret;
 }
 
-int Board::putStone(int x, int y, int stone, bool test) {
+bool	Board::isFreeThreeDir(int x, int y, int stone, int addx, int addy) {
+/*
+check if there is a free three from 'x' 'y' in direction given by 'addx' and 'addy'
+return 1 if it's a free-three
+else return 0
+*/
+	// list of all free-three configurations
+	// 0 == every stone is OK
+	// 1 == only empty stones
+	// 2 == only actual stone
+	// the 5th element is the 'x' 'y' element
+	std::array<std::array<int, 9>, 9> free_three = {{
+		{{ 0, 0, 1, 2, 2, 2, 1, 0, 0 }},
+		{{ 0, 0, 0, 1, 2, 2, 2, 1, 0 }},
+		{{ 0, 1, 2, 2, 2, 1, 0, 0, 0 }},
+		{{ 0, 0, 0, 1, 2, 2, 1, 2, 1 }},
+		{{ 1, 2, 1, 2, 2, 1, 0, 0, 0 }},
+		{{ 0, 0, 0, 1, 2, 1, 2, 2, 1 }},
+		{{ 0, 2, 2, 1, 2, 1, 0, 0, 0 }},
+		{{ 0, 0, 1, 2, 2, 1, 2, 1, 0 }},
+		{{ 0, 1, 2, 1, 2, 2, 1, 0, 0 }},
+	}};
+	int lenFT = 9;
+
+	// get a list to compare with the free-three list
+	std::vector<int> lst(lenFT, -2);
+	int i = 0;
+	int new_x = x - (addx * (lenFT >> 1));
+	int new_y = y - (addy * (lenFT >> 1));
+
+	for (int i = 0; i < lenFT; ++i) {
+		if (new_x > 0 && new_x < BOARD_SZ && new_y > 0 && new_y < BOARD_SZ)
+			lst[i] = GET_ST(_content, new_x, new_y);
+		new_x += addx;
+		new_y += addy;
+	}
+
+	lst[lenFT >> 1] = stone;
+	int	is_free_three = true;
+	for (std::array<int, 9> free_elem : free_three) {
+		is_free_three = true;
+		for (int i = 0; i < lenFT; ++i) {
+			if (free_elem[i] == 0)  // no matter
+				continue;
+			else if (free_elem[i] == 1) {  // only empty
+				if (lst[i] != 0) {
+					is_free_three = false;
+					break;
+				}
+			}
+			else if (free_elem[i] == 2) {  // only player stone
+				if (lst[i] != stone) {
+					is_free_three = false;
+					break;
+				}
+			}
+		}
+		if (is_free_three)
+			return true;
+	}
+	return false;
+}
+
+bool	Board::isAllowed(int x, int y, int stone) {
+/*
+if we want to put a stone at 'x' 'y',
+this function check if it's allowed (empty place, no free-threes, ...)
+*/
+	if (GET_ST(_content, x, y) != 0)
+		return false;
+
+	// check double three
+	// if the stone destroy others stones -> no double three effect
+	if (check_destroyable(x, y, stone).size() > 0)
+		return true;
+
+	int nbFreeThree = isFreeThreeDir(x, y, stone, 1, 0) ? 1 : 0;
+	nbFreeThree += isFreeThreeDir(x, y, stone, 0, 1) ? 1 : 0;
+	nbFreeThree += isFreeThreeDir(x, y, stone, 1, 1) ? 1 : 0;
+	nbFreeThree += isFreeThreeDir(x, y, stone, -1, 1) ? 1 : 0;
+
+	if (nbFreeThree >= 2) {
+		SET_ST(_content, x, y, stone);
+		bool check_aligned = check_aligned(x, y, true); // if true => double three
+		SET_ST(_content, x, y, 0);
+		return check_aligned;
+	}
+	return true;
+}
+
+int		Board::putStone(int x, int y, int stone, bool test) {
 /*
 put a stone at 'x' 'y' with id 'stone'
 this function put a stone and, if needed, destroy some stones

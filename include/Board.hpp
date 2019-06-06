@@ -26,6 +26,8 @@ class Board {
 		bool	isLastStone(int x, int y);
 
 		int		putStone(int x, int y, int stone, bool test = false);
+		bool	isFreeThreeDir(int x, int y, int stone, int addx, int addy);
+		bool	isAllowed(int x, int y, int stone);
 		std::vector< std::array<int, 2> >	check_destroyable(int x, int y, int stone);
 
 		class OutOfRangeException: public std::exception {
