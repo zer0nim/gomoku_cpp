@@ -33,14 +33,14 @@ return the list of destroyable stones [[x1, y1], [x2, y2], ...]
 	// this tab contains all configuration to destroy stones
 	// x1, y1, x2, y2, x3, y3
 	std::array<std::array<int, 6>, 8> destroy_conf = {{
-		{x, y-1, x, y-2, x, y-3},
-		{x, y+1, x, y+2, x, y+3},
-		{x-1, y, x-2, y, x-3, y},
-		{x+1, y, x+2, y, x+3, y},
-		{x+1, y+1, x+2, y+2, x+3, y+3},
-		{x+1, y-1, x+2, y-2, x+3, y-3},
-		{x-1, y+1, x-2, y+2, x-3, y+3},
-		{x-1, y-1, x-2, y-2, x-3, y-3}
+		{{ x, y-1, x, y-2, x, y-3 }},
+		{{ x, y+1, x, y+2, x, y+3 }},
+		{{ x-1, y, x-2, y, x-3, y }},
+		{{ x+1, y, x+2, y, x+3, y }},
+		{{ x+1, y+1, x+2, y+2, x+3, y+3 }},
+		{{ x+1, y-1, x+2, y-2, x+3, y-3 }},
+		{{ x-1, y+1, x-2, y+2, x-3, y+3 }},
+		{{ x-1, y-1, x-2, y-2, x-3, y-3 }}
 	}};
 
 	// this is the condition to know if we can destroy some stones
