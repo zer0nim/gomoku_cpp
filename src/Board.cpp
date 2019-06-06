@@ -30,6 +30,8 @@ bool Board::isLastStone(int x, int y) {
 
 // print the board (with colors)
 std::ostream & operator << (std::ostream &out, const Board &c) {
+	(void)c;
+	return out;
 	// std::array<std::string, 2> color;
 
 	// out << '*';
