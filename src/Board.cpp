@@ -98,32 +98,30 @@ this function put a stone and, if needed, destroy some stones
 
 // print the board (with colors)
 std::ostream & operator << (std::ostream &out, const Board &c) {
-	(void)c;
+	std::array<std::string, 2> color;
+
+	out << '*';
+	for (int i = 0; i < BOARD_SZ; ++i)
+		out << "---";
+	out << '*' << std::endl;
+	for (int y = 0; y < BOARD_SZ; ++y) {
+		out << '|';
+		for (int x = 0; x < BOARD_SZ; ++x) {
+			color = {{ C_EOC, C_EOC }};
+			if (c.get(x, y) == 1)
+				color = {{ C_WHITE, C_F_WHITE }};
+			else if (c.get(x, y) == 2)
+				color = {{ C_RED, C_F_RED }};
+			out << color[0] + color[1] + " . " + C_EOC;
+		}
+		out << "|" << std::endl;
+	}
+	out << '*';
+	for (int i = 0; i < BOARD_SZ; ++i)
+		out << "---";
+	out << '*' << std::endl;
+
 	return out;
-	// std::array<std::string, 2> color;
-
-	// out << '*';
-	// for (int i = 0; i < BOARD_SZ; ++i)
-	// 	out << "---";
-	// out << '*' << std::endl;
-	// for (int y = 0; y < BOARD_SZ; ++y) {
-	// 	out << '|';
-	// 	for (int x = 0; x < BOARD_SZ; ++x) {
-	// 		color = {C_EOC, C_EOC};
-	// 		if (c.get(x, y) == 1)
-	// 			color = {C_WHITE, C_F_WHITE};
-	// 		else if (c.get(x, y) == 2)
-	// 			color = {C_RED, C_F_RED};
-	// 		out << color[0] + color[1] + " . " + C_EOC;
-	// 	}
-	// 	out << "|" << std::endl;
-	// }
-	// out << '*';
-	// for (int i = 0; i < BOARD_SZ; ++i)
-	// 	out << "---";
-	// out << '*' << std::endl;
-
-	// return out;
 }
 
 MasterBoard::MasterBoard(Game &game) : Board(game) {
