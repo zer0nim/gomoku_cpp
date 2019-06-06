@@ -20,7 +20,7 @@ HEAD	=	Game.hpp \
 			players/Player.hpp \
 			players/RealPlayer.hpp
 
-LIBS_FLAGS = -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network
+LIBS_FLAGS = -L ~/.brew/lib -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network -rpath ~/.brew/lib
 
 OBJ		= $(SRC:.cpp=.o)
 
@@ -49,7 +49,7 @@ $(NAME): $(OBJP)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(HEADP) $(OBJ_PATH)
 	@printf $(YELLOW)"-> $<\n"$(NORMAL)
-	@$(CPP) $(FLAGS) -c $< -o $@ $(INCP)
+	@$(CPP) $(FLAGS) -c $< -o $@ $(INCP) -I ~/.brew/Cellar/sfml/2.5.1/include/
 
 $(OBJ_PATH):
 	@mkdir -p $(dir $(OBJP))
