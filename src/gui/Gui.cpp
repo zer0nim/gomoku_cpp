@@ -1,8 +1,7 @@
 #include "gui/Gui.hpp"
 #include "Game.hpp"
 
-Gui::Gui(Game *_game) {
-	game = _game;
+Gui::Gui(Game &_game) : game(_game) {
 	Gui::init();
 }
 
@@ -26,7 +25,7 @@ void Gui::event() {
 			localPosition.y > 0 && localPosition.y < GUI_BOARD_SZ) {
 				int realX = (int)(((float)localPosition.x - GUI_BOARD_START_X) / GUI_BOARD_SZ * BOARD_SZ);
 				int realY = (int)((float)localPosition.y / GUI_BOARD_SZ * BOARD_SZ);
-				game->getPlayerAct().click(realX, realY);
+				game.getPlayerAct().click(realX, realY);
 			}
 		}
 		_clicked = true;
@@ -74,24 +73,24 @@ void Gui::draw() {
 	stone.setOutlineThickness(step/12);
 	for (int x=0; x < BOARD_SZ; x++) {
 		for (int y=0; y < BOARD_SZ; y++) {
-			if (!game->board->isEmpty(x, y)) {
+			if (!game.getBoard().isEmpty(x, y)) {
 				float xwin = GUI_BOARD_START_X + step*0.5 - step/3 + step * x;
 				float ywin = step*0.5 - step/3 + step * y;
-				stone.setFillColor(getColor(game->board->get(x, y)));
+				stone.setFillColor(getColor(game.getBoard().get(x, y)));
 				// set outline color
-				if (game->board->getIsWin(x, y))
+				if (game.getBoard().getIsWin(x, y))
 					stone.setOutlineColor(sf::Color(GUI_COLOR_WIN));
-				else if (game->board->isLastStone(x, y))
+				else if (game.getBoard().isLastStone(x, y))
 					stone.setOutlineColor(sf::Color(GUI_COLOR_LAST_STONE));
 				else
-					stone.setOutlineColor(getRevColor(game->board->get(x, y)));
+					stone.setOutlineColor(getRevColor(game.getBoard().get(x, y)));
 				stone.setPosition(xwin, ywin);
 				win->draw(stone);
 			}
-			if (game->board->getMarkerColor(x, y) != -1) {
+			if (game.getBoard().getMarkerColor(x, y) != -1) {
 				float xwin = GUI_BOARD_START_X + step*0.5 - step/6 + step * x;
 				float ywin = step*0.5 - step/6 + step * y;
-				marker.setFillColor(sf::Color(game->board->getMarkerColor(x, y)));
+				marker.setFillColor(sf::Color(game.getBoard().getMarkerColor(x, y)));
 				marker.setPosition(xwin, ywin);
 				win->draw(marker);
 			}
@@ -100,7 +99,7 @@ void Gui::draw() {
 	win->display();
 }
 
-sf::Color Gui::getColor(int stone) {
+sf::Color Gui::getColor(int stone) const {
 	if (stone == 1)
 		return sf::Color(GUI_COLOR_1);
 	else if (stone == 2)
@@ -108,7 +107,7 @@ sf::Color Gui::getColor(int stone) {
 	return sf::Color::Red;
 }
 
-sf::Color Gui::getRevColor(int stone) {
+sf::Color Gui::getRevColor(int stone) const {
 	if (stone == 1)
 		return sf::Color(GUI_COLOR_2);
 	else if (stone == 2)
@@ -133,6 +132,6 @@ Gui::~Gui() {
 }
 
 void Gui::quit() {
-	game->quit();
+	game.quit();
 	win->close();
 }

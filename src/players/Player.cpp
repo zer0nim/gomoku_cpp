@@ -1,8 +1,9 @@
 #include "players/Player.hpp"
 #include "Game.hpp"
 
-Player::Player(Game &game)
-: _game(game), _nbDestroyedStones(0) {
+Player::Player(Game &_game) :
+	game(_game),
+	_nbDestroyedStones(0) {
 }
 
 Player::~Player() {
