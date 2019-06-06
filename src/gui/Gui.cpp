@@ -9,6 +9,8 @@ void Gui::init() {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
 	win = new sf::RenderWindow(sf::VideoMode(GUI_WIN_W, GUI_WIN_H), "Gomoku", sf::Style::Default, settings);
+	if (!font.loadFromFile(GUI_DEFAULT_FONT))
+		exit(EXIT_FAILURE);
 }
 
 void Gui::event() {
@@ -70,7 +72,14 @@ void Gui::draw() {
 	// draw stones
 	sf::CircleShape stone(step/3);
 	sf::CircleShape marker(step/6);
-	stone.setOutlineThickness(step/12);
+	sf::Text text;
+	sf::Text text2;
+	text.setFont(font);
+	text.setCharacterSize(step*0.8);
+	text2.setFont(font);
+	text2.setCharacterSize(step*0.8);
+	text2.setStyle(sf::Text::Bold);
+	stone.setOutlineThickness(step/14);
 	for (int x=0; x < BOARD_SZ; x++) {
 		for (int y=0; y < BOARD_SZ; y++) {
 			if (!game.getBoard().isEmpty(x, y)) {
@@ -94,25 +103,37 @@ void Gui::draw() {
 				marker.setPosition(xwin, ywin);
 				win->draw(marker);
 			}
+			if (game.getBoard().getMarkerTxt(x, y).txt != "") {
+				float xwin = GUI_BOARD_START_X + step * x + step*0.2;
+				float ywin = step * y;
+				text2.setFillColor(sf::Color(getComplementaryColor(game.getBoard().getMarkerTxt(x, y).color)));
+				text2.setString(game.getBoard().getMarkerTxt(x, y).txt);
+				text2.setPosition(xwin, ywin);
+				text.setFillColor(sf::Color(game.getBoard().getMarkerTxt(x, y).color));
+				text.setString(game.getBoard().getMarkerTxt(x, y).txt);
+				text.setPosition(xwin, ywin);
+				win->draw(text2);
+				win->draw(text);
+			}
 		}
 	}
 	win->display();
 }
 
 sf::Color Gui::getColor(int stone) const {
-	if (stone == 1)
-		return sf::Color(GUI_COLOR_1);
-	else if (stone == 2)
-		return sf::Color(GUI_COLOR_2);
-	return sf::Color::Red;
+	return sf::Color(game.getPlayer(stone).getColor());
+}
+
+int Gui::getComplementaryColor(int color) const {
+	int r = 255 - ((color & 0xFF000000) >> 24);
+	int g = 255 - ((color & 0x00FF0000) >> 16);
+	int b = 255 - ((color & 0x0000FF00) >> 8);
+	int a = (color & 0x000000FF);
+	return (r << 24) | (g << 16) | (b << 8) | a;
 }
 
 sf::Color Gui::getRevColor(int stone) const {
-	if (stone == 1)
-		return sf::Color(GUI_COLOR_2);
-	else if (stone == 2)
-		return sf::Color(GUI_COLOR_1);
-	return sf::Color::Red;
+	return sf::Color(getComplementaryColor(game.getPlayer(stone).getColor()));
 }
 
 void Gui::run() {

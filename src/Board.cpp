@@ -70,9 +70,22 @@ void MasterBoard::setMarkerColor(int x, int y, int val) {
 void MasterBoard::setMarkerColor(int x, int y) {
 	setMarkerColor(x, y, -1);
 }
+void MasterBoard::setMarkerTxt(int x, int y, std::string txt, int color) {
+	_markerTxt[y][x].txt = txt;
+	_markerTxt[y][x].color = color;
+}
+void MasterBoard::setMarkerTxt(int x, int y, std::string txt) {
+	setMarkerTxt(x, y, txt, 0xFFFFFFFF);
+}
+void MasterBoard::setMarkerTxt(int x, int y) {
+	setMarkerTxt(x, y, 0, 0);
+}
 bool MasterBoard::getIsWin(int x, int y) {
 	return _isWin[y][x];
 }
 int MasterBoard::getMarkerColor(int x, int y) {
 	return _markerColor[y][x];
+}
+struct markerTxt MasterBoard::getMarkerTxt(int x, int y) {
+	return _markerTxt[y][x];
 }

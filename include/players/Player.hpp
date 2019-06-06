@@ -7,13 +7,15 @@ class Game;
 
 class Player {
 	public:
-		Player(Game &_game);
+		Player(Game &_game, int _color);
 		virtual ~Player();
 		virtual void move();
 		void click(int x, int y);
+		int getColor() const;
 
 	protected:
 		Game &game;
+		int color;
 		int clickedPos[2];
 };
 
