@@ -14,7 +14,7 @@ class Player {
 		void	incrNbDestroyedStones();
 		int		getNbDestroyedStones() const;
 	protected:
-		Game	&_game;
+		Game &game;
 		int		clickedPos[2];
 	private:
 		Player();

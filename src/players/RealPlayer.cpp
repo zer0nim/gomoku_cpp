@@ -10,11 +10,11 @@ RealPlayer::~RealPlayer() {
 void RealPlayer::move() {
 	clickedPos[0] = -1;
 	clickedPos[1] = -1;
-	while (!_game.isQuit) {
+	while (!game.isQuit) {
 		if (clickedPos[0] >= 0 && clickedPos[1] >= 0) {
 			int x = clickedPos[0];
 			int y = clickedPos[1];
-			_game.board->set(x, y, _game.getPlayerActId());
+			game.getBoard().set(x, y, game.getPlayerActId());
 			break ;
 		}
 	}
