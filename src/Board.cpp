@@ -59,12 +59,6 @@ std::ostream & operator << (std::ostream &out, const Board &c) {
 }
 
 MasterBoard::MasterBoard() : Board() {
-	for (int x=0; x < BOARD_SZ; x++) {
-		for (int y=0; y < BOARD_SZ; y++) {
-			setIsWin(x, y, false);
-			setMarkerColor(x, y);
-		}
-	}
 }
 
 void MasterBoard::setIsWin(int x, int y, bool val) {

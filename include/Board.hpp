@@ -38,8 +38,8 @@ class MasterBoard : public Board {
 		bool getIsWin(int x, int y);
 		int getMarkerColor(int x, int y);
 	private:
-		bool _isWin[BOARD_SZ][BOARD_SZ];
-		int _markerColor[BOARD_SZ][BOARD_SZ];
+		std::array< std::array<bool, BOARD_SZ> , BOARD_SZ> _isWin = {};
+		std::array< std::array<int, BOARD_SZ> , BOARD_SZ> _markerColor = {};
 };
 
 std::ostream & operator << (std::ostream &out, const Board &c);
