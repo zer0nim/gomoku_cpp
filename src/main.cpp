@@ -18,7 +18,7 @@ int main(void) {
 		return 1;
 	}
 
-	game.gui->run();
+	game.getGui().run();
 	pthread_cancel(threadT);
 	return 0;
 }

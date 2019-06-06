@@ -24,7 +24,7 @@ class Game;
 
 class Gui {
 	public:
-		Gui(Game *_game);
+		Gui(Game &_game);
 		void init();  // init the gui -> called by Gui
 		void run();  // run the Gui: handle events, draw, ...
 		virtual ~Gui();
@@ -33,9 +33,9 @@ class Gui {
 		void event();  // handle events -> called by run
 		void draw();  // draw the board -> called by run
 
-		Game *game;
-		sf::Color getColor(int stone);  // get color corresponding to the player
-		sf::Color getRevColor(int stone);  // get the reverse color corresponding to the player
+		Game &game;
+		sf::Color getColor(int stone) const;  // get color corresponding to the player
+		sf::Color getRevColor(int stone) const;  // get the reverse color corresponding to the player
 		sf::RenderWindow *win;
 
 		bool _clicked;

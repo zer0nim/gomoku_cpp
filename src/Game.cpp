@@ -3,16 +3,16 @@
 
 Game::Game() {
 	board = new MasterBoard();
-	gui = new Gui(this);
+	gui = new Gui(*this);
 	isQuit = false;
 	_idPlayerAct = 1;
-	players[0] = new RealPlayer(this);
-	players[1] = new RealPlayer(this);
+	players[0] = new RealPlayer(*this);
+	players[1] = new RealPlayer(*this);
 }
 
 void Game::run() {
 	while (!isQuit) {
-		getPlayerAct()->move();
+		getPlayerAct().move();
 		nextPlayer();
 	}
 }
@@ -28,15 +28,25 @@ void Game::quit() {
 	isQuit = true;
 }
 
-Player *Game::getPlayer(int id) {
-	return players[id - 1];
+MasterBoard &Game::getBoard() const {
+	return *board;
 }
-Player *Game::getPlayerAct() {
-	return players[_idPlayerAct - 1];
+Gui &Game::getGui() const {
+	return *gui;
 }
-int Game::getPlayerActId() {
+Player &Game::getPlayer(int id) const {
+	return *players[id - 1];
+}
+Player &Game::getPlayerAct() const {
+	return *players[_idPlayerAct - 1];
+}
+int Game::getPlayerActId() const {
 	return _idPlayerAct;
 }
 
 Game::~Game() {
+	delete board;
+	delete gui;
+	delete players[0];
+	delete players[1];
 }
