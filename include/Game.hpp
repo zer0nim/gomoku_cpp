@@ -9,8 +9,8 @@ class Game {
 	public:
 		Game();
 		~Game();
-		Player *getPlayer(int id);
-		Player *getPlayerAct();
+		Player &getPlayer(int id);
+		Player &getPlayerAct();
 		int getPlayerActId();
 		void nextPlayer();
 		void run();

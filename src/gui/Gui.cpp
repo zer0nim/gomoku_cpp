@@ -15,7 +15,7 @@ void Gui::init() {
 void Gui::event() {
 	sf::Event event;
 	while (win->pollEvent(event)) {
-		if (event.type == sf::Event::Closed)
+		if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 			quit();
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -26,7 +26,7 @@ void Gui::event() {
 			localPosition.y > 0 && localPosition.y < GUI_BOARD_SZ) {
 				int realX = (int)(((float)localPosition.x - GUI_BOARD_START_X) / GUI_BOARD_SZ * BOARD_SZ);
 				int realY = (int)((float)localPosition.y / GUI_BOARD_SZ * BOARD_SZ);
-				game->getPlayerAct()->click(realX, realY);
+				game->getPlayerAct().click(realX, realY);
 			}
 		}
 		_clicked = true;
