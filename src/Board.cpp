@@ -3,6 +3,8 @@
 #include <string>
 
 Board::Board() {
+	_lastStone[0] = 0;
+	_lastStone[1] = 0;
 }
 
 Board::~Board() {
@@ -13,12 +15,17 @@ int Board::get(int x, int y) const {
 }
 void Board::set(int x, int y, int stone) {
 	SET_ST(_content, x, y, stone);
+	_lastStone[0] = x;
+	_lastStone[1] = y;
 }
 bool Board::isEmpty(int x, int y) const {
 	return GET_ST(_content, x, y) == 0;
 }
 bool Board::isStone(int x, int y, int stone) const {
 	return static_cast<int>(GET_ST(_content, x, y)) == stone;
+}
+bool Board::isLastStone(int x, int y) {
+	return (x == _lastStone[0] && y == _lastStone[1]);
 }
 
 // print the board (with colors)
@@ -53,6 +60,7 @@ MasterBoard::MasterBoard() : Board() {
 	for (int x=0; x < BOARD_SZ; x++) {
 		for (int y=0; y < BOARD_SZ; y++) {
 			setIsWin(x, y, false);
+			setMarkerColor(x, y);
 		}
 	}
 }
@@ -60,6 +68,15 @@ MasterBoard::MasterBoard() : Board() {
 void MasterBoard::setIsWin(int x, int y, bool val) {
 	_isWin[y][x] = val;
 }
+void MasterBoard::setMarkerColor(int x, int y, int val) {
+	_markerColor[y][x] = val;
+}
+void MasterBoard::setMarkerColor(int x, int y) {
+	setMarkerColor(x, y, -1);
+}
 bool MasterBoard::getIsWin(int x, int y) {
 	return _isWin[y][x];
+}
+int MasterBoard::getMarkerColor(int x, int y) {
+	return _markerColor[y][x];
 }

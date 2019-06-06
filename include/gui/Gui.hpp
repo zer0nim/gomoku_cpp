@@ -18,6 +18,7 @@
 #define GUI_COLOR_1   0x000000FF
 #define GUI_COLOR_2   0xFFFFFFFF
 #define GUI_COLOR_WIN 0x00FF00FF
+#define GUI_COLOR_LAST_STONE 0x0000FFFF
 
 class Game;
 

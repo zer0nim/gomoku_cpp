@@ -70,6 +70,7 @@ void Gui::draw() {
 
 	// draw stones
 	sf::CircleShape stone(step/3);
+	sf::CircleShape marker(step/6);
 	stone.setOutlineThickness(step/12);
 	for (int x=0; x < BOARD_SZ; x++) {
 		for (int y=0; y < BOARD_SZ; y++) {
@@ -80,10 +81,19 @@ void Gui::draw() {
 				// set outline color
 				if (game->board->getIsWin(x, y))
 					stone.setOutlineColor(sf::Color(GUI_COLOR_WIN));
+				else if (game->board->isLastStone(x, y))
+					stone.setOutlineColor(sf::Color(GUI_COLOR_LAST_STONE));
 				else
 					stone.setOutlineColor(getRevColor(game->board->get(x, y)));
 				stone.setPosition(xwin, ywin);
 				win->draw(stone);
+			}
+			if (game->board->getMarkerColor(x, y) != -1) {
+				float xwin = GUI_BOARD_START_X + step*0.5 - step/6 + step * x;
+				float ywin = step*0.5 - step/6 + step * y;
+				marker.setFillColor(sf::Color(game->board->getMarkerColor(x, y)));
+				marker.setPosition(xwin, ywin);
+				win->draw(marker);
 			}
 		}
 	}
