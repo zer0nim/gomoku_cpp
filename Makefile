@@ -1,6 +1,6 @@
 NAME	= gomoku
 CPP		= clang++
-FLAGS	= -Wall -Wextra -Werror -std=c++11
+FLAGS	= -Wall -Wextra -Werror -std=c++11 -pthread
 
 SRC_PATH	= src
 INC_PATH	= include

@@ -13,12 +13,14 @@ class Player {
 		void	click(int x, int y);
 		void	incrNbDestroyedStones();
 		int		getNbDestroyedStones() const;
+		void	setWinAligned();
 	protected:
 		Game	&_game;
 		int		clickedPos[2];
 	private:
 		Player();
-		int _nbDestroyedStones;
+		int		_nbDestroyedStones;
+		bool	_winAligned;
 };
 
 #endif
