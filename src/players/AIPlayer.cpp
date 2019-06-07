@@ -8,9 +8,16 @@ AIPlayer::~AIPlayer() {
 }
 
 void AIPlayer::move() {
-	int x = std::rand() % BOARD_SZ;
-	int y = std::rand() % BOARD_SZ;
-	game.getBoard().set(x, y, game.getPlayerActId());
+	int x = 0;
+	int y = 0;
+	while (!game.isQuit && game.getGui().getGuiType() == GUI_TYPE_GAME) {
+		x = std::rand() % BOARD_SZ;
+		y = std::rand() % BOARD_SZ;
+		if (game.getBoard().isAllowed(x, y, game.getPlayerActId())) {
+			game.getBoard().putStone(x, y, game.getPlayerActId());
+			break;
+		}
+	}
 }
 
 std::string AIPlayer::getType() const { return "AI"; }
