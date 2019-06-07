@@ -9,16 +9,19 @@ class Player {
 	public:
 		Player(Game &_game, int _color);
 		virtual ~Player();
-		virtual void move();
+		void moving();  // call this function at the player turn
 		void click(int x, int y);
 		int getColor() const;
 		void	incrNbDestroyedStones();
 		int		getNbDestroyedStones() const;
+		double	getTimeLastMove() const;
 
 	protected:
 		Game &game;
 		int color;
 		int clickedPos[2];
+		double _timeLastMove;
+		virtual void move();  // this function is called by moving (redefined in child)
 	private:
 		Player();
 		int _nbDestroyedStones;

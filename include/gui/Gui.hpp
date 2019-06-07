@@ -9,7 +9,7 @@
 #define GUI_RATE 10
 #define GUI_TIME_LOOP 1000 / GUI_RATE
 
-#define GUI_WIN_W 800
+#define GUI_WIN_W 1200
 #define GUI_WIN_H (GUI_WIN_W * 0.7)
 #define GUI_BOARD_SZ GUI_WIN_H
 #define GUI_BOARD_START_X (int)(GUI_WIN_W - GUI_BOARD_SZ)

@@ -10,6 +10,7 @@ class RealPlayer : public Player {
 	public:
 		RealPlayer(Game &_game, int _color);
 		~RealPlayer();
+	protected:
 		void move();
 	private:
 		RealPlayer();

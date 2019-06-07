@@ -12,7 +12,7 @@ Game::Game() {
 
 void Game::run() {
 	while (!isQuit) {
-		getPlayerAct().move();
+		getPlayerAct().moving();
 		nextPlayer();
 	}
 }

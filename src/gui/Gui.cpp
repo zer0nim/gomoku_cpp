@@ -16,7 +16,8 @@ void Gui::init() {
 void Gui::event() {
 	sf::Event event;
 	while (win->pollEvent(event)) {
-		if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
+		if (event.type == sf::Event::Closed
+		|| (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 			quit();
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -41,11 +42,15 @@ void Gui::draw() {
 
 	// draw left band
 	sf::RectangleShape playerRect(sf::Vector2f((GUI_WIN_W - GUI_BOARD_SZ) * 0.8, GUI_WIN_H * 0.4));
-	playerRect.setOutlineThickness(GUI_WIN_H * 0.01);
+	double textSize = GUI_WIN_H * 0.01;
+	playerRect.setOutlineThickness(textSize);
+	sf::Text playerText;
+	playerText.setFont(font);
+	playerText.setCharacterSize(GUI_WIN_H*0.04);
 	for (int i=1; i <= 2; i++) {
+		// draw player rectangle
 		int xwin = (GUI_WIN_W - GUI_BOARD_SZ) * 0.1;
 		int ywin = GUI_WIN_H * 0.05 + (GUI_WIN_H/2) * (i-1);
-		std::cout << xwin << " " << ywin << std::endl;
 		playerRect.setFillColor(getColor(i));
 		if (game.getPlayerActId() == i)
 			playerRect.setOutlineColor(sf::Color(GUI_COLOR_PLAYER_ACT));
@@ -53,6 +58,32 @@ void Gui::draw() {
 			playerRect.setOutlineColor(getRevColor(i));
 		playerRect.setPosition(xwin, ywin);
 		win->draw(playerRect);
+
+		// player info
+		// Player #
+		// Capture: x/10
+		// x.xs -> exec time
+		xwin += (GUI_WIN_W - GUI_BOARD_SZ) * 0.1;
+		ywin += (GUI_WIN_W - GUI_BOARD_SZ) * 0.1;
+		playerText.setFillColor(getRevColor(i));
+		// player #
+		playerText.setString("Player " + std::to_string(i));
+		playerText.setPosition(xwin, ywin);
+		win->draw(playerText);
+		ywin += textSize * 10;
+		// captured
+		playerText.setString("Captured: " + std::to_string(game.getPlayer(i).getNbDestroyedStones()) +
+							 "/" + std::to_string(NB_DESTROYED_VICTORY));
+		playerText.setPosition(xwin, ywin);
+		win->draw(playerText);
+		ywin += textSize * 10;
+		// exec time
+		char *str;
+		asprintf(&str, "%.2lfs", game.getPlayer(i).getTimeLastMove());
+		playerText.setString(str);
+		playerText.setPosition(xwin, ywin);
+		win->draw(playerText);
+		ywin += textSize * 10;
 	}
 
 	// draw background
