@@ -5,7 +5,7 @@
 #include <algorithm>
 
 Board::Board(Game &game)
-: _softMode(true), _remain_places(BOARD_SZ*BOARD_SZ), _game(game) {
+: game(game), _softMode(true), _remain_places(BOARD_SZ*BOARD_SZ) {
 	_lastStone[0] = 0;
 	_lastStone[1] = 0;
 }
@@ -185,7 +185,7 @@ return the new state of _isVulVict
 	if (isAlignedTot) {
 		if (!checkOnly) {
 			if (_isVulVict[stone - 1] || isNotVulTot)
-				_game.getPlayer(stone).setWinAligned();
+				game.getPlayer(stone).setWinAligned();
 			if (! isNotVulTot) // if vulnerable
 				return true;
 		}
@@ -303,7 +303,7 @@ this function put a stone and, if needed, destroy some stones
 		SET_ST(_content, dest[0], dest[1], 0);
 		++_remain_places;
 		if (!test)
-			_game.getPlayer(stone).incrNbDestroyedStones();
+			game.getPlayer(stone).incrNbDestroyedStones();
 	}
 
 	// ????
@@ -355,9 +355,22 @@ void MasterBoard::setMarkerColor(int x, int y, int val) {
 void MasterBoard::setMarkerColor(int x, int y) {
 	setMarkerColor(x, y, -1);
 }
+void MasterBoard::setMarkerTxt(int x, int y, std::string txt, int color) {
+	_markerTxt[y][x].txt = txt;
+	_markerTxt[y][x].color = color;
+}
+void MasterBoard::setMarkerTxt(int x, int y, std::string txt) {
+	setMarkerTxt(x, y, txt, 0xFFFFFFFF);
+}
+void MasterBoard::setMarkerTxt(int x, int y) {
+	setMarkerTxt(x, y, 0, 0);
+}
 bool MasterBoard::getIsWin(int x, int y) {
 	return _isWin[y][x];
 }
 int MasterBoard::getMarkerColor(int x, int y) {
 	return _markerColor[y][x];
+}
+struct markerTxt MasterBoard::getMarkerTxt(int x, int y) {
+	return _markerTxt[y][x];
 }

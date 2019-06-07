@@ -14,6 +14,11 @@
 # define GET_VUL(boardC, x, y) (static_cast<bool>((boardC[y] & (4ull << (x*3))) >> (x*3 + 2)))
 # define SET_VUL(boardC, x, y, val) (boardC[y] = (boardC[y] & (((1ull << (BOARD_SZ*3))-1) ^ (4ull << (x*3)))) | (static_cast<uint64_t>(val) << (x*3 + 2)))
 
+struct markerTxt {
+	std::string txt;
+	int color;
+};
+
 class Game;
 
 class Board {
@@ -34,6 +39,7 @@ class Board {
 		std::tuple<bool, bool>				checkAlignedDir(int x, int y, int stone, int addx, int addy, bool checkOnly=false);
 		bool								checkAligned(int x, int y, bool checkOnly=false);
 
+		Game	&game;
 
 		class OutOfRangeException: public std::exception {
 			public:
@@ -49,7 +55,6 @@ class Board {
 		std::array<uint64_t, BOARD_SZ>	_content = {};
 		int								_remain_places;
 		int								_lastStone[2];
-		Game							&_game;
 		std::array<bool, 2>				_isVulVict = {};
 };
 
@@ -62,14 +67,19 @@ class MasterBoard : public Board {
 		void setIsWin(int x, int y, bool val);
 		void setMarkerColor(int x, int y, int val);
 		void setMarkerColor(int x, int y);  // reset
+		void setMarkerTxt(int x, int y, std::string txt, int color);
+		void setMarkerTxt(int x, int y, std::string txt);
+		void setMarkerTxt(int x, int y);  // reset
 		// getter
 		bool getIsWin(int x, int y);
 		int getMarkerColor(int x, int y);
+		struct markerTxt getMarkerTxt(int x, int y);
 	private:
 		MasterBoard();
 
 		std::array< std::array<bool, BOARD_SZ> , BOARD_SZ> _isWin = {};
 		std::array< std::array<int, BOARD_SZ> , BOARD_SZ> _markerColor = {};
+		std::array< std::array<struct markerTxt, BOARD_SZ> , BOARD_SZ> _markerTxt = {};
 };
 
 #endif

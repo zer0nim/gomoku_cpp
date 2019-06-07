@@ -1,32 +1,33 @@
 #include "gui/Gui.hpp"
 #include "Game.hpp"
 
-Gui::Gui(Game *_game) {
-	game = _game;
+Gui::Gui(Game &game) : game(game) {
 	Gui::init();
 }
 
 void Gui::init() {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
-	win = new sf::RenderWindow(sf::VideoMode(GUI_WIN_W, GUI_WIN_H), "Gomoku", sf::Style::Default, settings);
+	_win = new sf::RenderWindow(sf::VideoMode(GUI_WIN_W, GUI_WIN_H), "Gomoku", sf::Style::Default, settings);
+	if (!_font.loadFromFile(GUI_DEFAULT_FONT))
+		exit(EXIT_FAILURE);
 }
 
 void Gui::event() {
 	sf::Event event;
-	while (win->pollEvent(event)) {
+	while (_win->pollEvent(event)) {
 		if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 			quit();
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		if (!_clicked){
-			sf::Vector2i localPosition = sf::Mouse::getPosition(*win);
+			sf::Vector2i localPosition = sf::Mouse::getPosition(*_win);
 			if (localPosition.x > GUI_BOARD_START_X && localPosition.x < GUI_BOARD_START_X + GUI_BOARD_SZ &&
 			localPosition.y > 0 && localPosition.y < GUI_BOARD_SZ) {
 				int realX = (int)(((float)localPosition.x - GUI_BOARD_START_X) / GUI_BOARD_SZ * BOARD_SZ);
 				int realY = (int)((float)localPosition.y / GUI_BOARD_SZ * BOARD_SZ);
-				game->getPlayerAct().click(realX, realY);
+				game.getPlayerAct().click(realX, realY);
 			}
 		}
 		_clicked = true;
@@ -36,13 +37,13 @@ void Gui::event() {
 }
 
 void Gui::draw() {
-	win->clear();
+	_win->clear();
 
 	// draw background
 	sf::RectangleShape bg(sf::Vector2f(GUI_BOARD_SZ, GUI_BOARD_SZ));
 	bg.setFillColor(sf::Color(246, 170, 73));
 	bg.setPosition(GUI_BOARD_START_X, 0);
-	win->draw(bg);
+	_win->draw(bg);
 
 	// draw all the _boards lines
 	float step = GUI_BOARD_SZ / BOARD_SZ;
@@ -50,12 +51,12 @@ void Gui::draw() {
 	line.setFillColor(sf::Color(0, 0, 0));
 	for (int y=0; y < BOARD_SZ; y++) {
 		line.setPosition(GUI_BOARD_START_X + (step*0.5) - step / 10, (step*0.5) + y*step);
-		win->draw(line);
+		_win->draw(line);
 	}
 	line.rotate(90);
 	for (int x=0; x < BOARD_SZ; x++) {
 		line.setPosition(GUI_BOARD_START_X + (step*0.5) + x*step, step / 2);
-		win->draw(line);
+		_win->draw(line);
 	}
 	sf::CircleShape point(step/5);
 	point.setFillColor(sf::Color(0, 0, 0));
@@ -64,61 +65,79 @@ void Gui::draw() {
 			float xwin = GUI_BOARD_START_X + step*0.5 - step/5 + step * x;
 			float ywin = step*0.5 - step/7.5 + step * y;
 			point.setPosition(xwin, ywin);
-			win->draw(point);
+			_win->draw(point);
 		}
 	}
 
 	// draw stones
 	sf::CircleShape stone(step/3);
 	sf::CircleShape marker(step/6);
-	stone.setOutlineThickness(step/12);
+	sf::Text text;
+	sf::Text text2;
+	text.setFont(_font);
+	text.setCharacterSize(step*0.8);
+	text2.setFont(_font);
+	text2.setCharacterSize(step*0.8);
+	text2.setStyle(sf::Text::Bold);
+	stone.setOutlineThickness(step/14);
 	for (int x=0; x < BOARD_SZ; x++) {
 		for (int y=0; y < BOARD_SZ; y++) {
-			if (!game->board->isEmpty(x, y)) {
+			if (!game.getBoard().isEmpty(x, y)) {
 				float xwin = GUI_BOARD_START_X + step*0.5 - step/3 + step * x;
 				float ywin = step*0.5 - step/3 + step * y;
-				stone.setFillColor(getColor(game->board->get(x, y)));
+				stone.setFillColor(getColor(game.getBoard().get(x, y)));
 				// set outline color
-				if (game->board->getIsWin(x, y))
+				if (game.getBoard().getIsWin(x, y))
 					stone.setOutlineColor(sf::Color(GUI_COLOR_WIN));
-				else if (game->board->isLastStone(x, y))
+				else if (game.getBoard().isLastStone(x, y))
 					stone.setOutlineColor(sf::Color(GUI_COLOR_LAST_STONE));
 				else
-					stone.setOutlineColor(getRevColor(game->board->get(x, y)));
+					stone.setOutlineColor(getRevColor(game.getBoard().get(x, y)));
 				stone.setPosition(xwin, ywin);
-				win->draw(stone);
+				_win->draw(stone);
 			}
-			if (game->board->getMarkerColor(x, y) != -1) {
+			if (game.getBoard().getMarkerColor(x, y) != -1) {
 				float xwin = GUI_BOARD_START_X + step*0.5 - step/6 + step * x;
 				float ywin = step*0.5 - step/6 + step * y;
-				marker.setFillColor(sf::Color(game->board->getMarkerColor(x, y)));
+				marker.setFillColor(sf::Color(game.getBoard().getMarkerColor(x, y)));
 				marker.setPosition(xwin, ywin);
-				win->draw(marker);
+				_win->draw(marker);
+			}
+			if (game.getBoard().getMarkerTxt(x, y).txt != "") {
+				float xwin = GUI_BOARD_START_X + step * x + step*0.2;
+				float ywin = step * y;
+				text2.setFillColor(sf::Color(getComplementaryColor(game.getBoard().getMarkerTxt(x, y).color)));
+				text2.setString(game.getBoard().getMarkerTxt(x, y).txt);
+				text2.setPosition(xwin, ywin);
+				text.setFillColor(sf::Color(game.getBoard().getMarkerTxt(x, y).color));
+				text.setString(game.getBoard().getMarkerTxt(x, y).txt);
+				text.setPosition(xwin, ywin);
+				_win->draw(text2);
+				_win->draw(text);
 			}
 		}
 	}
-	win->display();
+	_win->display();
 }
 
-sf::Color Gui::getColor(int stone) {
-	if (stone == 1)
-		return sf::Color(GUI_COLOR_1);
-	else if (stone == 2)
-		return sf::Color(GUI_COLOR_2);
-	return sf::Color::Red;
+int Gui::getComplementaryColor(int color) const {
+	int r = 255 - ((color & 0xFF000000) >> 24);
+	int g = 255 - ((color & 0x00FF0000) >> 16);
+	int b = 255 - ((color & 0x0000FF00) >> 8);
+	int a = (color & 0x000000FF);
+	return (r << 24) | (g << 16) | (b << 8) | a;
 }
 
-sf::Color Gui::getRevColor(int stone) {
-	if (stone == 1)
-		return sf::Color(GUI_COLOR_2);
-	else if (stone == 2)
-		return sf::Color(GUI_COLOR_1);
-	return sf::Color::Red;
+sf::Color Gui::getColor(int stone) const {
+	return sf::Color(game.getPlayer(stone).getColor());
+}
+sf::Color Gui::getRevColor(int stone) const {
+	return sf::Color(getComplementaryColor(game.getPlayer(stone).getColor()));
 }
 
 void Gui::run() {
 	sf::Clock clock;
-	while (win->isOpen()) {
+	while (_win->isOpen()) {
 		Gui::event();
 		Gui::draw();
 
@@ -133,6 +152,6 @@ Gui::~Gui() {
 }
 
 void Gui::quit() {
-	game->quit();
-	win->close();
+	game.quit();
+	_win->close();
 }
