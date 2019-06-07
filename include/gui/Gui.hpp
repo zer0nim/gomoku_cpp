@@ -17,10 +17,13 @@
 #define GUI_DEFAULT_FONT "font/Roboto/Roboto-Regular.ttf"
 
 // all colors are in format RGBA
+#define GUI_COLOR_BG 0x252525FF
+#define GUI_COLOR_BOARD_BG 0xF6AA49FF
 #define GUI_COLOR_1   0x000000FF
 #define GUI_COLOR_2   0xFFFFFFFF
 #define GUI_COLOR_WIN 0x00FF00FF
 #define GUI_COLOR_LAST_STONE 0x0000FFFF
+#define GUI_COLOR_PLAYER_ACT 0xFF0000FF
 
 class Game;
 

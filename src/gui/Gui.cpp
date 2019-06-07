@@ -37,11 +37,27 @@ void Gui::event() {
 }
 
 void Gui::draw() {
-	win->clear();
+	win->clear(sf::Color(GUI_COLOR_BG));
+
+	// draw left band
+	sf::RectangleShape playerRect(sf::Vector2f((GUI_WIN_W - GUI_BOARD_SZ) * 0.8, GUI_WIN_H * 0.4));
+	playerRect.setOutlineThickness(GUI_WIN_H * 0.01);
+	for (int i=1; i <= 2; i++) {
+		int xwin = (GUI_WIN_W - GUI_BOARD_SZ) * 0.1;
+		int ywin = GUI_WIN_H * 0.05 + (GUI_WIN_H/2) * (i-1);
+		std::cout << xwin << " " << ywin << std::endl;
+		playerRect.setFillColor(getColor(i));
+		if (game.getPlayerActId() == i)
+			playerRect.setOutlineColor(sf::Color(GUI_COLOR_PLAYER_ACT));
+		else
+			playerRect.setOutlineColor(getRevColor(i));
+		playerRect.setPosition(xwin, ywin);
+		win->draw(playerRect);
+	}
 
 	// draw background
 	sf::RectangleShape bg(sf::Vector2f(GUI_BOARD_SZ, GUI_BOARD_SZ));
-	bg.setFillColor(sf::Color(246, 170, 73));
+	bg.setFillColor(sf::Color(GUI_COLOR_BOARD_BG));
 	bg.setPosition(GUI_BOARD_START_X, 0);
 	win->draw(bg);
 
