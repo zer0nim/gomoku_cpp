@@ -1,14 +1,23 @@
 #include "players/Player.hpp"
 #include "Game.hpp"
+#include <chrono>
 
 Player::Player(Game &game, int color) :
-  game(game),
-  _color(color),
-  _nbDestroyedStones(0),
-  _winAligned(false) {
+	game(game),
+	_color(color),
+	_timeLastMove(0),
+	_nbDestroyedStones(0) {
 }
 
 Player::~Player() {
+}
+
+void Player::moving() {
+	auto startTime = std::chrono::system_clock::now();
+	move();
+	auto endTime = std::chrono::system_clock::now();
+	std::chrono::duration<double> execTime = endTime - startTime;
+	_timeLastMove = execTime.count();
 }
 
 void Player::move() {
@@ -24,8 +33,8 @@ void	Player::setWinAligned() {
 	_winAligned = true;
 }
 
-int Player::getColor() const {
-	return _color;
-}
+int		Player::getColor() const { return _color; }
 void	Player::incrNbDestroyedStones() { ++_nbDestroyedStones; }
 int		Player::getNbDestroyedStones() const { return _nbDestroyedStones; }
+double	Player::getTimeLastMove() const { return _timeLastMove; }
+std::string Player::getType() const { return "Player"; }

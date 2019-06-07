@@ -1,6 +1,6 @@
 NAME	= gomoku
 CPP		= clang++
-FLAGS	= -Wall -Wextra -Werror -std=c++11 -pthread
+FLAGS	= -Wall -Wextra -std=c++11 -pthread -g3 -fsanitize=address
 
 SRC_PATH	= src
 INC_PATH	= include
@@ -11,14 +11,16 @@ SRC		=	main.cpp \
 			Board.cpp \
 			gui/Gui.cpp \
 			players/Player.cpp \
-			players/RealPlayer.cpp
+			players/RealPlayer.cpp \
+			players/AIPlayer.cpp
 
 HEAD	=	Game.hpp \
 			Board.hpp \
 			Define.hpp \
 			gui/Gui.hpp \
 			players/Player.hpp \
-			players/RealPlayer.hpp
+			players/RealPlayer.hpp \
+			players/AIPlayer.hpp
 
 LIBS_FLAGS = -L ~/.brew/lib -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network -rpath ~/.brew/lib
 
