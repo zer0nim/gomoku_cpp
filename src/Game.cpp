@@ -2,7 +2,7 @@
 #include "players/RealPlayer.hpp"
 
 Game::Game() {
-	board = new MasterBoard();
+	board = new MasterBoard(*this);
 	gui = new Gui(*this);
 	isQuit = false;
 	_idPlayerAct = 1;

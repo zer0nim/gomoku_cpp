@@ -16,7 +16,7 @@ void Gui::init() {
 void Gui::event() {
 	sf::Event event;
 	while (win->pollEvent(event)) {
-		if (event.type == sf::Event::Closed)
+		if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 			quit();
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -120,10 +120,6 @@ void Gui::draw() {
 	win->display();
 }
 
-sf::Color Gui::getColor(int stone) const {
-	return sf::Color(game.getPlayer(stone).getColor());
-}
-
 int Gui::getComplementaryColor(int color) const {
 	int r = 255 - ((color & 0xFF000000) >> 24);
 	int g = 255 - ((color & 0x00FF0000) >> 16);
@@ -132,6 +128,9 @@ int Gui::getComplementaryColor(int color) const {
 	return (r << 24) | (g << 16) | (b << 8) | a;
 }
 
+sf::Color Gui::getColor(int stone) const {
+	return sf::Color(game.getPlayer(stone).getColor());
+}
 sf::Color Gui::getRevColor(int stone) const {
 	return sf::Color(getComplementaryColor(game.getPlayer(stone).getColor()));
 }

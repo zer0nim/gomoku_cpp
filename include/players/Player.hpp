@@ -12,11 +12,16 @@ class Player {
 		virtual void move();
 		void click(int x, int y);
 		int getColor() const;
+		void	incrNbDestroyedStones();
+		int		getNbDestroyedStones() const;
 
 	protected:
 		Game &game;
 		int color;
 		int clickedPos[2];
+	private:
+		Player();
+		int _nbDestroyedStones;
 };
 
 #endif
