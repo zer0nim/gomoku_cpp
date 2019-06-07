@@ -15,6 +15,7 @@ class Player {
 		void	incrNbDestroyedStones();
 		int		getNbDestroyedStones() const;
 		double	getTimeLastMove() const;
+		virtual std::string getType() const;
 
 	protected:
 		Game &game;
@@ -22,6 +23,7 @@ class Player {
 		int clickedPos[2];
 		double _timeLastMove;
 		virtual void move();  // this function is called by moving (redefined in child)
+
 	private:
 		Player();
 		int _nbDestroyedStones;

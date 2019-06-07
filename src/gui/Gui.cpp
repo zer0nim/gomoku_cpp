@@ -1,7 +1,9 @@
 #include "gui/Gui.hpp"
 #include "Game.hpp"
 
-Gui::Gui(Game &_game) : game(_game) {
+Gui::Gui(Game &_game) :
+	game(_game),
+	_typeGui(GUI_TYPE_MENU) {
 	Gui::init();
 }
 
@@ -13,12 +15,38 @@ void Gui::init() {
 		exit(EXIT_FAILURE);
 }
 
-void Gui::event() {
+void Gui::eventMenu() {
 	sf::Event event;
 	while (win->pollEvent(event)) {
 		if (event.type == sf::Event::Closed
 		|| (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 			quit();
+		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
+			game.startGame();
+		}
+		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+			game.nextPlayer();
+		}
+		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::A) {
+			game.gameInfo.playerAI[game.getPlayerActId()] = !game.gameInfo.playerAI[game.getPlayerActId()];
+		}
+		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::D) {
+			game.gameInfo.difficulty += 1;
+			if (game.gameInfo.difficulty >= NB_DIFICULTY_LEVEL)
+				game.gameInfo.difficulty = 0;
+		}
+	}
+}
+
+void Gui::eventGame() {
+	sf::Event event;
+	while (win->pollEvent(event)) {
+		if (event.type == sf::Event::Closed
+		|| (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
+			quit();
+		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
+			game.startMenu();
+		}
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
@@ -37,16 +65,84 @@ void Gui::event() {
 		_clicked = false;
 }
 
-void Gui::draw() {
-	win->clear(sf::Color(GUI_COLOR_BG));
+void Gui::event() {
+	if (getGuiType() == GUI_TYPE_MENU)
+		eventMenu();
+	else if (getGuiType() == GUI_TYPE_GAME)
+		eventGame();
+}
 
+void Gui::drawMenu() {
+	// draw left band
+	sf::RectangleShape rect(sf::Vector2f((GUI_WIN_W - GUI_BOARD_SZ) * 0.8, GUI_WIN_H * 0.4));
+	double textSize = GUI_WIN_H * 0.01;
+	rect.setOutlineThickness(textSize);
+	sf::Text text;
+	text.setFont(font);
+	text.setCharacterSize(GUI_TEXT_SIZE);
+	for (int i=1; i <= 2; i++) {
+		// draw player rectangle
+		int xwin = (GUI_WIN_W - GUI_BOARD_SZ) * 0.1;
+		int ywin = GUI_WIN_H * 0.05 + (GUI_WIN_H/2) * (i-1);
+		rect.setFillColor(getColor(i));
+		if (game.getPlayerActId() == i)
+			rect.setOutlineColor(sf::Color(GUI_COLOR_PLAYER_ACT));
+		else
+			rect.setOutlineColor(getRevColor(i));
+		rect.setPosition(xwin, ywin);
+		win->draw(rect);
+
+		// player info
+		// Player #
+		// Capture: x/10
+		// x.xs -> exec time
+		xwin += (GUI_WIN_W - GUI_BOARD_SZ) * 0.1;
+		ywin += (GUI_WIN_W - GUI_BOARD_SZ) * 0.1;
+		text.setFillColor(getRevColor(i));
+		std::string txt;
+		// AI or Player
+		if (game.gameInfo.playerAI[i])
+			txt = "[A] AI";
+		else
+			txt = "[A] Real player";
+		text.setString(txt);
+		text.setPosition(xwin, ywin);
+		win->draw(text);
+		ywin += GUI_LINE_SPACE;
+	}
+	// draw player rectangle
+	int xwin = (GUI_WIN_W - GUI_BOARD_SZ) * 1.2;
+	int ywin = (GUI_WIN_W - GUI_BOARD_SZ) * 0.1;
+	text.setFillColor(sf::Color(GUI_COLOR_TEXT_MENU));
+	std::string txt;
+	// start game
+	txt = "[Return] to start game";
+	text.setString(txt);
+	text.setPosition(xwin, ywin);
+	win->draw(text);
+	ywin += GUI_LINE_SPACE;
+	// change selected player
+	txt = "[Space] to change selected player";
+	text.setString(txt);
+	text.setPosition(xwin, ywin);
+	win->draw(text);
+	ywin += GUI_LINE_SPACE;
+	// change selected player
+	txt = "[D] difficulty: " + std::to_string(game.gameInfo.difficulty) +
+		  " (from 0 to " + std::to_string(NB_DIFICULTY_LEVEL-1) + ")";
+	text.setString(txt);
+	text.setPosition(xwin, ywin);
+	win->draw(text);
+	ywin += GUI_LINE_SPACE;
+}
+
+void Gui::drawGame() {
 	// draw left band
 	sf::RectangleShape playerRect(sf::Vector2f((GUI_WIN_W - GUI_BOARD_SZ) * 0.8, GUI_WIN_H * 0.4));
-	double textSize = GUI_WIN_H * 0.01;
-	playerRect.setOutlineThickness(textSize);
+	playerRect.setOutlineThickness(GUI_WIN_H * 0.01);
 	sf::Text playerText;
 	playerText.setFont(font);
-	playerText.setCharacterSize(GUI_WIN_H*0.04);
+	playerText.setCharacterSize(GUI_TEXT_SIZE);
 	for (int i=1; i <= 2; i++) {
 		// draw player rectangle
 		int xwin = (GUI_WIN_W - GUI_BOARD_SZ) * 0.1;
@@ -66,24 +162,29 @@ void Gui::draw() {
 		xwin += (GUI_WIN_W - GUI_BOARD_SZ) * 0.1;
 		ywin += (GUI_WIN_W - GUI_BOARD_SZ) * 0.1;
 		playerText.setFillColor(getRevColor(i));
+		// player type
+		playerText.setString(game.getPlayer(i).getType());
+		playerText.setPosition(xwin, ywin);
+		win->draw(playerText);
+		ywin += GUI_LINE_SPACE;
 		// player #
 		playerText.setString("Player " + std::to_string(i));
 		playerText.setPosition(xwin, ywin);
 		win->draw(playerText);
-		ywin += textSize * 10;
+		ywin += GUI_LINE_SPACE;
 		// captured
 		playerText.setString("Captured: " + std::to_string(game.getPlayer(i).getNbDestroyedStones()) +
 							 "/" + std::to_string(NB_DESTROYED_VICTORY));
 		playerText.setPosition(xwin, ywin);
 		win->draw(playerText);
-		ywin += textSize * 10;
+		ywin += GUI_LINE_SPACE;
 		// exec time
 		char *str;
 		asprintf(&str, "%.2lfs", game.getPlayer(i).getTimeLastMove());
 		playerText.setString(str);
 		playerText.setPosition(xwin, ywin);
 		win->draw(playerText);
-		ywin += textSize * 10;
+		ywin += GUI_LINE_SPACE;
 	}
 
 	// draw background
@@ -164,6 +265,14 @@ void Gui::draw() {
 			}
 		}
 	}
+}
+
+void Gui::draw() {
+	win->clear(sf::Color(GUI_COLOR_BG));
+	if (getGuiType() == GUI_TYPE_MENU)
+		drawMenu();
+	else if (getGuiType() == GUI_TYPE_GAME)
+		drawGame();
 	win->display();
 }
 
@@ -180,6 +289,10 @@ sf::Color Gui::getColor(int stone) const {
 }
 sf::Color Gui::getRevColor(int stone) const {
 	return sf::Color(getComplementaryColor(game.getPlayer(stone).getColor()));
+}
+typeGui Gui::getGuiType() const { return _typeGui; };
+void Gui::setGuiType(typeGui newType) {
+	_typeGui = newType;
 }
 
 void Gui::run() {

@@ -32,3 +32,4 @@ int		Player::getColor() const { return color; }
 void	Player::incrNbDestroyedStones() { ++_nbDestroyedStones; }
 int		Player::getNbDestroyedStones() const { return _nbDestroyedStones; }
 double	Player::getTimeLastMove() const { return _timeLastMove; }
+std::string Player::getType() const { return "Player"; }

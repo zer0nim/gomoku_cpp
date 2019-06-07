@@ -10,7 +10,7 @@ RealPlayer::~RealPlayer() {
 void RealPlayer::move() {
 	clickedPos[0] = -1;
 	clickedPos[1] = -1;
-	while (!game.isQuit) {
+	while (!game.isQuit && game.getGui().getGuiType() == GUI_TYPE_GAME) {
 		if (clickedPos[0] >= 0 && clickedPos[1] >= 0) {
 			int x = clickedPos[0];
 			int y = clickedPos[1];
@@ -19,3 +19,5 @@ void RealPlayer::move() {
 		}
 	}
 }
+
+std::string RealPlayer::getType() const { return "Real Player"; }
