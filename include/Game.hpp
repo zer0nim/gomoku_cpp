@@ -30,9 +30,9 @@ class Game {
 	private:
 		bool _loadInProgress;
 		MasterBoard *board;
-		Gui *gui;
-		Player *players[2];
-		int _idPlayerAct;  // 1 or 2 -> players[idPlayerAct-1]
+		Gui			*gui;
+		Player		*players[2];
+		int			_idPlayerAct;  // 1 or 2 -> players[idPlayerAct-1]
 };
 
 #endif

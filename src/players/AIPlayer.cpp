@@ -1,7 +1,7 @@
 #include "players/AIPlayer.hpp"
 #include "Game.hpp"
 
-AIPlayer::AIPlayer(Game &_game, int _color) : Player(_game, _color) {
+AIPlayer::AIPlayer(Game &game, int color) : Player(game, color) {
 }
 
 AIPlayer::~AIPlayer() {

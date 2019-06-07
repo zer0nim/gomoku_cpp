@@ -8,7 +8,7 @@ class Game;
 
 class AIPlayer : public Player {
 	public:
-		AIPlayer(Game &_game, int _color);
+		AIPlayer(Game &game, int color);
 		~AIPlayer();
 		std::string getType() const;
 	protected:

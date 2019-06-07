@@ -36,7 +36,7 @@ enum typeGui {
 
 class Gui {
 	public:
-		Gui(Game &_game);
+		Gui(Game &game);
 		void init();  // init the gui -> called by Gui
 		void run();  // run the Gui: handle events, draw, ...
 		virtual ~Gui();
@@ -46,6 +46,8 @@ class Gui {
 		int getComplementaryColor(int color) const;
 		typeGui getGuiType() const;
 		void setGuiType(typeGui newType);
+
+		Game	&game;
 	protected:
 		void event();  // handle events -> called by run
 		void eventMenu();  // handle event for the menu -> called by event
@@ -54,11 +56,10 @@ class Gui {
 		void drawMenu();  // draw the menu -> called by draw
 		void drawGame();  // draw the game -> called by draw
 
-		Game &game;
-		sf::RenderWindow *win;
-		sf::Font font;
-		typeGui _typeGui;
-		bool _clicked;
+		sf::RenderWindow	*_win;
+		sf::Font			_font;
+		typeGui				_typeGui;
+		bool				_clicked;
 };
 
 #endif

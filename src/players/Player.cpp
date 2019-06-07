@@ -1,9 +1,10 @@
 #include "players/Player.hpp"
 #include "Game.hpp"
+#include <chrono>
 
-Player::Player(Game &_game, int _color) :
-	game(_game),
-	color(_color),
+Player::Player(Game &game, int color) :
+	game(game),
+	_color(color),
 	_timeLastMove(0),
 	_nbDestroyedStones(0) {
 }
@@ -24,11 +25,15 @@ void Player::move() {
 }
 
 void Player::click(int x, int y) {
-	clickedPos[0] = x;
-	clickedPos[1] = y;
+	_clickedPos[0] = x;
+	_clickedPos[1] = y;
 }
 
-int		Player::getColor() const { return color; }
+void	Player::setWinAligned() {
+	_winAligned = true;
+}
+
+int		Player::getColor() const { return _color; }
 void	Player::incrNbDestroyedStones() { ++_nbDestroyedStones; }
 int		Player::getNbDestroyedStones() const { return _nbDestroyedStones; }
 double	Player::getTimeLastMove() const { return _timeLastMove; }

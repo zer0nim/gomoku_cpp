@@ -8,7 +8,7 @@ class Game;
 
 class RealPlayer : public Player {
 	public:
-		RealPlayer(Game &_game, int _color);
+		RealPlayer(Game &game, int _color);
 		~RealPlayer();
 		std::string getType() const;
 	protected:

@@ -7,26 +7,28 @@ class Game;
 
 class Player {
 	public:
-		Player(Game &_game, int _color);
+		Player(Game &game, int _color);
 		virtual ~Player();
-		void moving();  // call this function at the player turn
-		void click(int x, int y);
-		int getColor() const;
+		void	moving();  // call this function at the player turn
+		void	click(int x, int y);
+		int		getColor() const;
 		void	incrNbDestroyedStones();
 		int		getNbDestroyedStones() const;
+		void	setWinAligned();
 		double	getTimeLastMove() const;
 		virtual std::string getType() const;
 
+		Game	&game;
 	protected:
-		Game &game;
-		int color;
-		int clickedPos[2];
-		double _timeLastMove;
 		virtual void move();  // this function is called by moving (redefined in child)
 
+		int		_color;
+		int		_clickedPos[2];
+		double	_timeLastMove;
 	private:
 		Player();
-		int _nbDestroyedStones;
+		int		_nbDestroyedStones;
+		bool	_winAligned;
 };
 
 #endif

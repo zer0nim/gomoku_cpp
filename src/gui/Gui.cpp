@@ -1,23 +1,24 @@
 #include "gui/Gui.hpp"
 #include "Game.hpp"
 
-Gui::Gui(Game &_game) :
-	game(_game),
-	_typeGui(GUI_TYPE_MENU) {
+Gui::Gui(Game &game) :
+	game(game),
+	_typeGui(GUI_TYPE_MENU)
+{
 	Gui::init();
 }
 
 void Gui::init() {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
-	win = new sf::RenderWindow(sf::VideoMode(GUI_WIN_W, GUI_WIN_H), "Gomoku", sf::Style::Default, settings);
-	if (!font.loadFromFile(GUI_DEFAULT_FONT))
+	_win = new sf::RenderWindow(sf::VideoMode(GUI_WIN_W, GUI_WIN_H), "Gomoku", sf::Style::Default, settings);
+	if (!_font.loadFromFile(GUI_DEFAULT_FONT))
 		exit(EXIT_FAILURE);
 }
 
 void Gui::eventMenu() {
 	sf::Event event;
-	while (win->pollEvent(event)) {
+	while (_win->pollEvent(event)) {
 		if (event.type == sf::Event::Closed
 		|| (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 			quit();
@@ -40,7 +41,7 @@ void Gui::eventMenu() {
 
 void Gui::eventGame() {
 	sf::Event event;
-	while (win->pollEvent(event)) {
+	while (_win->pollEvent(event)) {
 		if (event.type == sf::Event::Closed
 		|| (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 			quit();
@@ -51,7 +52,7 @@ void Gui::eventGame() {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		if (!_clicked){
-			sf::Vector2i localPosition = sf::Mouse::getPosition(*win);
+			sf::Vector2i localPosition = sf::Mouse::getPosition(*_win);
 			if (localPosition.x > GUI_BOARD_START_X && localPosition.x < GUI_BOARD_START_X + GUI_BOARD_SZ &&
 			localPosition.y > 0 && localPosition.y < GUI_BOARD_SZ) {
 				int realX = (int)(((float)localPosition.x - GUI_BOARD_START_X) / GUI_BOARD_SZ * BOARD_SZ);
@@ -78,7 +79,7 @@ void Gui::drawMenu() {
 	double textSize = GUI_WIN_H * 0.01;
 	rect.setOutlineThickness(textSize);
 	sf::Text text;
-	text.setFont(font);
+	text.setFont(_font);
 	text.setCharacterSize(GUI_TEXT_SIZE);
 	for (int i=1; i <= 2; i++) {
 		// draw player rectangle
@@ -90,7 +91,7 @@ void Gui::drawMenu() {
 		else
 			rect.setOutlineColor(getRevColor(i));
 		rect.setPosition(xwin, ywin);
-		win->draw(rect);
+		_win->draw(rect);
 
 		// player info
 		// Player #
@@ -107,7 +108,7 @@ void Gui::drawMenu() {
 			txt = "[A] Real player";
 		text.setString(txt);
 		text.setPosition(xwin, ywin);
-		win->draw(text);
+		_win->draw(text);
 		ywin += GUI_LINE_SPACE;
 	}
 	// draw player rectangle
@@ -119,20 +120,20 @@ void Gui::drawMenu() {
 	txt = "[Return] to start game";
 	text.setString(txt);
 	text.setPosition(xwin, ywin);
-	win->draw(text);
+	_win->draw(text);
 	ywin += GUI_LINE_SPACE;
 	// change selected player
 	txt = "[Space] to change selected player";
 	text.setString(txt);
 	text.setPosition(xwin, ywin);
-	win->draw(text);
+	_win->draw(text);
 	ywin += GUI_LINE_SPACE;
 	// change selected player
 	txt = "[D] difficulty: " + std::to_string(game.gameInfo.difficulty) +
 		  " (from 0 to " + std::to_string(NB_DIFICULTY_LEVEL-1) + ")";
 	text.setString(txt);
 	text.setPosition(xwin, ywin);
-	win->draw(text);
+	_win->draw(text);
 	ywin += GUI_LINE_SPACE;
 }
 
@@ -141,7 +142,7 @@ void Gui::drawGame() {
 	sf::RectangleShape playerRect(sf::Vector2f((GUI_WIN_W - GUI_BOARD_SZ) * 0.8, GUI_WIN_H * 0.4));
 	playerRect.setOutlineThickness(GUI_WIN_H * 0.01);
 	sf::Text playerText;
-	playerText.setFont(font);
+	playerText.setFont(_font);
 	playerText.setCharacterSize(GUI_TEXT_SIZE);
 	for (int i=1; i <= 2; i++) {
 		// draw player rectangle
@@ -153,7 +154,7 @@ void Gui::drawGame() {
 		else
 			playerRect.setOutlineColor(getRevColor(i));
 		playerRect.setPosition(xwin, ywin);
-		win->draw(playerRect);
+		_win->draw(playerRect);
 
 		// player info
 		// Player #
@@ -165,25 +166,25 @@ void Gui::drawGame() {
 		// player type
 		playerText.setString(game.getPlayer(i).getType());
 		playerText.setPosition(xwin, ywin);
-		win->draw(playerText);
+		_win->draw(playerText);
 		ywin += GUI_LINE_SPACE;
 		// player #
 		playerText.setString("Player " + std::to_string(i));
 		playerText.setPosition(xwin, ywin);
-		win->draw(playerText);
+		_win->draw(playerText);
 		ywin += GUI_LINE_SPACE;
 		// captured
 		playerText.setString("Captured: " + std::to_string(game.getPlayer(i).getNbDestroyedStones()) +
 							 "/" + std::to_string(NB_DESTROYED_VICTORY));
 		playerText.setPosition(xwin, ywin);
-		win->draw(playerText);
+		_win->draw(playerText);
 		ywin += GUI_LINE_SPACE;
 		// exec time
 		char *str;
 		asprintf(&str, "%.2lfs", game.getPlayer(i).getTimeLastMove());
 		playerText.setString(str);
 		playerText.setPosition(xwin, ywin);
-		win->draw(playerText);
+		_win->draw(playerText);
 		ywin += GUI_LINE_SPACE;
 	}
 
@@ -191,7 +192,7 @@ void Gui::drawGame() {
 	sf::RectangleShape bg(sf::Vector2f(GUI_BOARD_SZ, GUI_BOARD_SZ));
 	bg.setFillColor(sf::Color(GUI_COLOR_BOARD_BG));
 	bg.setPosition(GUI_BOARD_START_X, 0);
-	win->draw(bg);
+	_win->draw(bg);
 
 	// draw all the _boards lines
 	float step = GUI_BOARD_SZ / BOARD_SZ;
@@ -199,12 +200,12 @@ void Gui::drawGame() {
 	line.setFillColor(sf::Color(0, 0, 0));
 	for (int y=0; y < BOARD_SZ; y++) {
 		line.setPosition(GUI_BOARD_START_X + (step*0.5) - step / 10, (step*0.5) + y*step);
-		win->draw(line);
+		_win->draw(line);
 	}
 	line.rotate(90);
 	for (int x=0; x < BOARD_SZ; x++) {
 		line.setPosition(GUI_BOARD_START_X + (step*0.5) + x*step, step / 2);
-		win->draw(line);
+		_win->draw(line);
 	}
 	sf::CircleShape point(step/5);
 	point.setFillColor(sf::Color(0, 0, 0));
@@ -213,7 +214,7 @@ void Gui::drawGame() {
 			float xwin = GUI_BOARD_START_X + step*0.5 - step/5 + step * x;
 			float ywin = step*0.5 - step/7.5 + step * y;
 			point.setPosition(xwin, ywin);
-			win->draw(point);
+			_win->draw(point);
 		}
 	}
 
@@ -222,9 +223,9 @@ void Gui::drawGame() {
 	sf::CircleShape marker(step/6);
 	sf::Text text;
 	sf::Text text2;
-	text.setFont(font);
+	text.setFont(_font);
 	text.setCharacterSize(step*0.8);
-	text2.setFont(font);
+	text2.setFont(_font);
 	text2.setCharacterSize(step*0.8);
 	text2.setStyle(sf::Text::Bold);
 	stone.setOutlineThickness(step/14);
@@ -242,14 +243,14 @@ void Gui::drawGame() {
 				else
 					stone.setOutlineColor(getRevColor(game.getBoard().get(x, y)));
 				stone.setPosition(xwin, ywin);
-				win->draw(stone);
+				_win->draw(stone);
 			}
 			if (game.getBoard().getMarkerColor(x, y) != -1) {
 				float xwin = GUI_BOARD_START_X + step*0.5 - step/6 + step * x;
 				float ywin = step*0.5 - step/6 + step * y;
 				marker.setFillColor(sf::Color(game.getBoard().getMarkerColor(x, y)));
 				marker.setPosition(xwin, ywin);
-				win->draw(marker);
+				_win->draw(marker);
 			}
 			if (game.getBoard().getMarkerTxt(x, y).txt != "") {
 				float xwin = GUI_BOARD_START_X + step * x + step*0.2;
@@ -260,20 +261,20 @@ void Gui::drawGame() {
 				text.setFillColor(sf::Color(game.getBoard().getMarkerTxt(x, y).color));
 				text.setString(game.getBoard().getMarkerTxt(x, y).txt);
 				text.setPosition(xwin, ywin);
-				win->draw(text2);
-				win->draw(text);
+				_win->draw(text2);
+				_win->draw(text);
 			}
 		}
 	}
 }
 
 void Gui::draw() {
-	win->clear(sf::Color(GUI_COLOR_BG));
+	_win->clear(sf::Color(GUI_COLOR_BG));
 	if (getGuiType() == GUI_TYPE_MENU)
 		drawMenu();
 	else if (getGuiType() == GUI_TYPE_GAME)
 		drawGame();
-	win->display();
+	_win->display();
 }
 
 int Gui::getComplementaryColor(int color) const {
@@ -297,7 +298,7 @@ void Gui::setGuiType(typeGui newType) {
 
 void Gui::run() {
 	sf::Clock clock;
-	while (win->isOpen()) {
+	while (_win->isOpen()) {
 		Gui::event();
 		Gui::draw();
 
@@ -313,5 +314,5 @@ Gui::~Gui() {
 
 void Gui::quit() {
 	game.quit();
-	win->close();
+	_win->close();
 }
