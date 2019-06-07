@@ -8,7 +8,7 @@ class Game;
 
 class RealPlayer : public Player {
 	public:
-		RealPlayer(Game &_game);
+		RealPlayer(Game &_game, int _color);
 		~RealPlayer();
 		void move();
 	private:

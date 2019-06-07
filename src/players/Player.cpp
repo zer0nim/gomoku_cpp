@@ -1,8 +1,9 @@
 #include "players/Player.hpp"
 #include "Game.hpp"
 
-Player::Player(Game &_game) :
-	game(_game),
+Player::Player(Game &_game, int _color) :
+  game(_game),
+  color(_color),
 	_nbDestroyedStones(0) {
 }
 
@@ -18,5 +19,8 @@ void Player::click(int x, int y) {
 	clickedPos[1] = y;
 }
 
+int Player::getColor() const {
+	return color;
+}
 void	Player::incrNbDestroyedStones() { ++_nbDestroyedStones; }
 int		Player::getNbDestroyedStones() const { return _nbDestroyedStones; }

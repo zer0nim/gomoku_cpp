@@ -1,7 +1,7 @@
 #include "players/RealPlayer.hpp"
 #include "Game.hpp"
 
-RealPlayer::RealPlayer(Game &_game) : Player(_game) {
+RealPlayer::RealPlayer(Game &_game, int _color) : Player(_game, _color) {
 }
 
 RealPlayer::~RealPlayer() {

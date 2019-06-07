@@ -14,6 +14,8 @@
 #define GUI_BOARD_SZ GUI_WIN_H
 #define GUI_BOARD_START_X (int)(GUI_WIN_W - GUI_BOARD_SZ)
 
+#define GUI_DEFAULT_FONT "font/Roboto/Roboto-Regular.ttf"
+
 // all colors are in format RGBA
 #define GUI_COLOR_1   0x000000FF
 #define GUI_COLOR_2   0xFFFFFFFF
@@ -29,14 +31,16 @@ class Gui {
 		void run();  // run the Gui: handle events, draw, ...
 		virtual ~Gui();
 		void quit();
+		sf::Color getColor(int stone) const;  // get color corresponding to the player
+		sf::Color getRevColor(int stone) const;  // get the reverse color corresponding to the player
+		int getComplementaryColor(int color) const;
 	protected:
 		void event();  // handle events -> called by run
 		void draw();  // draw the board -> called by run
 
 		Game &game;
-		sf::Color getColor(int stone) const;  // get color corresponding to the player
-		sf::Color getRevColor(int stone) const;  // get the reverse color corresponding to the player
 		sf::RenderWindow *win;
+		sf::Font font;
 
 		bool _clicked;
 };

@@ -6,8 +6,8 @@ Game::Game() {
 	gui = new Gui(*this);
 	isQuit = false;
 	_idPlayerAct = 1;
-	players[0] = new RealPlayer(*this);
-	players[1] = new RealPlayer(*this);
+	players[0] = new RealPlayer(*this, GUI_COLOR_1);
+	players[1] = new RealPlayer(*this, GUI_COLOR_2);
 }
 
 void Game::run() {

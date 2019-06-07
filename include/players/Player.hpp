@@ -7,15 +7,18 @@ class Game;
 
 class Player {
 	public:
-		Player(Game &_game);
+		Player(Game &_game, int _color);
 		virtual ~Player();
 		virtual void move();
-		void	click(int x, int y);
+		void click(int x, int y);
+		int getColor() const;
 		void	incrNbDestroyedStones();
 		int		getNbDestroyedStones() const;
+
 	protected:
 		Game &game;
-		int		clickedPos[2];
+		int color;
+		int clickedPos[2];
 	private:
 		Player();
 		int _nbDestroyedStones;
