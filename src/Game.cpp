@@ -56,6 +56,9 @@ void Game::startGame() {
 	else  // real
 		players[0] = new RealPlayer(*this, GUI_COLOR_1);
 
+	if (getPlayerActId() == 2)
+		nextPlayer();
+
 	// create new player 2
 	delete players[1];
 	if (gameInfo.playerAI[2])  // AI

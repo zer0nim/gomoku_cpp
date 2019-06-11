@@ -35,6 +35,12 @@ void Board::set(int x, int y, int stone) {
 	_lastStone[0] = x;
 	_lastStone[1] = y;
 }
+bool Board::isVul(int x, int y) const {
+	return GET_VUL(_content, x, y);
+}
+void Board::setVul(int x, int y, bool vul) {
+	SET_VUL(_content, x, y, vul);
+}
 bool Board::isEmpty(int x, int y) const {
 	return GET_ST(_content, x, y) == 0;
 }
@@ -365,6 +371,18 @@ MasterBoard::MasterBoard(Game &game)
 	_softMode = false;
 }
 
+void MasterBoard::resetDebug(int x, int y) {
+	_isWin[y][x] = false;
+	_markerColor[y][x] = 0;
+	_markerTxt[y][x].txt = "";
+	_markerTxt[y][x].color = 0;
+}
+void MasterBoard::resetDebug() {
+	for (int x=0; x < BOARD_SZ; x++)
+		for (int y=0; y < BOARD_SZ; y++)
+			resetDebug(x, y);
+}
+
 void MasterBoard::setIsWin(int x, int y, bool val) {
 	_isWin[y][x] = val;
 }
@@ -372,7 +390,7 @@ void MasterBoard::setMarkerColor(int x, int y, int val) {
 	_markerColor[y][x] = val;
 }
 void MasterBoard::setMarkerColor(int x, int y) {
-	setMarkerColor(x, y, -1);
+	setMarkerColor(x, y, 0);
 }
 void MasterBoard::setMarkerTxt(int x, int y, std::string txt, int color) {
 	_markerTxt[y][x].txt = txt;
