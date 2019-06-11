@@ -71,10 +71,7 @@ void Game::startGame() {
 }
 
 void Game::nextPlayer() {
-	if (_idPlayerAct == 1)
-		_idPlayerAct = 2;
-	else
-		_idPlayerAct = 1;
+	_idPlayerAct = OP_ST(_idPlayerAct);
 }
 
 void Game::quit() {
