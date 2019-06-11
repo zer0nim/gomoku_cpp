@@ -8,8 +8,6 @@ ifneq ($(UNAME_S), Darwin)
 	FLAGS += -pthread
 endif
 
-
-
 SRC_PATH	= src
 INC_PATH	= include
 OBJ_PATH	= obj
