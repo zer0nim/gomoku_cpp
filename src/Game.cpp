@@ -99,6 +99,9 @@ void Game::startGame() {
 
 	// set the GUI to game
 	getGui().setGuiType(GUI_TYPE_GAME);
+
+	// reset end of the game
+	_finished = false;
 }
 
 void Game::nextPlayer() {
