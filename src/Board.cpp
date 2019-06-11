@@ -95,9 +95,12 @@ void	Board::check_winner() {
 		for (int x = 0; x < BOARD_SZ; ++x)
 			checkVulnerability(x, y);
 
+	std::array<bool, 2>	tmpIsVulVict = {};
 	for (int y = 0; y < BOARD_SZ; ++y)
 		for (int x = 0; x < BOARD_SZ; ++x)
-			_isVulVict[GET_ST(_content, x, y) - 1] = checkAligned(x, y);
+			if (GET_ST(_content, x, y) != 0)
+				tmpIsVulVict[GET_ST(_content, x, y) - 1] = tmpIsVulVict[GET_ST(_content, x, y) - 1] || checkAligned(x, y);
+	_isVulVict = tmpIsVulVict;
 }
 
 std::vector< std::array<int, 2> >	Board::checkDestroyable(int x, int y, int stone) {
