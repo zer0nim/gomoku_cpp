@@ -33,6 +33,8 @@ class Board {
 
 		int		get(int x, int y) const;
 		void	set(int x, int y, int stone);
+		bool	isVul(int x, int y) const;
+		void	setVul(int x, int y, bool vul);
 		bool	isEmpty(int x, int y) const;
 		bool	isStone(int x, int y, int stone) const;
 		bool	isLastStone(int x, int y);
@@ -87,8 +89,10 @@ class MasterBoard : public Board {
 		int					getMarkerColor(int x, int y) const;
 		struct markerTxt	getMarkerTxt(int x, int y) const;
 		int					getRemainPlaces() const;
+		// others
+		void				resetDebug(int x, int y);  // reset all debug markers in xy
+		void				resetDebug();  // reset all debug marker, txt, ...
 	private:
-		MasterBoard();
 
 		int	_remain_places;
 		std::array< std::array<bool, BOARD_SZ> , BOARD_SZ> _isWin = {};

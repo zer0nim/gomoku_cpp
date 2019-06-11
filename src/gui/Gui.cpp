@@ -45,9 +45,11 @@ void Gui::eventGame() {
 		if (event.type == sf::Event::Closed
 		|| (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 			quit();
-		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
+		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return)
 			game.startMenu();
-		}
+		else if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Delete
+		|| event.key.code == sf::Keyboard::R))
+			game.getBoard().resetDebug();
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
@@ -248,6 +250,8 @@ void Gui::drawGame() {
 					stone.setOutlineColor(sf::Color(GUI_COLOR_WIN));
 				else if (game.getBoard().isLastStone(x, y))
 					stone.setOutlineColor(sf::Color(GUI_COLOR_LAST_STONE));
+				else if (game.getBoard().isVul(x, y))
+					stone.setOutlineColor(sf::Color(GUI_COLOR_VULNERABILITY));
 				else
 					stone.setOutlineColor(getRevColor(game.getBoard().get(x, y)));
 				stone.setPosition(xwin, ywin);
