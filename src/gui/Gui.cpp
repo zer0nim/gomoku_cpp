@@ -33,7 +33,7 @@ void Gui::eventMenu() {
 		}
 		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::D) {
 			game.gameInfo.difficulty += 1;
-			if (game.gameInfo.difficulty >= NB_DIFICULTY_LEVEL)
+			if (game.gameInfo.difficulty >= game.getHeuristic().getMaxDifficulty())
 				game.gameInfo.difficulty = 0;
 		}
 	}
@@ -132,7 +132,7 @@ void Gui::drawMenu() {
 	ywin += GUI_LINE_SPACE;
 	// change selected player
 	txt = "[D] difficulty: " + std::to_string(game.gameInfo.difficulty) +
-		  " (from 0 to " + std::to_string(NB_DIFICULTY_LEVEL-1) + ")";
+		  " (from 0 to " + std::to_string(game.getHeuristic().getMaxDifficulty()-1) + ")";
 	text.setString(txt);
 	text.setPosition(xwin, ywin);
 	_win->draw(text);

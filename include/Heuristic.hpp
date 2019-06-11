@@ -1,0 +1,56 @@
+#ifndef HEURISTIC_HPP
+#define HEURISTIC_HPP
+
+#include <iostream>
+#include <unordered_map>
+#include <list>
+#include "Node.hpp"
+
+#define NB_DIFFICULTY_LEVEL 3
+
+class Game;
+
+class Heuristic {
+	public:
+		Heuristic(Game &_game);
+		int heuristic(Node &node);
+		// setter
+		void setDifficulty(int difficulty);
+		// getter
+		int getDifficulty();
+		int getMaxDifficulty();
+		int getVal(std::string name);
+
+		Game &game;
+	private:
+		std::unordered_map<std::string, int> _defVal{
+			{"DEPTH", 4},  // the depth of the algorithm
+			{"MULTIPLIER_POSITIVE", -1},  // used to count more the positive or negative action in heuristic
+			{"MULTIPLIER_NEGATIVE", -1},  // used to count more the positive or negative action in heuristic
+			{"TWO", 10 / 2},  // BAA.
+			{"FREE_TWO", 15 / 2},  // .AA.
+			{"TRHEE", 30 / 3},  // BAAA.
+			{"FREE_THREE", 80 / 3},  // .AAA. .A.AA.
+			{"FOUR", 100 / 4},  // BAAAA.
+			{"FREE_FOUR", 1500 / 4},  // .AAAA.
+			{"WIN", 6000 / 5},  // AAAAA
+			{"VULNERABILITY", -35},  // BAA.
+			{"DESTROYED", 150},  // BAA. -> B..B
+			{"DESTROY_VICTORY_ADDER", 10}  // if this is the last destroyed stone, mul this stone by DESTROY_VICTORY_ADDER
+		};
+		std::unordered_map<std::string, int> _defValEasy{
+			{"DEPTH", 1},
+			{"MULTIPLIER_POSITIVE", -1},
+			{"MULTIPLIER_NEGATIVE", -2}
+		};
+		std::unordered_map<std::string, int> _defValNormal{
+			{"DEPTH", 2},
+			{"VULNERABILITY", 0},
+			{"DESTROYED", 0}
+		};
+		std::unordered_map<std::string, int> _defValHard{};
+		std::unordered_map<std::string, int> _difficultyVal[NB_DIFFICULTY_LEVEL];
+		int _difficulty;
+};
+
+#endif
