@@ -28,11 +28,15 @@ class Game {
 		bool isQuit;
 		GameInfo gameInfo;
 	private:
-		bool _loadInProgress;
-		MasterBoard *board;
-		Gui			*gui;
-		Player		*players[2];
+		bool 		_loadInProgress;
+		bool		_finished;
+		MasterBoard *_board;
+		Gui			*_gui;
+		std::array<Player *, 2>	_players;
 		int			_idPlayerAct;  // 1 or 2 -> players[idPlayerAct-1]
+
+		bool		has_win(int id);
+		void		checkWinner();
 };
 
 #endif

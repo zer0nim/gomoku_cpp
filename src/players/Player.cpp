@@ -39,7 +39,6 @@ void	Player::incrNbDestroyedStones() { ++_nbDestroyedStones; }
 int		Player::getNbDestroyedStones() const { return _nbDestroyedStones; }
 double	Player::getTimeLastMove() const { return _timeLastMove; }
 std::string Player::getType() const { return "Player"; }
-
 void	Player::incrNbStones() {
 	_nbStones = _nbStones + 1 < BOARD_SZ*BOARD_SZ ? _nbStones + 1 : BOARD_SZ*BOARD_SZ;
 }
@@ -47,3 +46,4 @@ void	Player::decrNbStones() {
 	_nbStones = _nbStones - 1 > 0 ? _nbStones - 1 : 0;
 }
 int		Player::getNbStones() const { return _nbStones; }
+bool	Player::getWinAligned() const { return _winAligned; }

@@ -6,21 +6,52 @@ Game::Game() :
 	isQuit(false),
 	gameInfo{{false, false, false}, 1},
 	_loadInProgress(true),
+	_finished(false),
 	_idPlayerAct(1) {
-	gui = new Gui(*this);
-	board = new MasterBoard(*this);
-	players[0] = new Player(*this, GUI_COLOR_1);
-	players[1] = new Player(*this, GUI_COLOR_2);
+	_gui = new Gui(*this);
+	_board = new MasterBoard(*this);
+	_players[0] = new Player(*this, GUI_COLOR_1);
+	_players[1] = new Player(*this, GUI_COLOR_2);
 }
 
-void Game::run() {
+bool	Game::has_win(int id) {
+	if (getPlayer(id).getWinAligned()) {
+		std::cout << "Win with " << NB_ALIGNED_VICTORY << " or more stones aligned" << std::endl;
+		_finished = true;
+	}
+	if (getPlayer(id).getNbDestroyedStones() >= NB_DESTROYED_VICTORY) {
+		std::cout << "Win because of " << NB_DESTROYED_VICTORY << " stones destroyed" << std::endl;
+		_finished = true;
+	}
+	if (_finished)
+		std::cout << "player " << id << " has win" << std::endl;
+
+	return _finished;
+}
+
+void	Game::checkWinner() {
+	if (!has_win(OP_ST(_idPlayerAct)))
+		if (!has_win(_idPlayerAct))
+			if (_board->getRemainPlaces() <= 0) {
+				std::cout << "Equality ! no winner in this game !" << std::endl;
+				_finished = true;
+			}
+
+	if (_finished)
+		std::cout << *_board << std::endl;
+}
+
+void	Game::run() {
 	while (!isQuit) {
 		if (!_loadInProgress) {
 			if (getGui().getGuiType() == GUI_TYPE_MENU) {
 			}
 			else if (getGui().getGuiType() == GUI_TYPE_GAME) {
-				getPlayerAct().moving();
-				nextPlayer();
+				if (!_finished) {
+					getPlayerAct().moving();
+					nextPlayer();
+					checkWinner();
+				}
 			}
 		}
 		if (!(getGui().getGuiType() == GUI_TYPE_LOADING)) {
@@ -46,25 +77,25 @@ void Game::startGame() {
 	_loadInProgress = true;
 
 	// create new board
-	delete board;
-	board = new MasterBoard(*this);
+	delete _board;
+	_board = new MasterBoard(*this);
 
 	// create new player 1
-	delete players[0];
+	delete _players[0];
 	if (gameInfo.playerAI[1])  // AI
-		players[0] = new AIPlayer(*this, GUI_COLOR_1);
+		_players[0] = new AIPlayer(*this, GUI_COLOR_1);
 	else  // real
-		players[0] = new RealPlayer(*this, GUI_COLOR_1);
+		_players[0] = new RealPlayer(*this, GUI_COLOR_1);
 
 	if (getPlayerActId() == 2)
 		nextPlayer();
 
 	// create new player 2
-	delete players[1];
+	delete _players[1];
 	if (gameInfo.playerAI[2])  // AI
-		players[1] = new AIPlayer(*this, GUI_COLOR_2);
+		_players[1] = new AIPlayer(*this, GUI_COLOR_2);
 	else  // real
-		players[1] = new RealPlayer(*this, GUI_COLOR_2);
+		_players[1] = new RealPlayer(*this, GUI_COLOR_2);
 
 	// set the GUI to game
 	getGui().setGuiType(GUI_TYPE_GAME);
@@ -78,15 +109,15 @@ void Game::quit() {
 	isQuit = true;
 }
 
-MasterBoard &Game::getBoard() const { return *board; }
-Gui &Game::getGui() const { return *gui; }
-Player &Game::getPlayer(int id) const { return *players[id - 1]; }
-Player &Game::getPlayerAct() const { return *players[_idPlayerAct - 1]; }
+MasterBoard &Game::getBoard() const { return *_board; }
+Gui &Game::getGui() const { return *_gui; }
+Player &Game::getPlayer(int id) const { return *_players[id - 1]; }
+Player &Game::getPlayerAct() const { return *_players[_idPlayerAct - 1]; }
 int Game::getPlayerActId() const { return _idPlayerAct; }
 
 Game::~Game() {
-	delete board;
-	delete gui;
-	delete players[0];
-	delete players[1];
+	delete _board;
+	delete _gui;
+	delete _players[0];
+	delete _players[1];
 }

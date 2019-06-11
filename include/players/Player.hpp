@@ -20,7 +20,7 @@ class Player {
 		void	incrNbStones();
 		void	decrNbStones();
 		int		getNbStones() const;
-
+		bool	getWinAligned() const;
 
 		Game	&game;
 	protected:
