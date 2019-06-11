@@ -24,7 +24,10 @@ class Game;
 class Board {
 	public:
 		Board(Game &game);
+		Board(Board const &src);
 		virtual	~Board();
+
+		Board &operator=(Board const &rhs);
 
 		int		get(int x, int y) const;
 		void	set(int x, int y, int stone);
@@ -32,12 +35,16 @@ class Board {
 		bool	isStone(int x, int y, int stone) const;
 		bool	isLastStone(int x, int y);
 
-		int		putStone(int x, int y, int stone, bool test = false);
+		int		putStone(int x, int y, int stone);
 		bool	isFreeThreeDir(int x, int y, int stone, int addx, int addy);
 		bool	isAllowed(int x, int y, int stone);
 		std::vector< std::array<int, 2> >	checkDestroyable(int x, int y, int stone);
 		std::tuple<bool, bool>				checkAlignedDir(int x, int y, int stone, int addx, int addy, bool checkOnly=false);
 		bool								checkAligned(int x, int y, bool checkOnly=false);
+
+		std::array<uint64_t, BOARD_SZ>	getContent() const;
+		std::array<int, 2>				getLastStone() const;
+		std::array<bool, 2>				getIsVulVict() const;
 
 		Game	&game;
 
@@ -53,8 +60,7 @@ class Board {
 		Board();
 
 		std::array<uint64_t, BOARD_SZ>	_content = {};
-		int								_remain_places;
-		int								_lastStone[2];
+		std::array<int, 2>				_lastStone;
 		std::array<bool, 2>				_isVulVict = {};
 };
 
@@ -74,6 +80,8 @@ class MasterBoard : public Board {
 		bool getIsWin(int x, int y);
 		int getMarkerColor(int x, int y);
 		struct markerTxt getMarkerTxt(int x, int y);
+
+		int	_remain_places;
 	private:
 		MasterBoard();
 

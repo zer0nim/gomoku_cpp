@@ -5,12 +5,26 @@
 #include <algorithm>
 
 Board::Board(Game &game)
-: game(game), _softMode(true), _remain_places(BOARD_SZ*BOARD_SZ) {
+: game(game), _softMode(true) {
 	_lastStone[0] = 0;
 	_lastStone[1] = 0;
 }
 
+Board::Board(Board const &src): game(src.game) {
+	*this = src;
+}
+
 Board::~Board() {
+}
+
+Board &Board::operator=(Board const &rhs) {
+	if (this != &rhs) {
+		this->_softMode = true;
+		this->_isVulVict = rhs.getIsVulVict();
+		this->_lastStone = rhs.getLastStone();
+		this->_content = rhs.getContent();
+	}
+	return *this;
 }
 
 int Board::get(int x, int y) const {
@@ -285,7 +299,7 @@ this function check if it's allowed (empty place, no free-threes, ...)
 	return true;
 }
 
-int		Board::putStone(int x, int y, int stone, bool test) {
+int		Board::putStone(int x, int y, int stone) {
 /*
 put a stone at 'x' 'y' with id 'stone'
 this function put a stone and, if needed, destroy some stones
@@ -294,24 +308,29 @@ this function put a stone and, if needed, destroy some stones
 		throw OutOfRangeException();
 
 	SET_ST(_content, x, y, stone);
-	if (!test)
-		--_remain_places;
+	if (!_softMode)
+		--(reinterpret_cast<MasterBoard*>(this)->_remain_places);
 
 	// destroy some stones if needed
 	std::vector< std::array<int, 2> > destroyed = checkDestroyable(x, y, stone);
 	for (std::array<int, 2> dest : destroyed) {
 		SET_ST(_content, dest[0], dest[1], 0);
-		++_remain_places;
-		if (!test)
+		if (!_softMode) {
+			++(reinterpret_cast<MasterBoard*>(this)->_remain_places);
 			game.getPlayer(stone).incrNbDestroyedStones();
+		}
 	}
 
 	// ????
-	// if (!test)
+	// if (!_softMode)
 	// 	check_winner();
 
 	return destroyed.size();
 }
+
+std::array<uint64_t, BOARD_SZ>	Board::getContent() const { return _content; }
+std::array<int, 2>				Board::getLastStone() const { return _lastStone; }
+std::array<bool, 2>				Board::getIsVulVict() const { return _isVulVict; }
 
 // print the board (with colors)
 std::ostream & operator << (std::ostream &out, const Board &c) {
@@ -342,7 +361,7 @@ std::ostream & operator << (std::ostream &out, const Board &c) {
 }
 
 MasterBoard::MasterBoard(Game &game)
-: Board(game) {
+: Board(game), _remain_places(BOARD_SZ*BOARD_SZ) {
 	_softMode = false;
 }
 
