@@ -20,8 +20,11 @@ void RealPlayer::move() {
 				game.getBoard().putStone(x, y, game.getPlayerActId());
 				break;
 			}
-			else
-				; // need to show an error !
+			else {
+				// need to show an error !
+				_clickedPos[0] = -1;
+				_clickedPos[1] = -1;
+			}
 		}
 	}
 }
