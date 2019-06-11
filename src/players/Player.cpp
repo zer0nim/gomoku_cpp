@@ -6,7 +6,8 @@ Player::Player(Game &game, int color) :
 	game(game),
 	_color(color),
 	_timeLastMove(0),
-	_nbDestroyedStones(0) {
+	_nbDestroyedStones(0),
+	_nbStones(0) {
 }
 
 Player::~Player() {
@@ -38,3 +39,11 @@ void	Player::incrNbDestroyedStones() { ++_nbDestroyedStones; }
 int		Player::getNbDestroyedStones() const { return _nbDestroyedStones; }
 double	Player::getTimeLastMove() const { return _timeLastMove; }
 std::string Player::getType() const { return "Player"; }
+
+void	Player::incrNbStones() {
+	_nbStones = _nbStones + 1 < BOARD_SZ*BOARD_SZ ? _nbStones + 1 : BOARD_SZ*BOARD_SZ;
+}
+void	Player::decrNbStones() {
+	_nbStones = _nbStones - 1 > 0 ? _nbStones - 1 : 0;
+}
+int		Player::getNbStones() const { return _nbStones; }

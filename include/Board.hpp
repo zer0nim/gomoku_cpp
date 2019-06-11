@@ -14,6 +14,8 @@
 # define GET_VUL(boardC, x, y) (static_cast<bool>((boardC[y] & (4ull << (x*3))) >> (x*3 + 2)))
 # define SET_VUL(boardC, x, y, val) (boardC[y] = (boardC[y] & (((1ull << (BOARD_SZ*3))-1) ^ (4ull << (x*3)))) | (static_cast<uint64_t>(val) << (x*3 + 2)))
 
+# define OP_ST(stone) (!(stone-1) + 1)
+
 struct markerTxt {
 	std::string txt;
 	int color;
@@ -38,6 +40,8 @@ class Board {
 		int		putStone(int x, int y, int stone);
 		bool	isFreeThreeDir(int x, int y, int stone, int addx, int addy);
 		bool	isAllowed(int x, int y, int stone);
+		bool								checkVulnerability(int x, int y);
+		void								check_winner();
 		std::vector< std::array<int, 2> >	checkDestroyable(int x, int y, int stone);
 		std::tuple<bool, bool>				checkAlignedDir(int x, int y, int stone, int addx, int addy, bool checkOnly=false);
 		bool								checkAligned(int x, int y, bool checkOnly=false);
@@ -70,21 +74,23 @@ class MasterBoard : public Board {
 	public:
 		MasterBoard(Game &game);
 		// setter
-		void setIsWin(int x, int y, bool val);
-		void setMarkerColor(int x, int y, int val);
-		void setMarkerColor(int x, int y);  // reset
-		void setMarkerTxt(int x, int y, std::string txt, int color);
-		void setMarkerTxt(int x, int y, std::string txt);
-		void setMarkerTxt(int x, int y);  // reset
+		void	setIsWin(int x, int y, bool val);
+		void	setMarkerColor(int x, int y, int val);
+		void	setMarkerColor(int x, int y);  // reset
+		void	setMarkerTxt(int x, int y, std::string txt, int color);
+		void	setMarkerTxt(int x, int y, std::string txt);
+		void	setMarkerTxt(int x, int y);  // reset
+		void	incrRemainPlaces();
+		void	decrRemainPlaces();
 		// getter
-		bool getIsWin(int x, int y);
-		int getMarkerColor(int x, int y);
-		struct markerTxt getMarkerTxt(int x, int y);
-
-		int	_remain_places;
+		bool				getIsWin(int x, int y) const;
+		int					getMarkerColor(int x, int y) const;
+		struct markerTxt	getMarkerTxt(int x, int y) const;
+		int					getRemainPlaces() const;
 	private:
 		MasterBoard();
 
+		int	_remain_places;
 		std::array< std::array<bool, BOARD_SZ> , BOARD_SZ> _isWin = {};
 		std::array< std::array<int, BOARD_SZ> , BOARD_SZ> _markerColor = {};
 		std::array< std::array<struct markerTxt, BOARD_SZ> , BOARD_SZ> _markerTxt = {};

@@ -17,6 +17,10 @@ class Player {
 		void	setWinAligned();
 		double	getTimeLastMove() const;
 		virtual std::string getType() const;
+		void	incrNbStones();
+		void	decrNbStones();
+		int		getNbStones() const;
+
 
 		Game	&game;
 	protected:
@@ -28,6 +32,7 @@ class Player {
 	private:
 		Player();
 		int		_nbDestroyedStones;
+		int		_nbStones;
 		bool	_winAligned;
 };
 

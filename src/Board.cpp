@@ -45,6 +45,55 @@ bool Board::isLastStone(int x, int y) {
 	return (x == _lastStone[0] && y == _lastStone[1]);
 }
 
+bool Board::checkVulnerability(int x, int y) {
+/*
+check the vulnerability of one stone
+*/
+	int stone = GET_ST(_content, x, y);
+	if (stone == 0)
+		return false;
+
+	// this tab contains all configuration to vulnerables stones
+	// x1, y1, x2, y2, x3, y3
+	std::array<std::array<int, 6>, 8> vul_conf = {{
+		{{ x-1, y, x+1, y, x+2, y }},
+		{{ x+1, y, x-1, y, x-2, y }},
+		{{ x, y-1, x, y+1, x, y+2 }},
+		{{ x, y+1, x, y-1, x, y-2 }},
+		{{ x-1, y-1, x+1, y+1, x+2, y+2 }},
+		{{ x-1, y+1, x+1, y-1, x+2, y-2 }},
+		{{ x+1, y-1, x-1, y+1, x-2, y+2 }},
+		{{ x+1, y+1, x-1, y-1, x-2, y-2 }},
+	}};
+
+	for (std::array<int, 6> conf : vul_conf) {
+		// for 4 stones: abcd with b is x y -> a=x1y1 b=xy c=x2y2 d=x3y3
+		if (conf[0] >= 0 && conf[0] < BOARD_SZ && conf[2] >= 0 && conf[2] < BOARD_SZ && conf[4] >= 0 && conf[4] < BOARD_SZ &&
+			conf[1] >= 0 && conf[1] < BOARD_SZ && conf[3] >= 0 && conf[3] < BOARD_SZ && conf[5] >= 0 && conf[5] < BOARD_SZ &&
+			stone == GET_ST(_content, conf[2], conf[3]) &&
+			GET_ST(_content, conf[0], conf[1]) != stone && GET_ST(_content, conf[4], conf[5]) != stone &&
+			GET_ST(_content, conf[0], conf[1]) != GET_ST(_content, conf[4], conf[5]) &&
+			(GET_ST(_content, conf[0], conf[1]) == 0 || GET_ST(_content, conf[4], conf[5]) == 0))
+		{
+			SET_VUL(_content, x, y, true);
+			return true;
+		}
+	}
+
+	SET_VUL(_content, x, y, false);
+	return false;
+}
+
+void	Board::check_winner() {
+	for (int y = 0; y < BOARD_SZ; ++y)
+		for (int x = 0; x < BOARD_SZ; ++x)
+			checkVulnerability(x, y);
+
+	for (int y = 0; y < BOARD_SZ; ++y)
+		for (int x = 0; x < BOARD_SZ; ++x)
+			_isVulVict[GET_ST(_content, x, y) - 1] = checkAligned(x, y);
+}
+
 std::vector< std::array<int, 2> >	Board::checkDestroyable(int x, int y, int stone) {
 /*
 check if the stone at 'x' 'y' can destroy some others stone
@@ -308,22 +357,24 @@ this function put a stone and, if needed, destroy some stones
 		throw OutOfRangeException();
 
 	SET_ST(_content, x, y, stone);
-	if (!_softMode)
-		--(reinterpret_cast<MasterBoard*>(this)->_remain_places);
+	if (!_softMode) {
+		reinterpret_cast<MasterBoard*>(this)->decrRemainPlaces();
+		game.getPlayer(stone).incrNbStones();
+	}
 
 	// destroy some stones if needed
 	std::vector< std::array<int, 2> > destroyed = checkDestroyable(x, y, stone);
 	for (std::array<int, 2> dest : destroyed) {
 		SET_ST(_content, dest[0], dest[1], 0);
 		if (!_softMode) {
-			++(reinterpret_cast<MasterBoard*>(this)->_remain_places);
+			reinterpret_cast<MasterBoard*>(this)->incrRemainPlaces();
 			game.getPlayer(stone).incrNbDestroyedStones();
+			game.getPlayer(OP_ST(stone)).decrNbStones();
 		}
 	}
 
-	// ????
-	// if (!_softMode)
-	// 	check_winner();
+	if (!_softMode)
+		check_winner();
 
 	return destroyed.size();
 }
@@ -384,12 +435,19 @@ void MasterBoard::setMarkerTxt(int x, int y, std::string txt) {
 void MasterBoard::setMarkerTxt(int x, int y) {
 	setMarkerTxt(x, y, 0, 0);
 }
-bool MasterBoard::getIsWin(int x, int y) {
+bool MasterBoard::getIsWin(int x, int y) const {
 	return _isWin[y][x];
 }
-int MasterBoard::getMarkerColor(int x, int y) {
+int MasterBoard::getMarkerColor(int x, int y) const {
 	return _markerColor[y][x];
 }
-struct markerTxt MasterBoard::getMarkerTxt(int x, int y) {
+struct markerTxt MasterBoard::getMarkerTxt(int x, int y) const {
 	return _markerTxt[y][x];
 }
+void	MasterBoard::incrRemainPlaces() {
+	_remain_places = _remain_places + 1 < BOARD_SZ*BOARD_SZ ? _remain_places + 1 : BOARD_SZ*BOARD_SZ;
+}
+void	MasterBoard::decrRemainPlaces() {
+	_remain_places = _remain_places - 1 > 0 ? _remain_places - 1: 0;
+}
+int	MasterBoard::getRemainPlaces() const { return _remain_places; }
