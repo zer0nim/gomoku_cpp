@@ -173,6 +173,14 @@ void Gui::drawGame() {
 		playerText.setPosition(xwin, ywin);
 		_win->draw(playerText);
 		ywin += GUI_LINE_SPACE;
+		// player nb stones
+		playerText.setString("Stones " + std::to_string(game.getPlayer(i).getNbStones()) + " " +
+			((game.getBoard().getRemainPlaces() < BOARD_SZ*BOARD_SZ)
+			? (std::to_string(static_cast<int>((float)game.getPlayer(i).getNbStones() / (BOARD_SZ*BOARD_SZ - game.getBoard().getRemainPlaces()) * 100)) + "%")
+			: ""));
+		playerText.setPosition(xwin, ywin);
+		_win->draw(playerText);
+		ywin += GUI_LINE_SPACE;
 		// captured
 		playerText.setString("Captured: " + std::to_string(game.getPlayer(i).getNbDestroyedStones()) +
 							 "/" + std::to_string(NB_DESTROYED_VICTORY));
