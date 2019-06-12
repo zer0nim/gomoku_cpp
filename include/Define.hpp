@@ -8,7 +8,6 @@
 #define NB_DESTROYED_VICTORY 10
 #define STONE_EMPTY 0
 
-// algo defines
 #define ENABLE_KEEP_NODE_PERCENT false
 
 #define DEBUG_SEARCH_ZONE false // print the search zone

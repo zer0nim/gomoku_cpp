@@ -42,6 +42,7 @@ class Heuristic {
 			{"NB_SQUARE_ARROUND", 1},  // the number of squares arround taked pos to limit search zone
 			{"MULTIPLIER_POSITIVE", 1},  // used to count more the positive or negative action in heuristic
 			{"MULTIPLIER_NEGATIVE", -1},  // used to count more the positive or negative action in heuristic
+			{"NB_STONES", 1},  // A
 			{"TWO", 10 / 2},  // BAA.
 			{"FREE_TWO", 15 / 2},  // .AA.
 			{"THREE", 30 / 3},  // BAAA.
