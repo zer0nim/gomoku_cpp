@@ -19,7 +19,7 @@ void AIPlayer::move() {
 	// 		break;
 	// 	}
 	// }
-	int depth = std::min<int>(DEPTH, game.getBoard().getRemainPlaces());
+	int depth = std::min<int>(game.getHeuristic().getVal("DEPTH"), game.getBoard().getRemainPlaces());
 	Node node(game, !game.getPlayerActId(), -1, -1, depth+1);
 	node.setChilds();
 }

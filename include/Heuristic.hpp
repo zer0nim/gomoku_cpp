@@ -39,6 +39,7 @@ class Heuristic {
 
 		std::unordered_map<std::string, int> _defVal{
 			{"DEPTH", 4},  // the depth of the algorithm
+			{"NB_SQUARE_ARROUND", 1},  // the number of squares arround taked pos to limit search zone
 			{"MULTIPLIER_POSITIVE", 1},  // used to count more the positive or negative action in heuristic
 			{"MULTIPLIER_NEGATIVE", -1},  // used to count more the positive or negative action in heuristic
 			{"TWO", 10 / 2},  // BAA.

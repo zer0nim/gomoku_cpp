@@ -31,7 +31,7 @@ void RealPlayer::move() {
 			}
 		}
 	}
-	int depth = std::min<int>(DEPTH, game.getBoard().getRemainPlaces());
+	int depth = std::min<int>(game.getHeuristic().getVal("DEPTH"), game.getBoard().getRemainPlaces());
 	Node node(game, !game.getPlayerActId(), -1, -1, depth+1);  // ////////////////////////
 	game.getHeuristic().heuristic(node);  // ///////////////////////////////////
 	std::cout << "heuristic: " << node.getHeuristic() << std::endl;  // /////////////
