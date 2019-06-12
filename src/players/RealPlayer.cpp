@@ -1,6 +1,7 @@
 #include "players/RealPlayer.hpp"
 #include "Game.hpp"
 #include "Node.hpp"
+#include <algorithm>
 
 RealPlayer::RealPlayer(Game &game, int _color) : Player(game, _color) {
 }
@@ -30,7 +31,8 @@ void RealPlayer::move() {
 			}
 		}
 	}
-	Node node(game);  // ////////////////////////
+	int depth = std::min<int>(DEPTH, game.getBoard().getRemainPlaces());
+	Node node(game, !game.getPlayerActId(), -1, -1, depth+1);  // ////////////////////////
 	game.getHeuristic().heuristic(node);  // ///////////////////////////////////
 	std::cout << "heuristic: " << node.getHeuristic() << std::endl;  // /////////////
 }
