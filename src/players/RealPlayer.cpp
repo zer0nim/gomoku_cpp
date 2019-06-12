@@ -30,7 +30,7 @@ void RealPlayer::move() {
 			}
 		}
 	}
-	Node node(game, *(new Board(game.getBoard())));  // //////////////////////////////////////////////
+	Node node(game);  // //////////////////////////////////////////////
 	std::cout << "heuristic: " << game.getHeuristic().heuristic(node) << std::endl;  // //////////////////////////////////////
 }
 

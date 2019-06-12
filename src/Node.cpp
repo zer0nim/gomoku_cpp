@@ -1,7 +1,22 @@
 #include "Node.hpp"
+#include "Game.hpp"
 
-Node::Node(Game &_game, Board &_board) :
-	game(_game),
-	board(_board),
-	isWin(false) {
+Node::Node(Game &game, Node *parent) :
+	game(game),
+	isWin(false),
+	_board(Board( (parent != nullptr) ? parent->getBoard() : this->game.getBoard() )),
+	_parent(parent) {
+}
+
+Node::~Node() {
+}
+
+int		Node::getX() const { return _x; }
+int		Node::getY() const { return _y; }
+int		Node::getHeuristic() const { return _heuristic; }
+Board	&Node::getBoard() { return _board; }
+
+std::ostream & operator << (std::ostream &out, const Node &n) {
+	out << "(" << n.getX() << ":" << n.getY() << "->" << n.getHeuristic() << ")";
+	return out;
 }
