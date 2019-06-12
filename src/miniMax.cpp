@@ -3,11 +3,10 @@
 #include <queue>
 #include <cmath>
 
-class ReverseCompareNode {
-    public:
-        bool operator()(const Node& lhs, const Node& rhs) const {
-            return lhs.getHeuristic() > rhs.getHeuristic();
-        }
+struct ReverseCompareNode {
+	bool operator()(const Node& lhs, const Node& rhs) const {
+		return lhs.getHeuristic() < rhs.getHeuristic();
+	}
 };
 
 std::tuple<Node, int> miniMax(Game &game, Node &node, int depth, bool maximize, float alpha, float beta) {
