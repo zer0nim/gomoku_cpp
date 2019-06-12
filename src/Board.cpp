@@ -358,7 +358,7 @@ this function check if it's allowed (empty place, no free-threes, ...)
 		SET_ST(_content, x, y, stone);
 		bool check_aligned = checkAligned(x, y, true); // if true => double three
 		SET_ST(_content, x, y, 0);
-		// return check_aligned;
+		return check_aligned;
 	}
 	return true;
 }
