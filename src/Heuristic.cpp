@@ -177,7 +177,7 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 }
 
 int Heuristic::heuristic(Node &node) {
-	std::unordered_map<std::string, int> checkReturn{
+	std::unordered_map<std::string, int> *checkReturnPtr = new std::unordered_map<std::string, int>{
         {"nb_stones", 0},
 		{"nb_two", 0},
 		{"nb_free_two", 0},
@@ -190,7 +190,7 @@ int Heuristic::heuristic(Node &node) {
 		{"nb_destroyed", 0}
 	};
 
-    std::stack<struct sNodeHist> nodeHist;
+    std::stack<struct sNodeHist> nodeHist{};
     Node *tmp = &node;
     while (tmp->getParent()) {
         nodeHist.push((struct sNodeHist){tmp->getX(), tmp->getY(), tmp->getStone()});
@@ -201,13 +201,12 @@ int Heuristic::heuristic(Node &node) {
         tmp = tmp->getParent();
     }
 
-    // if (nodeHist.size() > 1)
-    //     nodeHist.reverse()
     int i = 0;
     while (!nodeHist.empty()) {
+    // while (i < nodeHist.size()) {
         struct sNodeHist nodeHistI = nodeHist.top();
+        std::cout << "stone pos: " << nodeHistI.x << " " << nodeHistI.y << std::endl;
         nodeHist.pop();
-        std::cout << nodeHistI.x << std::endl;
         if (node.getBoard().isAllowed(nodeHistI.x, nodeHistI.y, nodeHistI.stone)) {
             int nbDestroyed = node.getBoard().putStone(nodeHistI.x, nodeHistI.y, nodeHistI.stone);
             int mul = ((nodeHist.size()+1)>>1) - (i>>1) + 1;
@@ -218,49 +217,63 @@ int Heuristic::heuristic(Node &node) {
                     if (game.getPlayerActId() == nodeHistI.stone)
                         node.isWin = true;
                 }
-                checkReturn["nbDestroyed"] += mul * (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(nodeHistI.stone);
+                (*checkReturnPtr)["nbDestroyed"] += mul * (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(nodeHistI.stone);
             }
-            checkStone(node, nodeHistI.x, nodeHistI.y, checkReturn, mul);
+            std::cout << "checkStone\n";
+            checkStone(node, nodeHistI.x, nodeHistI.y, (*checkReturnPtr), mul);
         }
-        else
+        else {
             return 0;  // ERROR
+        }
         i++;
     }
 
-	for (int x=0; x < BOARD_SZ; x++)
-		for (int y=0; y < BOARD_SZ; y++)
-			checkStone(node, x, y, checkReturn, 1);
+    std::size_t hashNode = node.getBoard().getHash();
+    if (node.transpositionTable->find(hashNode) != node.transpositionTable->end()) {
+        // checkReturnPtr = &((*node.transpositionTable)[hashNode]);
+        auto it = (*checkReturnPtr).begin();
+        while (it != (*checkReturnPtr).end()) {
+            (*checkReturnPtr)[it->first] += (*node.transpositionTable)[hashNode][it->first];
+            it++;
+        }
+    }
+    else {
+        for (int x=0; x < BOARD_SZ; x++)
+            for (int y=0; y < BOARD_SZ; y++)
+                checkStone(node, x, y, (*checkReturnPtr), 1);
+        (*node.transpositionTable)[hashNode] = *checkReturnPtr;
+    }
 
-#if DEBUG_PRINT_HEURISTIC_VAL == true
-    std::cout << "heuristic:" << std::endl;
-    std::cout << "\tnb_stones: " << checkReturn["nb_stones"] << std::endl;
-    std::cout << "\tnb_two: " << checkReturn["nb_two"] << std::endl;
-    std::cout << "\tnb_free_two: " << checkReturn["nb_free_two"] << std::endl;
-    std::cout << "\tnb_three: " << checkReturn["nb_three"] << std::endl;
-    std::cout << "\tnb_free_three: " << checkReturn["nb_free_three"] << std::endl;
-    std::cout << "\tnb_four: " << checkReturn["nb_four"] << std::endl;
-    std::cout << "\tnb_free_four: " << checkReturn["nb_free_four"] << std::endl;
-    std::cout << "\tnb_win: " << checkReturn["nb_win"] << std::endl;
-    std::cout << "\tnb_vulnerable: " << checkReturn["nb_vulnerable"] << std::endl;
-    std::cout << "\tnb_destroyed: " << checkReturn["nb_destroyed"] << std::endl;
-#endif
+    #if DEBUG_PRINT_HEURISTIC_VAL == true
+        std::cout << "heuristic:" << std::endl;
+        std::cout << "\tnb_stones: " << checkReturn["nb_stones"] << std::endl;
+        std::cout << "\tnb_two: " << checkReturn["nb_two"] << std::endl;
+        std::cout << "\tnb_free_two: " << checkReturn["nb_free_two"] << std::endl;
+        std::cout << "\tnb_three: " << checkReturn["nb_three"] << std::endl;
+        std::cout << "\tnb_free_three: " << checkReturn["nb_free_three"] << std::endl;
+        std::cout << "\tnb_four: " << checkReturn["nb_four"] << std::endl;
+        std::cout << "\tnb_free_four: " << checkReturn["nb_free_four"] << std::endl;
+        std::cout << "\tnb_win: " << checkReturn["nb_win"] << std::endl;
+        std::cout << "\tnb_vulnerable: " << checkReturn["nb_vulnerable"] << std::endl;
+        std::cout << "\tnb_destroyed: " << checkReturn["nb_destroyed"] << std::endl;
+    #endif
 
     // std::cout << node.getBoard().getHash() << std::endl;
 
-    checkReturn["nb_stones"] *= getVal("NB_STONES");
-    checkReturn["nb_two"] *= getVal("TWO");
-    checkReturn["nb_free_two"] *= getVal("FREE_TWO");
-    checkReturn["nb_three"] *= getVal("THREE");
-    checkReturn["nb_free_three"] *= getVal("FREE_THREE");
-    checkReturn["nb_four"] *= getVal("FOUR");
-    checkReturn["nb_free_four"] *= getVal("FREE_FOUR");
-    checkReturn["nb_win"] *= getVal("WIN");
-    checkReturn["nb_vulnerable"] *= getVal("VULNERABILITY");
-    checkReturn["nb_destroyed"] *= getVal("DESTROYED");
+    (*checkReturnPtr)["nb_stones"] *= getVal("NB_STONES");
+    (*checkReturnPtr)["nb_two"] *= getVal("TWO");
+    (*checkReturnPtr)["nb_free_two"] *= getVal("FREE_TWO");
+    (*checkReturnPtr)["nb_three"] *= getVal("THREE");
+    (*checkReturnPtr)["nb_free_three"] *= getVal("FREE_THREE");
+    (*checkReturnPtr)["nb_four"] *= getVal("FOUR");
+    (*checkReturnPtr)["nb_free_four"] *= getVal("FREE_FOUR");
+    (*checkReturnPtr)["nb_win"] *= getVal("WIN");
+    (*checkReturnPtr)["nb_vulnerable"] *= getVal("VULNERABILITY");
+    (*checkReturnPtr)["nb_destroyed"] *= getVal("DESTROYED");
 
 	int val = 0;
-	std::unordered_map<std::string, int>::iterator it = checkReturn.begin();
-	while (it != checkReturn.end()) {
+	std::unordered_map<std::string, int>::iterator it = (*checkReturnPtr).begin();
+	while (it != (*checkReturnPtr).end()) {
 		val += it->second;
 		it++;
 	}

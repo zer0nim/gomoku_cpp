@@ -1,9 +1,11 @@
 #include "Node.hpp"
 #include "Game.hpp"
 
-Node::Node(Game &game, int stone, int x, int y, int depth, Node *parent) :
+Node::Node(Game &game, int stone, int x, int y, int depth, Node *parent,
+std::unordered_map<std::size_t, std::unordered_map<std::string, int>> *_transpositionTable) :
 	game(game),
 	isWin(false),
+	transpositionTable( (_transpositionTable != nullptr) ? _transpositionTable : new std::unordered_map<std::size_t, std::unordered_map<std::string, int>>{}),
 	_board(Board( (parent != nullptr) ? parent->getBoard() : this->game.getBoard() )),
 	_x(x),
 	_y(y),
@@ -22,6 +24,7 @@ int		Node::getStone() const { return _stone; }
 Node	*Node::getParent() const { return _parent; }
 int		Node::getHeuristic() const { return _heuristic; }
 void	Node::setHeuristic(int val) { _heuristic = val; }
+std::vector<Node> &Node::getChilds() { return _childs; }
 
 Board	&Node::getBoard() { return _board; }
 
@@ -39,12 +42,13 @@ std::map<int, bool> Node::get_childs_coord() {
 							testChilds[_y * BOARD_SZ + _x] = true;
 			}
 	Node *tmp = this;
-	while (tmp->_parent != nullptr)
+	while (tmp->_parent != nullptr) {
 		for (int _y = tmp->_y - nbSquareArround; _y < tmp->_y + nbSquareArround + 1; ++_y)
 			for (int _x = tmp->_x - nbSquareArround; _x < tmp->_x + nbSquareArround + 1; ++_x)
 				if (_x >= 0 && _x < BOARD_SZ && _y >= 0 && _y < BOARD_SZ && _board.isEmpty(_x, _y))
 					testChilds[_y * BOARD_SZ + _x] = true;
 		tmp = tmp->_parent;
+	}
 	return testChilds;
 }
 
@@ -58,9 +62,10 @@ void	Node::setChilds() {
 	for (auto const& child : testChilds) {
 		int x = child.first % BOARD_SZ;
 		int y = child.first / BOARD_SZ;
-		if (DEBUG_SEARCH_ZONE)
+		#if DEBUG_SEARCH_ZONE == true
 			game.getBoard().setMarkerColor(x, y, 0xFF0000FF);
-		_childs.push_back(Node(game, !game.getPlayerActId(), x, y, _depth - 1));
+		#endif
+		_childs.push_back(Node(game, !game.getPlayerActId(), x, y, _depth - 1, this, transpositionTable));
 	}
 }
 
