@@ -4,11 +4,12 @@
 #include <iostream>
 #include <unordered_map>
 #include <list>
-#include "Node.hpp"
+#include "Define.hpp"
 
 #define NB_DIFFICULTY_LEVEL 3
 
 class Game;
+class Node;
 
 class Heuristic {
 	public:
@@ -17,12 +18,18 @@ class Heuristic {
 		// setter
 		void setDifficulty(int difficulty);
 		// getter
+		int getMul(int stone);
 		int getDifficulty();
 		int getMaxDifficulty();
 		int getVal(std::string name);
 
 		Game &game;
-	private:
+	protected:
+		void checkAlignedDir(Node &node, int x, int y, int stone, int addx, int addy,
+			std::unordered_map<std::string, int> checkReturn, int multiplier);
+		void checkStone(Node &node, int x, int y,
+			std::unordered_map<std::string, int> checkReturn, int multiplier);
+
 		std::unordered_map<std::string, int> _defVal{
 			{"DEPTH", 4},  // the depth of the algorithm
 			{"MULTIPLIER_POSITIVE", -1},  // used to count more the positive or negative action in heuristic

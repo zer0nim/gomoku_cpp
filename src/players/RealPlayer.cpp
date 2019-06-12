@@ -1,5 +1,6 @@
 #include "players/RealPlayer.hpp"
 #include "Game.hpp"
+#include "Node.hpp"
 
 RealPlayer::RealPlayer(Game &game, int _color) : Player(game, _color) {
 }
