@@ -41,19 +41,19 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
     while (1) {
         // if out of bound
         if (newX < 0 || newX >= BOARD_SZ || newY < 0 || newY >= BOARD_SZ) {
-            if (node.board.isEmpty(newX - addx, newY - addy))
+            if (node.getBoard().isEmpty(newX - addx, newY - addy))
                 freeSide[0] = true;
             break;
 		}
         // if player stone
-        else if (node.board.get(newX, newY) == stone) {
+        else if (node.getBoard().get(newX, newY) == stone) {
             nbAlmostAligned += 1;
             if (nbHole[0] == 0)
                 nbAligned += 1;
 		}
         // if empty
-        else if (node.board.isEmpty(newX, newY)) {
-            if (node.board.get(newX - addx, newY - addy) == stone) {
+        else if (node.getBoard().isEmpty(newX, newY)) {
+            if (node.getBoard().get(newX - addx, newY - addy) == stone) {
                 if (nbHole[0] == 0) {
                     nbHole[0] = 1;
 				}
@@ -62,7 +62,7 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
                     break;
 				}
 			}
-            else if (node.board.isEmpty(newX - addx, newY - addy)) {
+            else if (node.getBoard().isEmpty(newX - addx, newY - addy)) {
                 nbHole[0] = 0;
                 freeSide[0] = true;
                 break;
@@ -70,7 +70,7 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 		}
         // if other stone
         else {
-            if (node.board.isEmpty(newX - addx, newY - addy)) {
+            if (node.getBoard().isEmpty(newX - addx, newY - addy)) {
                 nbHole[0] = 0;
                 freeSide[0] = true;
 			}
@@ -84,19 +84,19 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
     while (1) {
         // if out of bound
         if (newX < 0 || newX >= BOARD_SZ || newY < 0 || newY >= BOARD_SZ) {
-            if (node.board.isEmpty(newX + addx, newY + addy))
+            if (node.getBoard().isEmpty(newX + addx, newY + addy))
                 freeSide[0] = true;
             break;
 		}
         // if player stone
-        else if (node.board.get(newX, newY) == stone) {
+        else if (node.getBoard().get(newX, newY) == stone) {
             nbAlmostAligned += 1;
             if (nbHole[0] == 0)
                 nbAligned += 1;
 		}
         // if empty
-        else if (node.board.isEmpty(newX, newY)) {
-            if (node.board.get(newX + addx, newY + addy) == stone) {
+        else if (node.getBoard().isEmpty(newX, newY)) {
+            if (node.getBoard().get(newX + addx, newY + addy) == stone) {
                 if (nbHole[0] == 0) {
                     nbHole[0] = 1;
 				}
@@ -105,7 +105,7 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
                     break;
 				}
 			}
-            else if (node.board.isEmpty(newX + addx, newY + addy)) {
+            else if (node.getBoard().isEmpty(newX + addx, newY + addy)) {
                 nbHole[0] = 0;
                 freeSide[0] = true;
                 break;
@@ -113,7 +113,7 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 		}
         // if other stone
         else {
-            if (node.board.isEmpty(newX + addx, newY + addy)) {
+            if (node.getBoard().isEmpty(newX + addx, newY + addy)) {
                 nbHole[0] = 0;
                 freeSide[0] = true;
 			}
@@ -157,10 +157,10 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 
 void Heuristic::checkStone(Node &node, int x, int y,
 std::unordered_map<std::string, int> &checkReturn, int multiplier) {
-	int stone = node.board.get(x, y);
-	if (node.board.isEmpty(x, y))
+	int stone = node.getBoard().get(x, y);
+	if (node.getBoard().isEmpty(x, y))
 		return ;
-	if (node.board.checkVulnerability(x, y)) {
+	if (node.getBoard().checkVulnerability(x, y)) {
 		int mul = multiplier;
 		if (game.getPlayer(stone).getNbDestroyedStones() + 2 >= NB_DESTROYED_VICTORY)
 			mul *= getVal("DESTROY_VICTORY_ADDER");
@@ -201,7 +201,7 @@ int Heuristic::heuristic(Node &node) {
     std::cout << "\tnb_destroyed: " << checkReturn["nb_destroyed"] << std::endl;
 #endif
 
-    std::cout << node.board.getStrHashable() << std::endl;
+    std::cout << node.getBoard().getStrHashable() << std::endl;
 
     checkReturn["nb_two"] *= getVal("TWO");
     checkReturn["nb_free_two"] *= getVal("FREE_TWO");
@@ -219,7 +219,7 @@ int Heuristic::heuristic(Node &node) {
 		val += it->second;
 		it++;
 	}
-    node.heuristic = val;
+    node.setHeuristic(val);
 	return val;
 }
 

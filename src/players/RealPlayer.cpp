@@ -30,9 +30,9 @@ void RealPlayer::move() {
 			}
 		}
 	}
-	Node node(game, *(new Board(game.getBoard())));  // ////////////////////////
+	Node node(game);  // ////////////////////////
 	game.getHeuristic().heuristic(node);  // ///////////////////////////////////
-	std::cout << "heuristic: " << node.heuristic << std::endl;  // /////////////
+	std::cout << "heuristic: " << node.getHeuristic() << std::endl;  // /////////////
 }
 
 std::string RealPlayer::getType() const { return "Real Player"; }
