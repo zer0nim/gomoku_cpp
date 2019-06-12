@@ -177,7 +177,7 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 }
 
 int Heuristic::heuristic(Node &node) {
-	std::unordered_map<std::string, int> *checkReturnPtr = new std::unordered_map<std::string, int>{
+	std::unordered_map<std::string, int> checkReturn{
         {"nb_stones", 0},
 		{"nb_two", 0},
 		{"nb_free_two", 0},
@@ -203,7 +203,6 @@ int Heuristic::heuristic(Node &node) {
 
     int i = 0;
     while (!nodeHist.empty()) {
-    // while (i < nodeHist.size()) {
         struct sNodeHist nodeHistI = nodeHist.top();
         std::cout << "stone pos: " << nodeHistI.x << " " << nodeHistI.y << std::endl;
         nodeHist.pop();
@@ -217,10 +216,10 @@ int Heuristic::heuristic(Node &node) {
                     if (game.getPlayerActId() == nodeHistI.stone)
                         node.isWin = true;
                 }
-                (*checkReturnPtr)["nbDestroyed"] += mul * (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(nodeHistI.stone);
+                checkReturn["nbDestroyed"] += mul * (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(nodeHistI.stone);
             }
             std::cout << "checkStone\n";
-            checkStone(node, nodeHistI.x, nodeHistI.y, (*checkReturnPtr), mul);
+            checkStone(node, nodeHistI.x, nodeHistI.y, checkReturn, mul);
         }
         else {
             return 0;  // ERROR
@@ -229,19 +228,19 @@ int Heuristic::heuristic(Node &node) {
     }
 
     std::size_t hashNode = node.getBoard().getHash();
-    if (node.transpositionTable->find(hashNode) != node.transpositionTable->end()) {
-        // checkReturnPtr = &((*node.transpositionTable)[hashNode]);
-        auto it = (*checkReturnPtr).begin();
-        while (it != (*checkReturnPtr).end()) {
-            (*checkReturnPtr)[it->first] += (*node.transpositionTable)[hashNode][it->first];
+    if (node.transpositionTable.find(hashNode) != node.transpositionTable.end()) {
+        // checkReturn = (*node.transpositionTable)[hashNode];
+        auto it = checkReturn.begin();
+        while (it != checkReturn.end()) {
+            checkReturn[it->first] += node.transpositionTable[hashNode][it->first];
             it++;
         }
     }
     else {
         for (int x=0; x < BOARD_SZ; x++)
             for (int y=0; y < BOARD_SZ; y++)
-                checkStone(node, x, y, (*checkReturnPtr), 1);
-        (*node.transpositionTable)[hashNode] = *checkReturnPtr;
+                checkStone(node, x, y, checkReturn, 1);
+        node.transpositionTable[hashNode] = checkReturn;
     }
 
     #if DEBUG_PRINT_HEURISTIC_VAL == true
@@ -260,20 +259,20 @@ int Heuristic::heuristic(Node &node) {
 
     // std::cout << node.getBoard().getHash() << std::endl;
 
-    (*checkReturnPtr)["nb_stones"] *= getVal("NB_STONES");
-    (*checkReturnPtr)["nb_two"] *= getVal("TWO");
-    (*checkReturnPtr)["nb_free_two"] *= getVal("FREE_TWO");
-    (*checkReturnPtr)["nb_three"] *= getVal("THREE");
-    (*checkReturnPtr)["nb_free_three"] *= getVal("FREE_THREE");
-    (*checkReturnPtr)["nb_four"] *= getVal("FOUR");
-    (*checkReturnPtr)["nb_free_four"] *= getVal("FREE_FOUR");
-    (*checkReturnPtr)["nb_win"] *= getVal("WIN");
-    (*checkReturnPtr)["nb_vulnerable"] *= getVal("VULNERABILITY");
-    (*checkReturnPtr)["nb_destroyed"] *= getVal("DESTROYED");
+    checkReturn["nb_stones"] *= getVal("NB_STONES");
+    checkReturn["nb_two"] *= getVal("TWO");
+    checkReturn["nb_free_two"] *= getVal("FREE_TWO");
+    checkReturn["nb_three"] *= getVal("THREE");
+    checkReturn["nb_free_three"] *= getVal("FREE_THREE");
+    checkReturn["nb_four"] *= getVal("FOUR");
+    checkReturn["nb_free_four"] *= getVal("FREE_FOUR");
+    checkReturn["nb_win"] *= getVal("WIN");
+    checkReturn["nb_vulnerable"] *= getVal("VULNERABILITY");
+    checkReturn["nb_destroyed"] *= getVal("DESTROYED");
 
 	int val = 0;
-	std::unordered_map<std::string, int>::iterator it = (*checkReturnPtr).begin();
-	while (it != (*checkReturnPtr).end()) {
+	auto it = checkReturn.begin();
+	while (it != checkReturn.end()) {
 		val += it->second;
 		it++;
 	}

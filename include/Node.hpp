@@ -28,7 +28,7 @@ this class store a possible move for the ai minMax algorithm
 
 		Game		&game;
 		bool		isWin;
-		std::unordered_map<std::size_t, std::unordered_map<std::string, int>> *transpositionTable;
+		std::unordered_map<std::size_t, std::unordered_map<std::string, int>> transpositionTable;
 	private:
 		std::map<int, bool>	get_childs_coord();
 

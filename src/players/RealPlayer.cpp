@@ -22,6 +22,20 @@ void RealPlayer::move() {
 			y = _clickedPos[1];
 			if (game.getBoard().isAllowed(x, y, game.getPlayerActId())) {
 				game.getBoard().putStone(x, y, game.getPlayerActId());
+				///////////////
+				int depth = std::min<int>(game.getHeuristic().getVal("DEPTH"), game.getBoard().getRemainPlaces());
+				Node node(game, !game.getPlayerActId(), -1, -1, depth+1);  // ////////////////////////
+				game.getHeuristic().heuristic(node);  // ///////////////////////////////////
+				node.setChilds();
+				node.getChilds()[0].setChilds();
+				int heuristic;
+				heuristic = game.getHeuristic().heuristic(node);
+				std::cout << std::endl << "heuristic: " << heuristic << std::endl;  // /////////////
+				heuristic = game.getHeuristic().heuristic(node.getChilds()[0]);
+				std::cout << "child heuristic: " << heuristic << std::endl;
+				heuristic = game.getHeuristic().heuristic(node.getChilds()[0].getChilds()[0]);
+				std::cout << "childchild heuristic: " << heuristic << std::endl;
+				////////////////////
 				break;
 			}
 			else {
@@ -31,18 +45,6 @@ void RealPlayer::move() {
 			}
 		}
 	}
-	int depth = std::min<int>(game.getHeuristic().getVal("DEPTH"), game.getBoard().getRemainPlaces());
-	Node node(game, !game.getPlayerActId(), -1, -1, depth+1);  // ////////////////////////
-	game.getHeuristic().heuristic(node);  // ///////////////////////////////////
-	node.setChilds();
-	node.getChilds()[0].setChilds();
-	int heuristic;
-	heuristic = game.getHeuristic().heuristic(node);
-	std::cout << std::endl << "heuristic: " << heuristic << std::endl;  // /////////////
-	heuristic = game.getHeuristic().heuristic(node.getChilds()[0]);
-	std::cout << "child heuristic: " << heuristic << std::endl;
-	heuristic = game.getHeuristic().heuristic(node.getChilds()[0].getChilds()[0]);
-	std::cout << "childchild heuristic: " << heuristic << std::endl;
 }
 
 std::string RealPlayer::getType() const { return "Real Player"; }

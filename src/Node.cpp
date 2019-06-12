@@ -5,7 +5,7 @@ Node::Node(Game &game, int stone, int x, int y, int depth, Node *parent,
 std::unordered_map<std::size_t, std::unordered_map<std::string, int>> *_transpositionTable) :
 	game(game),
 	isWin(false),
-	transpositionTable( (_transpositionTable != nullptr) ? _transpositionTable : new std::unordered_map<std::size_t, std::unordered_map<std::string, int>>{}),
+	transpositionTable( (_transpositionTable != nullptr) ? *_transpositionTable : std::unordered_map<std::size_t, std::unordered_map<std::string, int>>{}),
 	_board(Board( (parent != nullptr) ? parent->getBoard() : this->game.getBoard() )),
 	_x(x),
 	_y(y),
@@ -65,7 +65,7 @@ void	Node::setChilds() {
 		#if DEBUG_SEARCH_ZONE == true
 			game.getBoard().setMarkerColor(x, y, 0xFF0000FF);
 		#endif
-		_childs.push_back(Node(game, !game.getPlayerActId(), x, y, _depth - 1, this, transpositionTable));
+		_childs.push_back(Node(game, !game.getPlayerActId(), x, y, _depth - 1, this, &transpositionTable));
 	}
 }
 
