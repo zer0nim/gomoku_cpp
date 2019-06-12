@@ -201,6 +201,8 @@ int Heuristic::heuristic(Node &node) {
     std::cout << "\tnb_destroyed: " << checkReturn["nb_destroyed"] << std::endl;
 #endif
 
+    std::cout << node.board.getStrHashable() << std::endl;
+
     checkReturn["nb_two"] *= getVal("TWO");
     checkReturn["nb_free_two"] *= getVal("FREE_TWO");
     checkReturn["nb_three"] *= getVal("THREE");

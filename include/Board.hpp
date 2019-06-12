@@ -14,6 +14,9 @@
 # define GET_VUL(boardC, x, y) (static_cast<bool>((boardC[y] & (4ull << (x*3))) >> (x*3 + 2)))
 # define SET_VUL(boardC, x, y, val) (boardC[y] = (boardC[y] & (((1ull << (BOARD_SZ*3))-1) ^ (4ull << (x*3)))) | (static_cast<uint64_t>(val) << (x*3 + 2)))
 
+// _content[y] & MASK_STONE -> get only stones and ignore vulnerability
+# define MASK_STONE 0b0000000011011011011011011011011011011011011011011011011011011011ull
+
 # define OP_ST(stone) (!(stone-1) + 1)
 
 struct markerTxt {
@@ -38,6 +41,7 @@ class Board {
 		bool	isEmpty(int x, int y) const;
 		bool	isStone(int x, int y, int stone) const;
 		bool	isLastStone(int x, int y);
+		std::string getStrHashable();
 
 		int		putStone(int x, int y, int stone);
 		bool	isFreeThreeDir(int x, int y, int stone, int addx, int addy);

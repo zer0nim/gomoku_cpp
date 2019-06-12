@@ -8,7 +8,7 @@
 
 #define NB_DIFFICULTY_LEVEL 3
 
-#define DEBUG_PRINT_HEURISTIC_VAL true
+#define DEBUG_PRINT_HEURISTIC_VAL false
 
 class Game;
 class Node;

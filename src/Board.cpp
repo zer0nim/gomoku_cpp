@@ -50,6 +50,13 @@ bool Board::isStone(int x, int y, int stone) const {
 bool Board::isLastStone(int x, int y) {
 	return (x == _lastStone[0] && y == _lastStone[1]);
 }
+std::string Board::getStrHashable() {
+	// char s[8 * BOARD_SZ];
+	// for (int i=0; i < BOARD_SZ; i++) {
+	// 	std::cout << (_content[i] & MASK_STONE) << std::endl;
+	// }
+	return "";
+}
 
 bool Board::checkVulnerability(int x, int y) {
 /*
