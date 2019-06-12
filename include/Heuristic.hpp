@@ -8,6 +8,8 @@
 
 #define NB_DIFFICULTY_LEVEL 3
 
+#define DEBUG_PRINT_HEURISTIC_VAL true
+
 class Game;
 class Node;
 
@@ -32,11 +34,11 @@ class Heuristic {
 
 		std::unordered_map<std::string, int> _defVal{
 			{"DEPTH", 4},  // the depth of the algorithm
-			{"MULTIPLIER_POSITIVE", -1},  // used to count more the positive or negative action in heuristic
+			{"MULTIPLIER_POSITIVE", 1},  // used to count more the positive or negative action in heuristic
 			{"MULTIPLIER_NEGATIVE", -1},  // used to count more the positive or negative action in heuristic
 			{"TWO", 10 / 2},  // BAA.
 			{"FREE_TWO", 15 / 2},  // .AA.
-			{"TRHEE", 30 / 3},  // BAAA.
+			{"THREE", 30 / 3},  // BAAA.
 			{"FREE_THREE", 80 / 3},  // .AAA. .A.AA.
 			{"FOUR", 100 / 4},  // BAAAA.
 			{"FREE_FOUR", 1500 / 4},  // .AAAA.
@@ -47,7 +49,7 @@ class Heuristic {
 		};
 		std::unordered_map<std::string, int> _defValEasy{
 			{"DEPTH", 1},
-			{"MULTIPLIER_POSITIVE", -1},
+			{"MULTIPLIER_POSITIVE", 1},
 			{"MULTIPLIER_NEGATIVE", -2}
 		};
 		std::unordered_map<std::string, int> _defValNormal{

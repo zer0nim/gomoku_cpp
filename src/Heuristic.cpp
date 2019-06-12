@@ -9,18 +9,21 @@ Heuristic::Heuristic(Game &_game) :
 }
 
 int Heuristic::getVal(std::string name) {
+    int retVal = 0;
 	if (_difficultyVal[_difficulty].find(name) == _difficultyVal[_difficulty].end()) {
-		return _defVal[name];
+		retVal = _defVal[name];
 	}
 	else {
-		return _difficultyVal[_difficulty][name];
+		retVal = _difficultyVal[_difficulty][name];
 	}
-	std::cout << "invalid parameter " << name << std::endl;
-	return 0;
+    if (retVal == 0)
+        std::cout << "invalid parameter " << name << std::endl;
+	return retVal;
 }
 int Heuristic::getMul(int stone) {
-	if (game.getPlayerActId() == stone)
+	if (game.getPlayerActId() == stone) {
 		return getVal("MULTIPLIER_POSITIVE");
+    }
 	return getVal("MULTIPLIER_NEGATIVE");
 }
 
@@ -185,12 +188,36 @@ int Heuristic::heuristic(Node &node) {
 		for (int y=0; y < BOARD_SZ; y++)
 			checkStone(node, x, y, checkReturn, 1);
 
+#if DEBUG_PRINT_HEURISTIC_VAL == true
+    std::cout << "heuristic:" << std::endl;
+    std::cout << "\tnb_two: " << checkReturn["nb_two"] << std::endl;
+    std::cout << "\tnb_free_two: " << checkReturn["nb_free_two"] << std::endl;
+    std::cout << "\tnb_three: " << checkReturn["nb_three"] << std::endl;
+    std::cout << "\tnb_free_three: " << checkReturn["nb_free_three"] << std::endl;
+    std::cout << "\tnb_four: " << checkReturn["nb_four"] << std::endl;
+    std::cout << "\tnb_free_four: " << checkReturn["nb_free_four"] << std::endl;
+    std::cout << "\tnb_win: " << checkReturn["nb_win"] << std::endl;
+    std::cout << "\tnb_vulnerable: " << checkReturn["nb_vulnerable"] << std::endl;
+    std::cout << "\tnb_destroyed: " << checkReturn["nb_destroyed"] << std::endl;
+#endif
+
+    checkReturn["nb_two"] *= getVal("TWO");
+    checkReturn["nb_free_two"] *= getVal("FREE_TWO");
+    checkReturn["nb_three"] *= getVal("THREE");
+    checkReturn["nb_free_three"] *= getVal("FREE_THREE");
+    checkReturn["nb_four"] *= getVal("FOUR");
+    checkReturn["nb_free_four"] *= getVal("FREE_FOUR");
+    checkReturn["nb_win"] *= getVal("WIN");
+    checkReturn["nb_vulnerable"] *= getVal("VULNERABILITY");
+    checkReturn["nb_destroyed"] *= getVal("DESTROYED");
+
 	int val = 0;
 	std::unordered_map<std::string, int>::iterator it = checkReturn.begin();
 	while (it != checkReturn.end()) {
 		val += it->second;
 		it++;
 	}
+    node.heuristic = val;
 	return val;
 }
 
