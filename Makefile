@@ -53,13 +53,13 @@ LIGHT = "\e[2m"
 ITALIC = "\e[3m"
 ULINE = "\e[4m"
 
-all: $(OBJ_PATH) $(NAME)
+all: $(NAME)
 
-$(NAME): $(OBJP)
+$(NAME): $(OBJ_PATH) $(OBJP)
 	@printf $(CYAN)"-> create program : $(NAME)\n"$(NORMAL)
 	@$(CPP) $(FLAGS) -o $(NAME) $(OBJP) $(LIBS_FLAGS)
 
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(HEADP) $(OBJ_PATH)
+$(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(HEADP)
 	@printf $(YELLOW)"-> $<\n"$(NORMAL)
 	@$(CPP) $(FLAGS) -c $< -o $@ $(INCP) -I ~/.brew/Cellar/sfml/2.5.1/include/
 

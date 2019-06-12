@@ -159,8 +159,11 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 void Heuristic::checkStone(Node &node, int x, int y,
 std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 	int stone = node.getBoard().get(x, y);
+
 	if (node.getBoard().isEmpty(x, y))
 		return ;
+
+    checkReturn["nb_stones"] += getMul(stone);
 	if (node.getBoard().checkVulnerability(x, y)) {
 		int mul = multiplier;
 		if (game.getPlayer(stone).getNbDestroyedStones() + 2 >= NB_DESTROYED_VICTORY)
@@ -175,6 +178,7 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 
 int Heuristic::heuristic(Node &node) {
 	std::unordered_map<std::string, int> checkReturn{
+        {"nb_stones", 0},
 		{"nb_two", 0},
 		{"nb_free_two", 0},
 		{"nb_three", 0},
@@ -229,6 +233,7 @@ int Heuristic::heuristic(Node &node) {
 
 #if DEBUG_PRINT_HEURISTIC_VAL == true
     std::cout << "heuristic:" << std::endl;
+    std::cout << "\tnb_stones: " << checkReturn["nb_stones"] << std::endl;
     std::cout << "\tnb_two: " << checkReturn["nb_two"] << std::endl;
     std::cout << "\tnb_free_two: " << checkReturn["nb_free_two"] << std::endl;
     std::cout << "\tnb_three: " << checkReturn["nb_three"] << std::endl;
@@ -242,6 +247,7 @@ int Heuristic::heuristic(Node &node) {
 
     // std::cout << node.getBoard().getHash() << std::endl;
 
+    checkReturn["nb_stones"] *= getVal("NB_STONES");
     checkReturn["nb_two"] *= getVal("TWO");
     checkReturn["nb_free_two"] *= getVal("FREE_TWO");
     checkReturn["nb_three"] *= getVal("THREE");
