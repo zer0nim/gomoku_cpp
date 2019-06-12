@@ -13,6 +13,8 @@ Node::~Node() {
 
 int		Node::getX() const { return _x; }
 int		Node::getY() const { return _y; }
+int		Node::getStone() const { return _stone; }
+Node	*Node::getParent() const { return _parent; }
 int		Node::getHeuristic() const { return _heuristic; }
 void	Node::setHeuristic(int val) { _heuristic = val; }
 

@@ -41,7 +41,7 @@ class Board {
 		bool	isEmpty(int x, int y) const;
 		bool	isStone(int x, int y, int stone) const;
 		bool	isLastStone(int x, int y);
-		std::string getStrHashable();
+		std::size_t getHash();
 
 		int		putStone(int x, int y, int stone);
 		bool	isFreeThreeDir(int x, int y, int stone, int addx, int addy);

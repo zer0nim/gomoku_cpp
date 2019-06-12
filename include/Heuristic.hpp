@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <unordered_map>
-#include <list>
 #include "Define.hpp"
 
 #define NB_DIFFICULTY_LEVEL 3
@@ -12,6 +11,12 @@
 
 class Game;
 class Node;
+
+struct sNodeHist {
+	int x;
+	int y;
+	int stone;
+};
 
 class Heuristic {
 	public:

@@ -10,6 +10,8 @@ class Node {
 		~Node();
 		int		getX() const;
  		int		getY() const;
+		int		getStone() const;
+		Node	*getParent() const;
 		int		getHeuristic() const;
 		void	setHeuristic(int val);
 		Board	&getBoard();

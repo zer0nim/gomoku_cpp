@@ -8,4 +8,6 @@
 #define NB_DESTROYED_VICTORY 10
 #define STONE_EMPTY 0
 
+#define ENABLE_KEEP_NODE_PERCENT false
+
 #endif

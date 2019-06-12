@@ -1,3 +1,4 @@
+#include <stack>
 #include "Game.hpp"
 #include "Node.hpp"
 #include "Heuristic.hpp"
@@ -184,6 +185,44 @@ int Heuristic::heuristic(Node &node) {
 		{"nb_vulnerable", 0},
 		{"nb_destroyed", 0}
 	};
+
+    std::stack<struct sNodeHist> nodeHist;
+    Node *tmp = &node;
+    while (tmp->getParent()) {
+        nodeHist.push((struct sNodeHist){tmp->getX(), tmp->getY(), tmp->getStone()});
+        // tmp.is_stone_on_board = True
+        #if ENABLE_KEEP_NODE_PERCENT == true
+            break;
+        #endif
+        tmp = tmp->getParent();
+    }
+
+    // if (nodeHist.size() > 1)
+    //     nodeHist.reverse()
+    int i = 0;
+    while (!nodeHist.empty()) {
+        struct sNodeHist nodeHistI = nodeHist.top();
+        nodeHist.pop();
+        std::cout << nodeHistI.x << std::endl;
+        if (node.getBoard().isAllowed(nodeHistI.x, nodeHistI.y, nodeHistI.stone)) {
+            int nbDestroyed = node.getBoard().putStone(nodeHistI.x, nodeHistI.y, nodeHistI.stone);
+            int mul = ((nodeHist.size()+1)>>1) - (i>>1) + 1;
+            if (nbDestroyed > 0) {
+                mul = 1;
+                if (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + nbDestroyed >= NB_DESTROYED_VICTORY) {
+                    mul = getVal("DESTROY_VICTORY_ADDER");
+                    if (game.getPlayerActId() == nodeHistI.stone)
+                        node.isWin = true;
+                }
+                checkReturn["nbDestroyed"] += mul * (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(nodeHistI.stone);
+            }
+            checkStone(node, nodeHistI.x, nodeHistI.y, checkReturn, mul);
+        }
+        else
+            return 0;  // ERROR
+        i++;
+    }
+
 	for (int x=0; x < BOARD_SZ; x++)
 		for (int y=0; y < BOARD_SZ; y++)
 			checkStone(node, x, y, checkReturn, 1);
@@ -201,7 +240,7 @@ int Heuristic::heuristic(Node &node) {
     std::cout << "\tnb_destroyed: " << checkReturn["nb_destroyed"] << std::endl;
 #endif
 
-    std::cout << node.getBoard().getStrHashable() << std::endl;
+    // std::cout << node.getBoard().getHash() << std::endl;
 
     checkReturn["nb_two"] *= getVal("TWO");
     checkReturn["nb_free_two"] *= getVal("FREE_TWO");
