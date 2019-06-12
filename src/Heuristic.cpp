@@ -25,129 +25,135 @@ int Heuristic::getMul(int stone) {
 }
 
 void Heuristic::checkAlignedDir(Node &node, int x, int y, int stone, int addx, int addy,
-std::unordered_map<std::string, int> checkReturn, int multiplier) {
-	int nb_aligned = 1;  // number of aligned stones
-    int nb_almost_aligned = 1;  // number of pseudo aligned stones (pseudo mean that there is a hole)
-    bool free_side[] = {false, false};  // True if there is a free space around alignement
-    int nb_hole[] = {0, 0};
-	int new_x;
-	int new_y;
+std::unordered_map<std::string, int> &checkReturn, int multiplier) {
+	int nbAligned = 1;  // number of aligned stones
+    int nbAlmostAligned = 1;  // number of pseudo aligned stones (pseudo mean that there is a hole)
+    bool freeSide[] = {false, false};  // True if there is a free space around alignement
+    int nbHole[] = {0, 0};
+	int newX;
+	int newY;
 
-    new_x = x + addx;
-    new_y = y + addy;
+    newX = x + addx;
+    newY = y + addy;
     while (1) {
         // if out of bound
-        if (new_x < 0 || new_x >= BOARD_SZ || new_y < 0 || new_y >= BOARD_SZ) {
-            if (node.board.isEmpty(new_x - addx, new_y - addy))
-                free_side[0] = true;
+        if (newX < 0 || newX >= BOARD_SZ || newY < 0 || newY >= BOARD_SZ) {
+            if (node.board.isEmpty(newX - addx, newY - addy))
+                freeSide[0] = true;
             break;
 		}
         // if player stone
-        else if (node.board.get(new_x, new_y) == stone) {
-            nb_almost_aligned += 1;
-            if (nb_hole[0] == 0)
-                nb_aligned += 1;
+        else if (node.board.get(newX, newY) == stone) {
+            nbAlmostAligned += 1;
+            if (nbHole[0] == 0)
+                nbAligned += 1;
 		}
         // if empty
-        else if (node.board.isEmpty(new_x, new_y)) {
-            if (node.board.get(new_x - addx, new_y - addy) == stone) {
-                if (nb_hole[0] == 0) {
-                    nb_hole[0] = 1;
+        else if (node.board.isEmpty(newX, newY)) {
+            if (node.board.get(newX - addx, newY - addy) == stone) {
+                if (nbHole[0] == 0) {
+                    nbHole[0] = 1;
 				}
                 else {
-                    free_side[0] = true;
+                    freeSide[0] = true;
                     break;
 				}
 			}
-            else if (node.board.isEmpty(new_x - addx, new_y - addy)) {
-                nb_hole[0] = 0;
-                free_side[0] = true;
+            else if (node.board.isEmpty(newX - addx, newY - addy)) {
+                nbHole[0] = 0;
+                freeSide[0] = true;
                 break;
 			}
 		}
         // if other stone
         else {
-            if (node.board.isEmpty(new_x - addx, new_y - addy)) {
-                nb_hole[0] = 0;
-                free_side[0] = true;
+            if (node.board.isEmpty(newX - addx, newY - addy)) {
+                nbHole[0] = 0;
+                freeSide[0] = true;
 			}
             break;
 		}
-        new_x += addx;
-        new_y += addy;
+        newX += addx;
+        newY += addy;
 	}
-    new_x = x - addx;
-    new_y = y - addy;
+    newX = x - addx;
+    newY = y - addy;
     while (1) {
         // if out of bound
-        if (new_x < 0 || new_x >= BOARD_SZ || new_y < 0 || new_y >= BOARD_SZ) {
-            if (node.board.isEmpty(new_x + addx, new_y + addy))
-                free_side[0] = true;
+        if (newX < 0 || newX >= BOARD_SZ || newY < 0 || newY >= BOARD_SZ) {
+            if (node.board.isEmpty(newX + addx, newY + addy))
+                freeSide[0] = true;
             break;
 		}
         // if player stone
-        else if (node.board.get(new_x, new_y) == stone) {
-            nb_almost_aligned += 1;
-            if (nb_hole[0] == 0)
-                nb_aligned += 1;
+        else if (node.board.get(newX, newY) == stone) {
+            nbAlmostAligned += 1;
+            if (nbHole[0] == 0)
+                nbAligned += 1;
 		}
         // if empty
-        else if (node.board.isEmpty(new_x, new_y)) {
-            if (node.board.get(new_x + addx, new_y + addy) == stone) {
-                if (nb_hole[0] == 0) {
-                    nb_hole[0] = 1;
+        else if (node.board.isEmpty(newX, newY)) {
+            if (node.board.get(newX + addx, newY + addy) == stone) {
+                if (nbHole[0] == 0) {
+                    nbHole[0] = 1;
 				}
                 else {
-                    free_side[0] = true;
+                    freeSide[0] = true;
                     break;
 				}
 			}
-            else if (node.board.isEmpty(new_x + addx, new_y + addy)) {
-                nb_hole[0] = 0;
-                free_side[0] = true;
+            else if (node.board.isEmpty(newX + addx, newY + addy)) {
+                nbHole[0] = 0;
+                freeSide[0] = true;
                 break;
 			}
 		}
         // if other stone
         else {
-            if (node.board.isEmpty(new_x + addx, new_y + addy)) {
-                nb_hole[0] = 0;
-                free_side[0] = true;
+            if (node.board.isEmpty(newX + addx, newY + addy)) {
+                nbHole[0] = 0;
+                freeSide[0] = true;
 			}
             break;
 		}
-        new_x -= addx;
-        new_y -= addy;
+        newX -= addx;
+        newY -= addy;
 	}
 
-    // if nb_aligned >= G.GET("NB_ALIGNED_VICTORY"):  // AAAAA
-    //     if game.id_player_act == stone:
-    //         node.is_win = True
-    //     check_return['nb_win'] += multiplier * (G.GET("H_POSITIVE_MULTIPLIER") if game.id_player_act == stone else G.GET("H_NEGATIVE_MULTIPLIER"))
-    // elif nb_aligned >= 4:
-    //     if free_side[0] + free_side[1] == 2:  // .AAAA.
-    //         check_return['nb_free_four'] += multiplier * (G.GET("H_POSITIVE_MULTIPLIER") if game.id_player_act == stone else G.GET("H_NEGATIVE_MULTIPLIER"))
-    //     elif free_side[0] + free_side[1] == 1:  // BAAAA.
-    //         check_return['nb_four'] += multiplier * (G.GET("H_POSITIVE_MULTIPLIER") if game.id_player_act == stone else G.GET("H_NEGATIVE_MULTIPLIER"))
-    // elif nb_aligned >= 3:
-    //     if free_side[0] + free_side[1] == 2:  // .AAA.
-    //         check_return['nb_free_three'] += multiplier * (G.GET("H_POSITIVE_MULTIPLIER") if game.id_player_act == stone else G.GET("H_NEGATIVE_MULTIPLIER"))
-    //     elif free_side[0] + free_side[1] == 1:  // BAAA.
-    //         check_return['nb_three'] += multiplier * (G.GET("H_POSITIVE_MULTIPLIER") if game.id_player_act == stone else G.GET("H_NEGATIVE_MULTIPLIER"))
-    // elif nb_aligned >= 2:
-    //     if free_side[0] + free_side[1] == 2:  // .AA.
-    //         check_return['nb_free_two'] += multiplier * (G.GET("H_POSITIVE_MULTIPLIER") if game.id_player_act == stone else G.GET("H_NEGATIVE_MULTIPLIER"))
-    //     elif free_side[0] + free_side[1] == 1:  // BAA.
-    //         check_return['nb_two'] += multiplier * (G.GET("H_POSITIVE_MULTIPLIER") if game.id_player_act == stone else G.GET("H_NEGATIVE_MULTIPLIER"))
-    // elif nb_almost_aligned >= 4:  // AA.AA  AAA.AA
-    //     check_return['nb_four'] += multiplier * (G.GET("H_POSITIVE_MULTIPLIER") if game.id_player_act == stone else G.GET("H_NEGATIVE_MULTIPLIER"))
-    // elif nb_almost_aligned == 3:
-    //     if free_side[0] + free_side[1] == 2:  // .A.AA.  .AAA.
-    //         check_return['nb_free_three'] += multiplier * (G.GET("H_POSITIVE_MULTIPLIER") if game.id_player_act == stone else G.GET("H_NEGATIVE_MULTIPLIER"))
+    if (nbAligned >= NB_ALIGNED_VICTORY) {  // AAAAA
+        if (game.getPlayerActId() == stone)
+            node.isWin = true;
+        checkReturn["nb_win"] += multiplier * getMul(stone);
+	}
+    else if (nbAligned >= 4) {
+        if (freeSide[0] + freeSide[1] == 2)  // .AAAA.
+            checkReturn["nb_free_four"] += multiplier * getMul(stone);
+        else if (freeSide[0] + freeSide[1] == 1)  // BAAAA.
+            checkReturn["nb_four"] += multiplier * getMul(stone);
+	}
+    else if (nbAligned >= 3) {
+        if (freeSide[0] + freeSide[1] == 2)  // .AAA.
+            checkReturn["nb_free_three"] += multiplier * getMul(stone);
+        else if (freeSide[0] + freeSide[1] == 1)  // BAAA.
+            checkReturn["nb_three"] += multiplier * getMul(stone);
+	}
+    else if (nbAligned >= 2) {
+        if (freeSide[0] + freeSide[1] == 2)  // .AA.
+            checkReturn["nb_free_two"] += multiplier * getMul(stone);
+        else if (freeSide[0] + freeSide[1] == 1)  // BAA.
+            checkReturn["nb_two"] += multiplier * getMul(stone);
+	}
+    else if (nbAlmostAligned >= 4) {  // AA.AA  AAA.AA
+        checkReturn["nb_four"] += multiplier * getMul(stone);
+	}
+    else if (nbAlmostAligned == 3) {
+        if (freeSide[0] + freeSide[1] == 2)  // .A.AA.  .AAA.
+            checkReturn["nb_free_three"] += multiplier * getMul(stone);
+	}
 }
 
 void Heuristic::checkStone(Node &node, int x, int y,
-std::unordered_map<std::string, int> checkReturn, int multiplier) {
+std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 	int stone = node.board.get(x, y);
 	if (node.board.isEmpty(x, y))
 		return ;
@@ -178,7 +184,14 @@ int Heuristic::heuristic(Node &node) {
 	for (int x=0; x < BOARD_SZ; x++)
 		for (int y=0; y < BOARD_SZ; y++)
 			checkStone(node, x, y, checkReturn, 1);
-	return 0;
+
+	int val = 0;
+	std::unordered_map<std::string, int>::iterator it = checkReturn.begin();
+	while (it != checkReturn.end()) {
+		val += it->second;
+		it++;
+	}
+	return val;
 }
 
 void Heuristic::setDifficulty(int difficulty) {

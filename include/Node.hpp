@@ -10,6 +10,7 @@ class Node {
 		Game &game;
 		Board &board;
 		int heuristic;
+		bool isWin;
 };
 
 #endif

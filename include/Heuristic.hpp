@@ -26,9 +26,9 @@ class Heuristic {
 		Game &game;
 	protected:
 		void checkAlignedDir(Node &node, int x, int y, int stone, int addx, int addy,
-			std::unordered_map<std::string, int> checkReturn, int multiplier);
+			std::unordered_map<std::string, int> &checkReturn, int multiplier);
 		void checkStone(Node &node, int x, int y,
-			std::unordered_map<std::string, int> checkReturn, int multiplier);
+			std::unordered_map<std::string, int> &checkReturn, int multiplier);
 
 		std::unordered_map<std::string, int> _defVal{
 			{"DEPTH", 4},  // the depth of the algorithm
