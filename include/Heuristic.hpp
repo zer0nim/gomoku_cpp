@@ -40,6 +40,9 @@ class Heuristic {
 		std::unordered_map<std::string, int> _defVal{
 			{"DEPTH", 4},  // the depth of the algorithm
 			{"NB_SQUARE_ARROUND", 1},  // the number of squares arround taked pos to limit search zone
+			{"KEEP_NODE_PERCENT", 20},  // the percentage of node to keep (in minmax algo)
+			{"MIN_KEEP_NODE", 3},  // keep at least MIN_KEEP_NODE nodes (if the percentage return less than MIN_KEEP_NODE)
+			{"MAX_KEEP_NODE", 4},  // keep max MAX_KEEP_NODE nodes (if the percentage return more than MAX_KEEP_NODE)
 			{"MULTIPLIER_POSITIVE", 1},  // used to count more the positive or negative action in heuristic
 			{"MULTIPLIER_NEGATIVE", -1},  // used to count more the positive or negative action in heuristic
 			{"NB_STONES", 1},  // A

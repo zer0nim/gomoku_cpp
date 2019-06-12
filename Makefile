@@ -20,7 +20,8 @@ SRC		=	main.cpp \
 			players/RealPlayer.cpp \
 			players/AIPlayer.cpp \
 			Node.cpp \
-			Heuristic.cpp
+			Heuristic.cpp \
+			miniMax.cpp
 
 HEAD	=	Game.hpp \
 			Board.hpp \
@@ -30,7 +31,8 @@ HEAD	=	Game.hpp \
 			players/RealPlayer.hpp \
 			players/AIPlayer.hpp \
 			Node.hpp \
-			Heuristic.hpp
+			Heuristic.hpp \
+			miniMax.hpp
 
 LIBS_FLAGS = -L ~/.brew/lib -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network -rpath ~/.brew/lib
 
