@@ -35,7 +35,7 @@ this class store a possible move for the ai minMax algorithm
 		Node	*_parent;
 		int		_stone;
 		int		_depth;
-		std::vector<Node>	_childs;
+		std::vector<Node>	_childs = {};
 };
 
 std::ostream & operator << (std::ostream &out, const Node &n);

@@ -7,6 +7,7 @@ Node::Node(Game &game, int stone, int x, int y, int depth, Node *parent) :
 	_board(Board( (parent != nullptr) ? parent->getBoard() : this->game.getBoard() )),
 	_x(x),
 	_y(y),
+	_heuristic(0),
 	_parent(parent),
 	_stone(stone),
 	_depth(depth) {
