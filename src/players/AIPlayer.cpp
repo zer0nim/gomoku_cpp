@@ -16,7 +16,6 @@ void AIPlayer::move() {
 	else {
 		int depth = std::min<int>(game.getHeuristic().getVal("DEPTH"), game.getBoard().getRemainPlaces());
 		Node node(game, OP_ST(game.getPlayerActId()), -1, -1, depth+1);
-		node.setChilds();
 		std::tuple<Node*, int> move = miniMax(game, node, depth);
 
 		Node *nodeRes = std::get<0>(move);
