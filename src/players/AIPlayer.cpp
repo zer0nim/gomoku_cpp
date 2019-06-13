@@ -20,7 +20,7 @@ void AIPlayer::move() {
 
 		std::tuple<Node, int> move = miniMax(game, node, depth);
 		node = std::get<0>(move);
-		while (node.getParent()->getParent())
+		while (node.getParent() != nullptr)
 			node = *(node.getParent());
 		game.getBoard().putStone(node.getX(), node.getY(), game.getPlayerActId());
 	}
