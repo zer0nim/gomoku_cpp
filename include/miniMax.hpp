@@ -8,7 +8,7 @@
 # include <limits>
 # define COST_NONE std::numeric_limits<int>::max()
 
-std::tuple<Node, int> miniMax(Game &game, Node &node, int depth, bool maximize=true,
+std::tuple<Node*, int> miniMax(Game &game, Node &node, int depth, bool maximize=true,
     float alpha=(- std::numeric_limits<float>::infinity()), float beta=(std::numeric_limits<float>::infinity()));
 
 #endif

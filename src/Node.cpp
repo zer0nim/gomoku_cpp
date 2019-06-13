@@ -25,16 +25,17 @@ Node::~Node() {
 }
 
 Node &Node::operator=(Node const &rhs) {
+	std::cout << "Copy called" << std::endl;
 	if (this != &rhs) {
 		this->isWin = rhs.isWin;
 		this->_board = rhs.getBoardCopy();
 		this->_x = rhs.getX();
 		this->_y = rhs.getY();
 		this->_heuristic = rhs.getHeuristic();
-		this->_parent = nullptr;
+		this->_parent = rhs.getParent();
 		this->_stone = rhs.getStone();
 		this->_depth = rhs.getDepth();
-		this->_childs = rhs.getChildsCopy();
+		this->_childs = rhs.getChilds();
 	}
 	return *this;
 }
@@ -74,8 +75,7 @@ std::map<int, bool> Node::get_childs_coord() {
 	return testChilds;
 }
 
-std::vector<Node>	&Node::getChilds() { return _childs; }
-std::vector<Node>	Node::getChildsCopy() const { return _childs; }
+std::vector<Node*>	Node::getChilds() const { return _childs; }
 
 int		Node::setChilds() {
 	std::map<int, bool> testChilds = get_childs_coord();
@@ -90,7 +90,7 @@ int		Node::setChilds() {
 		#if DEBUG_SEARCH_ZONE == true
 			game.getBoard().setMarkerColor(x, y, 0xFF0000FF);
 		#endif
-		_childs.push_back(Node(game, !game.getPlayerActId(), x, y, _depth - 1, this, &transpositionTable));
+		_childs.push_back(new Node(game, OP_ST(game.getPlayerActId()), x, y, _depth - 1, this, &transpositionTable));
 	}
 	return _childs.size();
 }

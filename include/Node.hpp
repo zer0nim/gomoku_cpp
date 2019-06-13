@@ -31,8 +31,7 @@ this class store a possible move for the ai minMax algorithm
 		Board	getBoardCopy() const;
 		void	setIsWin(bool win);
 		int		getDepth() const;
-		std::vector<Node>	&getChilds();
-		std::vector<Node>	getChildsCopy() const;
+		std::vector<Node*>	getChilds() const;
 		int		setChilds();
 
 		Game		&game;
@@ -55,7 +54,7 @@ this class store a possible move for the ai minMax algorithm
 		Node	*_parent;
 		int		_stone;
 		int		_depth;
-		std::vector<Node>	_childs = {};
+		std::vector<Node*>	_childs = {};
 };
 
 std::ostream & operator << (std::ostream &out, const Node &n);

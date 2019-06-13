@@ -15,14 +15,15 @@ void AIPlayer::move() {
 		game.getBoard().putStone(BOARD_SZ / 2, BOARD_SZ / 2, game.getPlayerActId());
 	else {
 		int depth = std::min<int>(game.getHeuristic().getVal("DEPTH"), game.getBoard().getRemainPlaces());
-		Node node(game, !game.getPlayerActId(), -1, -1, depth+1);
+		Node node(game, OP_ST(game.getPlayerActId()), -1, -1, depth+1);
 		node.setChilds();
+		std::tuple<Node*, int> move = miniMax(game, node, depth);
 
-		std::tuple<Node, int> move = miniMax(game, node, depth);
-		node = std::get<0>(move);
-		while (node.getParent() != nullptr)
-			node = *(node.getParent());
-		game.getBoard().putStone(node.getX(), node.getY(), game.getPlayerActId());
+		Node *nodeRes = std::get<0>(move);
+		while (nodeRes->getParent() && nodeRes->getParent()->getParent()) {
+			nodeRes = nodeRes->getParent();
+		}
+		game.getBoard().putStone(nodeRes->getX(), nodeRes->getY(), game.getPlayerActId());
 	}
 }
 
