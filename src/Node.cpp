@@ -83,10 +83,6 @@ std::vector<Node*>	Node::getChilds() const { return _childs; }
 int		Node::setChilds() {
 	std::map<int, bool> testChilds = get_childs_coord();
 
-	#if DEBUG_SEARCH_ZONE == true
-		game.getBoard().resetDebug();
-	#endif
-
 	for (auto const& child : testChilds) {
 		int x = child.first % BOARD_SZ;
 		int y = child.first / BOARD_SZ;
