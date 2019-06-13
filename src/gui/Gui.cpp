@@ -1,5 +1,7 @@
 #include "gui/Gui.hpp"
 #include "Game.hpp"
+#include <iomanip>
+#include <sstream>
 
 Gui::Gui(Game &game) :
 	game(game),
@@ -190,9 +192,9 @@ void Gui::drawGame() {
 		_win->draw(playerText);
 		ywin += GUI_LINE_SPACE;
 		// exec time
-		char *str;
-		asprintf(&str, "%.2lfs", game.getPlayer(i).getTimeLastMove());
-		playerText.setString(str);
+		std::stringstream ss;
+		ss << std::fixed << std::setprecision(2) << game.getPlayer(i).getTimeLastMove() << 's' << std::endl;
+		playerText.setString(ss.str());
 		playerText.setPosition(xwin, ywin);
 		_win->draw(playerText);
 		ywin += GUI_LINE_SPACE;

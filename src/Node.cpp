@@ -22,6 +22,9 @@ Node::Node(Node const &src):
 }
 
 Node::~Node() {
+	for (auto it = _childs.begin(); it != _childs.end(); ++it)
+		delete *it;
+	_childs.clear();
 }
 
 Node &Node::operator=(Node const &rhs) {
