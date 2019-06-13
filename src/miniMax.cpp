@@ -9,14 +9,14 @@ struct ReverseCompareNode {
 	}
 };
 
-std::tuple<Node*, int> miniMax(Game &game, Node &node, int depth, bool maximize, float alpha, float beta) {
+std::tuple<Node*, int> miniMax(Game &game, Node &node, int depth, bool maximize, int alpha, int beta) {
 /*
 min_max algorithm implementation
 */
     if (depth == 0 || node.setChilds() == 0)
         return {&node, game.getHeuristic().heuristic(node)};
     if (maximize) {
-        float _max = - std::numeric_limits<float>::infinity();
+        int _max = - std::numeric_limits<int>::min();
         std::vector<Node*>	maxlst;
 		std::vector<Node*>  childs = node.getChilds();
         #if ENABLE_KEEP_NODE_PERCENT == true
@@ -47,7 +47,7 @@ min_max algorithm implementation
 			#endif
 
             std::tuple<Node*, int> childMin = miniMax(game, *child, depth-1, false, alpha, beta);
-            if (std::get<1>(childMin) == COST_NONE)
+            if (std::get<1>(childMin) == HEURIS_NOT_SET)
                 continue;
             if (std::get<1>(childMin) > _max) {
                 _max = std::get<1>(childMin);
@@ -60,7 +60,7 @@ min_max algorithm implementation
                 break;
         }
         if (maxlst.empty())
-            return {&node, COST_NONE};
+            return {&node, HEURIS_NOT_SET};
         #if MINMAX_RANDOM_CHOICE == true
             Node *_node = random.choice(maxlst);
         #else
@@ -69,7 +69,7 @@ min_max algorithm implementation
         return {_node, _max};
     }
     else {  // minimize
-        float _min = std::numeric_limits<float>::infinity();
+        int _min = std::numeric_limits<int>::max();
         std::vector<Node*>	minlst;
 		std::vector<Node*>	childs = node.getChilds();
         #if ENABLE_KEEP_NODE_PERCENT == true
@@ -97,7 +97,7 @@ min_max algorithm implementation
 			#endif
 
             std::tuple<Node*, int> childMin = miniMax(game, *child, depth-1, true, alpha, beta);
-            if (std::get<1>(childMin) == COST_NONE)
+            if (std::get<1>(childMin) == HEURIS_NOT_SET)
                 continue;
             if (std::get<1>(childMin) < _min) {
                 _min = std::get<1>(childMin);
@@ -110,7 +110,7 @@ min_max algorithm implementation
                 break;
         }
         if (minlst.empty())
-            return {&node, COST_NONE};
+            return {&node, HEURIS_NOT_SET};
         #if MINMAX_RANDOM_CHOICE == true
             Node *_node = random.choice(minlst);
         #else
