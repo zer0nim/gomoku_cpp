@@ -59,8 +59,8 @@ void Gui::eventGame() {
 			sf::Vector2i localPosition = sf::Mouse::getPosition(*_win);
 			if (localPosition.x > GUI_BOARD_START_X && localPosition.x < GUI_BOARD_START_X + GUI_BOARD_SZ &&
 			localPosition.y > 0 && localPosition.y < GUI_BOARD_SZ) {
-				int realX = (int)(((float)localPosition.x - GUI_BOARD_START_X) / GUI_BOARD_SZ * BOARD_SZ);
-				int realY = (int)((float)localPosition.y / GUI_BOARD_SZ * BOARD_SZ);
+				int realX = (static_cast<float>(localPosition.x) - GUI_BOARD_START_X) / GUI_BOARD_SZ * BOARD_SZ;
+				int realY = static_cast<float>(localPosition.y) / GUI_BOARD_SZ * BOARD_SZ;
 				game.getPlayerAct().click(realX, realY);
 			}
 		}
@@ -180,7 +180,7 @@ void Gui::drawGame() {
 		// player nb stones
 		playerText.setString("Stones " + std::to_string(game.getPlayer(i).getNbStones()) + " " +
 			((game.getBoard().getRemainPlaces() < BOARD_SZ*BOARD_SZ)
-			? (std::to_string(static_cast<int>((float)game.getPlayer(i).getNbStones() / (BOARD_SZ*BOARD_SZ - game.getBoard().getRemainPlaces()) * 100)) + "%")
+			? (std::to_string(static_cast<int>(static_cast<float>(game.getPlayer(i).getNbStones()) / (BOARD_SZ*BOARD_SZ - game.getBoard().getRemainPlaces()) * 100)) + "%")
 			: ""));
 		playerText.setPosition(xwin, ywin);
 		_win->draw(playerText);
@@ -221,8 +221,8 @@ void Gui::drawGame() {
 	}
 	sf::CircleShape point(step/5);
 	point.setFillColor(sf::Color(0, 0, 0));
-	for (int x=(int)(BOARD_SZ/2)%6; x < BOARD_SZ; x+=6) {
-		for (int y=(int)(BOARD_SZ/2)%6; y < BOARD_SZ; y+=6) {
+	for (int x=(BOARD_SZ/2)%6; x < BOARD_SZ; x+=6) {
+		for (int y=(BOARD_SZ/2)%6; y < BOARD_SZ; y+=6) {
 			float xwin = GUI_BOARD_START_X + step*0.5 - step/5 + step * x;
 			float ywin = step*0.5 - step/7.5 + step * y;
 			point.setPosition(xwin, ywin);
