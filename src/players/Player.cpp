@@ -34,7 +34,7 @@ void	Player::setWinAligned() {
 	_winAligned = true;
 }
 
-int		Player::getColor() const { return _color; }
+uint	Player::getColor() const { return _color; }
 void	Player::incrNbDestroyedStones() { ++_nbDestroyedStones; }
 int		Player::getNbDestroyedStones() const { return _nbDestroyedStones; }
 double	Player::getTimeLastMove() const { return _timeLastMove; }

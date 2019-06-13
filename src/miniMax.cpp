@@ -43,6 +43,9 @@ min_max algorithm implementation
             #if ENABLE_KEEP_NODE_PERCENT == true
                 Node *child = keepChilds.top();
                 keepChilds.pop();
+                if (depth == game.getHeuristic().getVal("DEPTH")) {
+                    game.getBoard().setMarkerColor(child->getX(), child->getY(), game.getPlayer(child->getStone()).getColor());
+                }
             #else
                 Node *child = childs[i];
 			#endif

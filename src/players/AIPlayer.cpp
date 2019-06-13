@@ -10,6 +10,9 @@ AIPlayer::~AIPlayer() {
 }
 
 void AIPlayer::move() {
+	#if DEBUG_RESET_GUI == true
+		game.getBoard().resetDebug();
+	#endif
 	// put the first stone in the middle
 	if (game.getBoard().getRemainPlaces() == BOARD_SZ*BOARD_SZ)
 		game.getBoard().putStone(BOARD_SZ / 2, BOARD_SZ / 2, game.getPlayerActId());
@@ -19,7 +22,15 @@ void AIPlayer::move() {
 		std::tuple<Node*, int> move = miniMax(game, node, depth);
 
 		Node *nodeRes = std::get<0>(move);
+		#if DEBUG_ANTICIPATION == true
+			int tmpDepth = depth - 1;
+		#endif
 		while (nodeRes->getParent() && nodeRes->getParent()->getParent()) {
+			#if DEBUG_ANTICIPATION == true
+				game.getBoard().setMarkerTxt(nodeRes->getX(), nodeRes->getY(), std::to_string(tmpDepth),
+					game.getPlayer(nodeRes->getBoard().get(nodeRes->getX(), nodeRes->getY())).getColor());
+				tmpDepth--;
+			#endif
 			nodeRes = nodeRes->getParent();
 		}
 		game.getBoard().putStone(nodeRes->getX(), nodeRes->getY(), game.getPlayerActId());

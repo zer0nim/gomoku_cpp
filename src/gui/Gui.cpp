@@ -236,9 +236,9 @@ void Gui::drawGame() {
 	sf::Text text;
 	sf::Text text2;
 	text.setFont(_font);
-	text.setCharacterSize(step*0.8);
+	text.setCharacterSize(step);
 	text2.setFont(_font);
-	text2.setCharacterSize(step*0.8);
+	text2.setCharacterSize(step);
 	text2.setStyle(sf::Text::Bold);
 	stone.setOutlineThickness(step/14);
 	for (int x=0; x < BOARD_SZ; x++) {
@@ -252,14 +252,16 @@ void Gui::drawGame() {
 					stone.setOutlineColor(sf::Color(GUI_COLOR_WIN));
 				else if (game.getBoard().isLastStone(x, y))
 					stone.setOutlineColor(sf::Color(GUI_COLOR_LAST_STONE));
-				else if (game.getBoard().isVul(x, y))
-					stone.setOutlineColor(sf::Color(GUI_COLOR_VULNERABILITY));
+				#if DEBUG_SHOW_VULNERABILITY == true
+					else if (game.getBoard().isVul(x, y))
+						stone.setOutlineColor(sf::Color(GUI_COLOR_VULNERABILITY));
+				#endif
 				else
 					stone.setOutlineColor(getRevColor(game.getBoard().get(x, y)));
 				stone.setPosition(xwin, ywin);
 				_win->draw(stone);
 			}
-			if (game.getBoard().getMarkerColor(x, y) != -1) {
+			if (game.getBoard().getMarkerColor(x, y) != 0) {
 				float xwin = GUI_BOARD_START_X + step*0.5 - step/6 + step * x;
 				float ywin = step*0.5 - step/6 + step * y;
 				marker.setFillColor(sf::Color(game.getBoard().getMarkerColor(x, y)));
