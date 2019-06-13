@@ -46,13 +46,11 @@ void	Game::checkWinner() {
 void	Game::run() {
 	while (!isQuit) {
 		if (!_loadInProgress) {
-			if (getGui().getGuiType() == GUI_TYPE_MENU) {
-			}
-			else if (getGui().getGuiType() == GUI_TYPE_GAME) {
+			if (getGui().getGuiType() == GUI_TYPE_GAME) {
 				if (!_finished) {
 					getPlayerAct().moving();
-					nextPlayer();
 					checkWinner();
+					nextPlayer();
 				}
 			}
 		}
