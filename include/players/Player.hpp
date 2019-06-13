@@ -11,7 +11,7 @@ class Player {
 		virtual ~Player();
 		void	moving();  // call this function at the player turn
 		void	click(int x, int y);
-		int		getColor() const;
+		uint	getColor() const;
 		void	incrNbDestroyedStones();
 		int		getNbDestroyedStones() const;
 		void	setWinAligned();

@@ -1,5 +1,7 @@
 #include "players/RealPlayer.hpp"
 #include "Game.hpp"
+#include "Node.hpp"
+#include <algorithm>
 
 RealPlayer::RealPlayer(Game &game, int _color) : Player(game, _color) {
 }

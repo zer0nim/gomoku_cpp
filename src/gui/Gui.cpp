@@ -1,5 +1,7 @@
 #include "gui/Gui.hpp"
 #include "Game.hpp"
+#include <iomanip>
+#include <sstream>
 
 Gui::Gui(Game &game) :
 	game(game),
@@ -33,7 +35,7 @@ void Gui::eventMenu() {
 		}
 		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::D) {
 			game.gameInfo.difficulty += 1;
-			if (game.gameInfo.difficulty >= NB_DIFICULTY_LEVEL)
+			if (game.gameInfo.difficulty >= game.getHeuristic().getMaxDifficulty())
 				game.gameInfo.difficulty = 0;
 		}
 	}
@@ -57,8 +59,8 @@ void Gui::eventGame() {
 			sf::Vector2i localPosition = sf::Mouse::getPosition(*_win);
 			if (localPosition.x > GUI_BOARD_START_X && localPosition.x < GUI_BOARD_START_X + GUI_BOARD_SZ &&
 			localPosition.y > 0 && localPosition.y < GUI_BOARD_SZ) {
-				int realX = (int)(((float)localPosition.x - GUI_BOARD_START_X) / GUI_BOARD_SZ * BOARD_SZ);
-				int realY = (int)((float)localPosition.y / GUI_BOARD_SZ * BOARD_SZ);
+				int realX = (static_cast<float>(localPosition.x) - GUI_BOARD_START_X) / GUI_BOARD_SZ * BOARD_SZ;
+				int realY = static_cast<float>(localPosition.y) / GUI_BOARD_SZ * BOARD_SZ;
 				game.getPlayerAct().click(realX, realY);
 			}
 		}
@@ -132,7 +134,7 @@ void Gui::drawMenu() {
 	ywin += GUI_LINE_SPACE;
 	// change selected player
 	txt = "[D] difficulty: " + std::to_string(game.gameInfo.difficulty) +
-		  " (from 0 to " + std::to_string(NB_DIFICULTY_LEVEL-1) + ")";
+		  " (from 0 to " + std::to_string(game.getHeuristic().getMaxDifficulty()-1) + ")";
 	text.setString(txt);
 	text.setPosition(xwin, ywin);
 	_win->draw(text);
@@ -178,7 +180,7 @@ void Gui::drawGame() {
 		// player nb stones
 		playerText.setString("Stones " + std::to_string(game.getPlayer(i).getNbStones()) + " " +
 			((game.getBoard().getRemainPlaces() < BOARD_SZ*BOARD_SZ)
-			? (std::to_string(static_cast<int>((float)game.getPlayer(i).getNbStones() / (BOARD_SZ*BOARD_SZ - game.getBoard().getRemainPlaces()) * 100)) + "%")
+			? (std::to_string(static_cast<int>(static_cast<float>(game.getPlayer(i).getNbStones()) / (BOARD_SZ*BOARD_SZ - game.getBoard().getRemainPlaces()) * 100)) + "%")
 			: ""));
 		playerText.setPosition(xwin, ywin);
 		_win->draw(playerText);
@@ -190,9 +192,9 @@ void Gui::drawGame() {
 		_win->draw(playerText);
 		ywin += GUI_LINE_SPACE;
 		// exec time
-		char *str;
-		asprintf(&str, "%.2lfs", game.getPlayer(i).getTimeLastMove());
-		playerText.setString(str);
+		std::stringstream ss;
+		ss << std::fixed << std::setprecision(2) << game.getPlayer(i).getTimeLastMove() << 's' << std::endl;
+		playerText.setString(ss.str());
 		playerText.setPosition(xwin, ywin);
 		_win->draw(playerText);
 		ywin += GUI_LINE_SPACE;
@@ -219,8 +221,8 @@ void Gui::drawGame() {
 	}
 	sf::CircleShape point(step/5);
 	point.setFillColor(sf::Color(0, 0, 0));
-	for (int x=(int)(BOARD_SZ/2)%6; x < BOARD_SZ; x+=6) {
-		for (int y=(int)(BOARD_SZ/2)%6; y < BOARD_SZ; y+=6) {
+	for (int x=(BOARD_SZ/2)%6; x < BOARD_SZ; x+=6) {
+		for (int y=(BOARD_SZ/2)%6; y < BOARD_SZ; y+=6) {
 			float xwin = GUI_BOARD_START_X + step*0.5 - step/5 + step * x;
 			float ywin = step*0.5 - step/7.5 + step * y;
 			point.setPosition(xwin, ywin);
@@ -234,9 +236,9 @@ void Gui::drawGame() {
 	sf::Text text;
 	sf::Text text2;
 	text.setFont(_font);
-	text.setCharacterSize(step*0.8);
+	text.setCharacterSize(step);
 	text2.setFont(_font);
-	text2.setCharacterSize(step*0.8);
+	text2.setCharacterSize(step);
 	text2.setStyle(sf::Text::Bold);
 	stone.setOutlineThickness(step/14);
 	for (int x=0; x < BOARD_SZ; x++) {
@@ -250,14 +252,16 @@ void Gui::drawGame() {
 					stone.setOutlineColor(sf::Color(GUI_COLOR_WIN));
 				else if (game.getBoard().isLastStone(x, y))
 					stone.setOutlineColor(sf::Color(GUI_COLOR_LAST_STONE));
-				else if (game.getBoard().isVul(x, y))
-					stone.setOutlineColor(sf::Color(GUI_COLOR_VULNERABILITY));
+				#if DEBUG_SHOW_VULNERABILITY == true
+					else if (game.getBoard().isVul(x, y))
+						stone.setOutlineColor(sf::Color(GUI_COLOR_VULNERABILITY));
+				#endif
 				else
 					stone.setOutlineColor(getRevColor(game.getBoard().get(x, y)));
 				stone.setPosition(xwin, ywin);
 				_win->draw(stone);
 			}
-			if (game.getBoard().getMarkerColor(x, y) != -1) {
+			if (game.getBoard().getMarkerColor(x, y) != 0) {
 				float xwin = GUI_BOARD_START_X + step*0.5 - step/6 + step * x;
 				float ywin = step*0.5 - step/6 + step * y;
 				marker.setFillColor(sf::Color(game.getBoard().getMarkerColor(x, y)));

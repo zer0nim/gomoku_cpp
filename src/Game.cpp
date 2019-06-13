@@ -4,7 +4,7 @@
 
 Game::Game() :
 	isQuit(false),
-	gameInfo{{false, false, false}, 1},
+	gameInfo{{false, false, true}, 0},
 	_loadInProgress(true),
 	_finished(false),
 	_idPlayerAct(1) {
@@ -12,6 +12,8 @@ Game::Game() :
 	_board = new MasterBoard(*this);
 	_players[0] = new Player(*this, GUI_COLOR_1);
 	_players[1] = new Player(*this, GUI_COLOR_2);
+	_heuristic = new Heuristic(*this);
+	gameInfo.difficulty = getHeuristic().getDifficulty();
 }
 
 bool	Game::has_win(int id) {
@@ -44,13 +46,11 @@ void	Game::checkWinner() {
 void	Game::run() {
 	while (!isQuit) {
 		if (!_loadInProgress) {
-			if (getGui().getGuiType() == GUI_TYPE_MENU) {
-			}
-			else if (getGui().getGuiType() == GUI_TYPE_GAME) {
+			if (getGui().getGuiType() == GUI_TYPE_GAME) {
 				if (!_finished) {
 					getPlayerAct().moving();
-					nextPlayer();
 					checkWinner();
+					nextPlayer();
 				}
 			}
 		}
@@ -97,6 +97,9 @@ void Game::startGame() {
 	else  // real
 		_players[1] = new RealPlayer(*this, GUI_COLOR_2);
 
+	// set difficulty
+	getHeuristic().setDifficulty(gameInfo.difficulty);
+
 	// set the GUI to game
 	getGui().setGuiType(GUI_TYPE_GAME);
 
@@ -117,6 +120,7 @@ Gui &Game::getGui() const { return *_gui; }
 Player &Game::getPlayer(int id) const { return *_players[id - 1]; }
 Player &Game::getPlayerAct() const { return *_players[_idPlayerAct - 1]; }
 int Game::getPlayerActId() const { return _idPlayerAct; }
+Heuristic &Game::getHeuristic() const { return *_heuristic; }
 
 Game::~Game() {
 	delete _board;

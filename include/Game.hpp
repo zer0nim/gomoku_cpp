@@ -4,6 +4,7 @@
 #include "Board.hpp"
 #include "gui/Gui.hpp"
 #include "players/Player.hpp"
+#include "Heuristic.hpp"
 
 struct GameInfo {
 	bool playerAI[3];  // 0: unused, 1: player1, 2: player2
@@ -18,6 +19,7 @@ class Game {
 		Player &getPlayerAct() const;
 		MasterBoard &getBoard() const;
 		Gui &getGui() const;
+		Heuristic &getHeuristic() const;
 		int getPlayerActId() const;
 		void startMenu();
 		void startGame();
@@ -32,6 +34,7 @@ class Game {
 		bool		_finished;
 		MasterBoard *_board;
 		Gui			*_gui;
+		Heuristic	*_heuristic;
 		std::array<Player *, 2>	_players;
 		int			_idPlayerAct;  // 1 or 2 -> players[idPlayerAct-1]
 

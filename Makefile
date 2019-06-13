@@ -1,7 +1,7 @@
 NAME	= gomoku
 CPP		= clang++
 
-FLAGS	= -Wall -Wextra -Werror -std=c++11 -g3 -fsanitize=address
+FLAGS	= -Wall -Wextra -std=c++11 -g3 -fsanitize=address
 # If os !== macos add pthread FLAGS
 UNAME_S := $(shell uname -s)
 ifneq ($(UNAME_S), Darwin)
@@ -18,7 +18,10 @@ SRC		=	main.cpp \
 			gui/Gui.cpp \
 			players/Player.cpp \
 			players/RealPlayer.cpp \
-			players/AIPlayer.cpp
+			players/AIPlayer.cpp \
+			Node.cpp \
+			Heuristic.cpp \
+			miniMax.cpp
 
 HEAD	=	Game.hpp \
 			Board.hpp \
@@ -26,7 +29,10 @@ HEAD	=	Game.hpp \
 			gui/Gui.hpp \
 			players/Player.hpp \
 			players/RealPlayer.hpp \
-			players/AIPlayer.hpp
+			players/AIPlayer.hpp \
+			Node.hpp \
+			Heuristic.hpp \
+			miniMax.hpp
 
 LIBS_FLAGS = -L ~/.brew/lib -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network -rpath ~/.brew/lib
 
@@ -49,13 +55,13 @@ LIGHT = "\e[2m"
 ITALIC = "\e[3m"
 ULINE = "\e[4m"
 
-all: $(OBJ_PATH) $(NAME)
+all: $(NAME)
 
-$(NAME): $(OBJP)
+$(NAME): $(OBJ_PATH) $(OBJP)
 	@printf $(CYAN)"-> create program : $(NAME)\n"$(NORMAL)
 	@$(CPP) $(FLAGS) -o $(NAME) $(OBJP) $(LIBS_FLAGS)
 
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(HEADP) $(OBJ_PATH)
+$(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(HEADP)
 	@printf $(YELLOW)"-> $<\n"$(NORMAL)
 	@$(CPP) $(FLAGS) -c $< -o $@ $(INCP) -I ~/.brew/Cellar/sfml/2.5.1/include/
 

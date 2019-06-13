@@ -12,7 +12,7 @@
 #define GUI_WIN_W 800
 #define GUI_WIN_H (GUI_WIN_W * 0.7)
 #define GUI_BOARD_SZ GUI_WIN_H
-#define GUI_BOARD_START_X (int)(GUI_WIN_W - GUI_BOARD_SZ)
+#define GUI_BOARD_START_X static_cast<int>(GUI_WIN_W - GUI_BOARD_SZ)
 
 #define GUI_DEFAULT_FONT "font/Roboto/Roboto-Regular.ttf"
 #define GUI_TEXT_SIZE (GUI_WIN_H*0.04)
