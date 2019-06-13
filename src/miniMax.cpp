@@ -21,7 +21,7 @@ min_max algorithm implementation
         std::vector<Node*>	maxlst;
 		std::vector<Node*>  childs = node.getChilds();
         #if ENABLE_KEEP_NODE_PERCENT == true
-			std::priority_queue<Node*> keepChilds;
+			std::priority_queue<Node*, std::vector<Node*>, ReverseCompareNode> keepChilds;
 			for (auto &child : childs) {
                 game.getHeuristic().heuristic(*child);
                 if (child->getHeuristic() != HEURIS_NOT_SET) {
@@ -75,7 +75,7 @@ min_max algorithm implementation
         std::vector<Node*>	minlst;
 		std::vector<Node*>	childs = node.getChilds();
         #if ENABLE_KEEP_NODE_PERCENT == true
-			std::priority_queue<Node*, std::vector<Node*>, ReverseCompareNode> keepChilds;
+			std::priority_queue<Node*> keepChilds;
 			for (auto &child : childs) {
                 game.getHeuristic().heuristic(*child);
                 if (child->getHeuristic() != HEURIS_NOT_SET) {
