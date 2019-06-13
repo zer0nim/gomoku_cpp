@@ -208,12 +208,9 @@ int Heuristic::heuristic(Node &node) {
     int i = 0;
     while (!nodeHist.empty()) {
         struct sNodeHist nodeHistI = nodeHist.top();
-        // std::cout << "stone pos: " << nodeHistI.x << " " << nodeHistI.y << std::endl;
         nodeHist.pop();
         if (node.getBoard().isAllowed(nodeHistI.x, nodeHistI.y, nodeHistI.stone)) {
-			// std::cout << "PUT STONE " << nodeHistI.x << " " << nodeHistI.y << " stone: " << nodeHistI.stone << std::endl;
             int nbDestroyed = node.getBoard().putStone(nodeHistI.x, nodeHistI.y, nodeHistI.stone);
-			// std::cout << node.getBoard() << "\n";
             int mul = ((nodeHist.size()+1)>>1) - (i>>1) + 1;
             if (nbDestroyed > 0) {
                 mul = 1;
@@ -263,8 +260,6 @@ int Heuristic::heuristic(Node &node) {
         std::cout << "\tnb_destroyed: " << checkReturn["nb_destroyed"] << std::endl;
     #endif
 
-    // std::cout << node.getBoard().getHash() << std::endl;
-
     checkReturn["nb_stones"] *= getVal("NB_STONES");
     checkReturn["nb_two"] *= getVal("TWO");
     checkReturn["nb_free_two"] *= getVal("FREE_TWO");
@@ -283,8 +278,6 @@ int Heuristic::heuristic(Node &node) {
 		it++;
 	}
     node.setHeuristic(val);
-    std::cout << "heuristic " << node.getX() << " " << node.getY() << " -> ";
-	std::cout << val << std::endl;
 	return val;
 }
 
