@@ -68,7 +68,7 @@ min_max algorithm implementation
 		#endif
         return {_node, _max};
     }
-    else {
+    else {  // minimize
         float _min = std::numeric_limits<float>::infinity();
         std::vector<Node*>	minlst;
 		std::vector<Node*>	childs = node.getChilds();

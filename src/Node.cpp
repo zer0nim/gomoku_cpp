@@ -93,7 +93,7 @@ int		Node::setChilds() {
 		#if DEBUG_SEARCH_ZONE == true
 			game.getBoard().setMarkerColor(x, y, 0xFF0000FF);
 		#endif
-		_childs.push_back(new Node(game, OP_ST(game.getPlayerActId()), x, y, _depth - 1, this, &transpositionTable));
+		_childs.push_back(new Node(game, OP_ST(getStone()), x, y, _depth - 1, this, &transpositionTable));
 	}
 	return _childs.size();
 }

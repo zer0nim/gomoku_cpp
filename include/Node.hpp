@@ -7,7 +7,7 @@
 #include <map>
 #include <limits>
 
-#define HEURIS_NOT_SET std::numeric_limits<float>::infinity()
+#define HEURIS_NOT_SET std::numeric_limits<int>::min()
 
 class Node {
 /*

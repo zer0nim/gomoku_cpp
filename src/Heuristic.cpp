@@ -177,6 +177,10 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 }
 
 int Heuristic::heuristic(Node &node) {
+	if (node.getHeuristic() != HEURIS_NOT_SET) {
+		return node.getHeuristic();
+	}
+
 	std::unordered_map<std::string, int> checkReturn{
         {"nb_stones", 0},
 		{"nb_two", 0},
@@ -204,10 +208,12 @@ int Heuristic::heuristic(Node &node) {
     int i = 0;
     while (!nodeHist.empty()) {
         struct sNodeHist nodeHistI = nodeHist.top();
-        std::cout << "stone pos: " << nodeHistI.x << " " << nodeHistI.y << std::endl;
+        // std::cout << "stone pos: " << nodeHistI.x << " " << nodeHistI.y << std::endl;
         nodeHist.pop();
         if (node.getBoard().isAllowed(nodeHistI.x, nodeHistI.y, nodeHistI.stone)) {
+			// std::cout << "PUT STONE " << nodeHistI.x << " " << nodeHistI.y << " stone: " << nodeHistI.stone << std::endl;
             int nbDestroyed = node.getBoard().putStone(nodeHistI.x, nodeHistI.y, nodeHistI.stone);
+			// std::cout << node.getBoard() << "\n";
             int mul = ((nodeHist.size()+1)>>1) - (i>>1) + 1;
             if (nbDestroyed > 0) {
                 mul = 1;
@@ -218,11 +224,11 @@ int Heuristic::heuristic(Node &node) {
                 }
                 checkReturn["nbDestroyed"] += mul * (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(nodeHistI.stone);
             }
-            std::cout << "checkStone\n";
             checkStone(node, nodeHistI.x, nodeHistI.y, checkReturn, mul);
         }
         else {
-            return 0;  // ERROR
+			node.setHeuristic(HEURIS_NOT_SET);
+            return HEURIS_NOT_SET;  // ERROR
         }
         i++;
     }
@@ -277,6 +283,8 @@ int Heuristic::heuristic(Node &node) {
 		it++;
 	}
     node.setHeuristic(val);
+    std::cout << "heuristic " << node.getX() << " " << node.getY() << " -> ";
+	std::cout << val << std::endl;
 	return val;
 }
 

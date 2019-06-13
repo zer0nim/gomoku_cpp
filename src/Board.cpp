@@ -355,9 +355,9 @@ this function check if it's allowed (empty place, no free-threes, ...)
 	nbFreeThree += isFreeThreeDir(x, y, stone, -1, 1) ? 1 : 0;
 
 	if (nbFreeThree >= 2) {
-		SET_ST(_content, x, y, stone);
+		set(x, y, stone);
 		bool check_aligned = checkAligned(x, y, true); // if true => double three
-		SET_ST(_content, x, y, 0);
+		set(x, y, 0);
 		return check_aligned;
 	}
 	return true;
@@ -371,7 +371,7 @@ this function put a stone and, if needed, destroy some stones
 	if (x >= BOARD_SZ || y >= BOARD_SZ)
 		throw OutOfRangeException();
 
-	SET_ST(_content, x, y, stone);
+	set(x, y, stone);
 	if (!_softMode) {
 		reinterpret_cast<MasterBoard*>(this)->decrRemainPlaces();
 		game.getPlayer(stone).incrNbStones();
@@ -380,7 +380,7 @@ this function put a stone and, if needed, destroy some stones
 	// destroy some stones if needed
 	std::vector< std::array<int, 2> > destroyed = checkDestroyable(x, y, stone);
 	for (std::array<int, 2> dest : destroyed) {
-		SET_ST(_content, dest[0], dest[1], 0);
+		set(dest[0], dest[1], 0);
 		if (!_softMode) {
 			reinterpret_cast<MasterBoard*>(this)->incrRemainPlaces();
 			game.getPlayer(stone).incrNbDestroyedStones();
@@ -411,9 +411,9 @@ std::ostream & operator << (std::ostream &out, const Board &c) {
 		for (int x = 0; x < BOARD_SZ; ++x) {
 			color = {{ C_EOC, C_EOC }};
 			if (c.get(x, y) == 1)
-				color = {{ C_WHITE, C_F_WHITE }};
-			else if (c.get(x, y) == 2)
 				color = {{ C_RED, C_F_RED }};
+			else if (c.get(x, y) == 2)
+				color = {{ C_WHITE, C_F_WHITE }};
 			out << color[0] + color[1] + " . " + C_EOC;
 		}
 		out << "|" << std::endl;
