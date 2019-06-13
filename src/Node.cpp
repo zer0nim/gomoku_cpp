@@ -54,8 +54,8 @@ Board	&Node::getBoard() { return _board; }
 Board	Node::getBoardCopy() const { return _board; }
 int		Node::getDepth() const { return _depth; }
 
-std::map<int, bool> Node::get_childs_coord() {
-	std::map<int, bool> testChilds;
+std::unordered_map<int, bool> Node::get_childs_coord() {
+	std::unordered_map<int, bool> testChilds;
 	int nbSquareArround = game.getHeuristic().getVal("NB_SQUARE_ARROUND");
 
 	for (int y = 0; y < BOARD_SZ; ++y)
@@ -81,7 +81,7 @@ std::map<int, bool> Node::get_childs_coord() {
 std::vector<Node*>	Node::getChilds() const { return _childs; }
 
 int		Node::setChilds() {
-	std::map<int, bool> testChilds = get_childs_coord();
+	std::unordered_map<int, bool> testChilds = get_childs_coord();
 
 	#if DEBUG_SEARCH_ZONE == true
 		game.getBoard().resetDebug();

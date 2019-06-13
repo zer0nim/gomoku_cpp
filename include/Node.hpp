@@ -4,7 +4,7 @@
 #include "Board.hpp"
 #include <vector>
 #include <unordered_map>
-#include <map>
+#include <unordered_map>
 #include <limits>
 
 #define HEURIS_NOT_SET std::numeric_limits<int>::min()
@@ -45,7 +45,7 @@ this class store a possible move for the ai minMax algorithm
         bool    operator==(Node const &rhs) const;
         bool    operator!=(Node const &rhs) const;
 	private:
-		std::map<int, bool>	get_childs_coord();
+		std::unordered_map<int, bool>	get_childs_coord();
 
 		Board	_board;
 		int		_x;
