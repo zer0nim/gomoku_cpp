@@ -51,6 +51,7 @@ min_max algorithm implementation
                 continue;
             if (std::get<1>(childMin) > _max) {
                 _max = std::get<1>(childMin);
+                maxlst.clear();
                 maxlst.push_back(std::get<0>(childMin));
             }
             else if (std::get<1>(childMin) == _max)
@@ -101,6 +102,7 @@ min_max algorithm implementation
                 continue;
             if (std::get<1>(childMin) < _min) {
                 _min = std::get<1>(childMin);
+                minlst.clear();
                 minlst.push_back(std::get<0>(childMin));
             }
             else if (std::get<1>(childMin) == _min)
