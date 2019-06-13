@@ -9,13 +9,34 @@ std::unordered_map<std::size_t, std::unordered_map<std::string, int>> *_transpos
 	_board(Board( (parent != nullptr) ? parent->getBoard() : this->game.getBoard() )),
 	_x(x),
 	_y(y),
-	_heuristic(0),
+	_heuristic(HEURIS_NOT_SET),
 	_parent(parent),
 	_stone(stone),
 	_depth(depth) {
 }
 
+Node::Node(Node const &src):
+	game(src.game),
+	_board(src.getBoardCopy()) {
+	*this = src;
+}
+
 Node::~Node() {
+}
+
+Node &Node::operator=(Node const &rhs) {
+	if (this != &rhs) {
+		this->isWin = rhs.isWin;
+		this->_board = rhs.getBoardCopy();
+		this->_x = rhs.getX();
+		this->_y = rhs.getY();
+		this->_heuristic = rhs.getHeuristic();
+		this->_parent = rhs.getParent();
+		this->_stone = rhs.getStone();
+		this->_depth = rhs.getDepth();
+		this->_childs = rhs.getChildsCopy();
+	}
+	return *this;
 }
 
 int		Node::getX() const { return _x; }
@@ -24,9 +45,10 @@ int		Node::getStone() const { return _stone; }
 Node	*Node::getParent() const { return _parent; }
 int		Node::getHeuristic() const { return _heuristic; }
 void	Node::setHeuristic(int val) { _heuristic = val; }
-std::vector<Node> &Node::getChilds() { return _childs; }
 
 Board	&Node::getBoard() { return _board; }
+Board	Node::getBoardCopy() const { return _board; }
+int		Node::getDepth() const { return _depth; }
 
 std::map<int, bool> Node::get_childs_coord() {
 	std::map<int, bool> testChilds;
@@ -52,7 +74,10 @@ std::map<int, bool> Node::get_childs_coord() {
 	return testChilds;
 }
 
-void	Node::setChilds() {
+std::vector<Node>	&Node::getChilds() { return _childs; }
+std::vector<Node>	Node::getChildsCopy() const { return _childs; }
+
+int		Node::setChilds() {
 	std::map<int, bool> testChilds = get_childs_coord();
 
 	#if DEBUG_SEARCH_ZONE == true
@@ -67,6 +92,26 @@ void	Node::setChilds() {
 		#endif
 		_childs.push_back(Node(game, !game.getPlayerActId(), x, y, _depth - 1, this, &transpositionTable));
 	}
+	return _childs.size();
+}
+
+bool    Node::operator >(Node const &rhs) const {
+	return this->_heuristic > rhs.getHeuristic();
+}
+bool    Node::operator <(Node const &rhs) const {
+	return this->_heuristic < rhs.getHeuristic();
+}
+bool    Node::operator >=(Node const &rhs) const {
+	return this->_heuristic >= rhs.getHeuristic();
+}
+bool    Node::operator <=(Node const &rhs) const {
+	return this->_heuristic <= rhs.getHeuristic();
+}
+bool    Node::operator ==(Node const &rhs) const {
+	return this->_heuristic == rhs.getHeuristic();
+}
+bool    Node::operator !=(Node const &rhs) const {
+	return this->_heuristic != rhs.getHeuristic();
 }
 
 std::ostream & operator << (std::ostream &out, const Node &n) {
