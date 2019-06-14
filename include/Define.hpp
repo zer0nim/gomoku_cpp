@@ -14,9 +14,9 @@
 
 // DEBUG
 #define DEBUG_SEARCH_ZONE false // print the search zone
-#define DEBUG_ANTICIPATION false  // print the anticipation
+#define DEBUG_ANTICIPATION true  // print the anticipation
+#define DEBUG_KEEP_NODE_PERCENT true  // print all the choice for the first move
 #define DEBUG_PRINT_HEURISTIC_VAL false  // print all values of checkReturn on heuristic
-#define DEBUG_KEEP_NODE_PERCENT false  // print all the choice for the first move
 #define DEBUG_SHOW_VULNERABILITY true  // show the vulnerables stones
 
 #define DEBUG_RESET_GUI DEBUG_SEARCH_ZONE || DEBUG_ANTICIPATION || DEBUG_KEEP_NODE_PERCENT

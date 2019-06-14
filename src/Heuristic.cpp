@@ -199,7 +199,7 @@ int Heuristic::heuristic(Node &node) {
     while (tmp->getParent()) {
         nodeHist.push((struct sNodeHist){tmp->getX(), tmp->getY(), tmp->getStone()});
         // tmp.is_stone_on_board = True
-        #if ENABLE_KEEP_NODE_PERCENT == true
+        #if ENABLE_KEEP_NODE_PERCENT
             break;
         #endif
         tmp = tmp->getParent();
@@ -246,7 +246,7 @@ int Heuristic::heuristic(Node &node) {
         node.transpositionTable[hashNode] = checkReturn;
     }
 
-    #if DEBUG_PRINT_HEURISTIC_VAL == true
+    #if DEBUG_PRINT_HEURISTIC_VAL
         std::cout << "heuristic:" << std::endl;
         std::cout << "\tnb_stones: " << checkReturn["nb_stones"] << std::endl;
         std::cout << "\tnb_two: " << checkReturn["nb_two"] << std::endl;

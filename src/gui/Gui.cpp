@@ -252,7 +252,7 @@ void Gui::drawGame() {
 					stone.setOutlineColor(sf::Color(GUI_COLOR_WIN));
 				else if (game.getBoard().isLastStone(x, y))
 					stone.setOutlineColor(sf::Color(GUI_COLOR_LAST_STONE));
-				#if DEBUG_SHOW_VULNERABILITY == true
+				#if DEBUG_SHOW_VULNERABILITY
 					else if (game.getBoard().isVul(x, y))
 						stone.setOutlineColor(sf::Color(GUI_COLOR_VULNERABILITY));
 				#endif

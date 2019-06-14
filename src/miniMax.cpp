@@ -20,7 +20,7 @@ min_max algorithm implementation
         int _max = - std::numeric_limits<int>::min();
         std::vector<Node*>	maxlst;
 		std::vector<Node*>  childs = node.getChilds();
-        #if ENABLE_KEEP_NODE_PERCENT == true
+        #if ENABLE_KEEP_NODE_PERCENT
 			std::priority_queue<Node*, std::vector<Node*>, ReverseCompareNode> keepChilds;
 			for (auto &child : childs) {
                 game.getHeuristic().heuristic(*child);
@@ -32,7 +32,7 @@ min_max algorithm implementation
 			}
             range = std::max<int>(std::ceil(keepChilds.size()
             * (static_cast<float>(game.getHeuristic().getVal("KEEP_NODE_PERCENT")) / 100)), game.getHeuristic().getVal("MIN_KEEP_NODE"));
-            #if USE_MAX_KEEP_NODE == true
+            #if USE_MAX_KEEP_NODE
                 range = std::min<int>(range, game.getHeuristic().getVal("MAX_KEEP_NODE"));
 			#endif
         #else
@@ -40,12 +40,14 @@ min_max algorithm implementation
         #endif
 
         for (int i = 0; i < range; ++i) {
-            #if ENABLE_KEEP_NODE_PERCENT == true
+            #if ENABLE_KEEP_NODE_PERCENT
                 Node *child = keepChilds.top();
                 keepChilds.pop();
-                if (depth == game.getHeuristic().getVal("DEPTH")) {
-                    game.getBoard().setMarkerColor(child->getX(), child->getY(), game.getPlayer(child->getStone()).getColor());
-                }
+                #if DEBUG_KEEP_NODE_PERCENT
+                    if (depth == game.getHeuristic().getVal("DEPTH")) {
+                        game.getBoard().setMarkerColor(child->getX(), child->getY(), game.getPlayer(child->getStone()).getColor());
+                    }
+                #endif
             #else
                 Node *child = childs[i];
 			#endif
@@ -66,7 +68,7 @@ min_max algorithm implementation
         }
         if (maxlst.empty())
             return {&node, HEURIS_NOT_SET};
-        #if MINMAX_RANDOM_CHOICE == true
+        #if MINMAX_RANDOM_CHOICE
             Node *_node = random.choice(maxlst);
         #else
             Node *_node = maxlst[0];
@@ -77,7 +79,7 @@ min_max algorithm implementation
         int _min = std::numeric_limits<int>::max();
         std::vector<Node*>	minlst;
 		std::vector<Node*>	childs = node.getChilds();
-        #if ENABLE_KEEP_NODE_PERCENT == true
+        #if ENABLE_KEEP_NODE_PERCENT
 			std::priority_queue<Node*> keepChilds;
 			for (auto &child : childs) {
                 game.getHeuristic().heuristic(*child);
@@ -86,7 +88,7 @@ min_max algorithm implementation
 				}
 			}
             range = std::max<int>(std::ceil(keepChilds.size() * (game.getHeuristic().getVal("KEEP_NODE_PERCENT") / 100)), game.getHeuristic().getVal("MIN_KEEP_NODE"));
-            #if USE_MAX_KEEP_NODE == true
+            #if USE_MAX_KEEP_NODE
                 range = std::min<int>(range, game.getHeuristic().getVal("MAX_KEEP_NODE"));
 			#endif
         #else
@@ -94,7 +96,7 @@ min_max algorithm implementation
         #endif
 
         for (int i = 0; i < range; ++i) {
-            #if ENABLE_KEEP_NODE_PERCENT == true
+            #if ENABLE_KEEP_NODE_PERCENT
                 Node *child = keepChilds.top();
                 keepChilds.pop();
             #else
@@ -117,7 +119,7 @@ min_max algorithm implementation
         }
         if (minlst.empty())
             return {&node, HEURIS_NOT_SET};
-        #if MINMAX_RANDOM_CHOICE == true
+        #if MINMAX_RANDOM_CHOICE
             Node *_node = random.choice(minlst);
         #else
             Node *_node = minlst[0];
