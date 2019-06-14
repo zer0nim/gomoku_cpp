@@ -12,6 +12,9 @@
 
 #define MINMAX_RANDOM_CHOICE false // choose a random position if we have the choice
 
+// GAMEPLAY
+#define SPACE_BEFORE_AI_MOVE false  // press space before AI can move
+
 // DEBUG
 #define DEBUG_SEARCH_ZONE false // print the search zone
 #define DEBUG_ANTICIPATION true  // print the anticipation

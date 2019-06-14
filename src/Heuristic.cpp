@@ -281,8 +281,6 @@ int Heuristic::heuristic(Node &node) {
 	return val;
 }
 
-void Heuristic::setDifficulty(int difficulty) {
-	_difficulty = difficulty;
-}
+void Heuristic::setDifficulty(int difficulty) { _difficulty = difficulty; }
 int Heuristic::getDifficulty() { return _difficulty; }
 int Heuristic::getMaxDifficulty() { return NB_DIFFICULTY_LEVEL;}

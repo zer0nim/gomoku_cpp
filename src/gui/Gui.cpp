@@ -38,6 +38,9 @@ void Gui::eventMenu() {
 			if (game.gameInfo.difficulty >= game.getHeuristic().getMaxDifficulty())
 				game.gameInfo.difficulty = 0;
 		}
+		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S) {
+			game.gameInfo.pressSpaceBeforeAI = !game.gameInfo.pressSpaceBeforeAI;
+		}
 	}
 }
 
@@ -52,6 +55,9 @@ void Gui::eventGame() {
 		else if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Delete
 		|| event.key.code == sf::Keyboard::R))
 			game.getBoard().resetDebug();
+		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+			game.getPlayerAct().setSpacePressed(true);
+		}
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
@@ -132,9 +138,16 @@ void Gui::drawMenu() {
 	text.setPosition(xwin, ywin);
 	_win->draw(text);
 	ywin += GUI_LINE_SPACE;
-	// change selected player
+	// change difficulty
 	txt = "[D] difficulty: " + std::to_string(game.gameInfo.difficulty) +
 		  " (from 0 to " + std::to_string(game.getHeuristic().getMaxDifficulty()-1) + ")";
+	text.setString(txt);
+	text.setPosition(xwin, ywin);
+	_win->draw(text);
+	ywin += GUI_LINE_SPACE;
+	// press space before AI move
+	txt = static_cast<std::string>("[S] press space before AI can move (") +
+		((game.gameInfo.pressSpaceBeforeAI) ? "yes" : "no") + ")";
 	text.setString(txt);
 	text.setPosition(xwin, ywin);
 	_win->draw(text);

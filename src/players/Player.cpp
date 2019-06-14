@@ -5,9 +5,12 @@
 Player::Player(Game &game, int color) :
 	game(game),
 	_color(color),
+	_clickedPos{-1, -1},
+	_spacePressed(false),
 	_timeLastMove(0),
 	_nbDestroyedStones(0),
-	_nbStones(0) {
+	_nbStones(0),
+	_winAligned(false) {
 }
 
 Player::~Player() {
@@ -29,6 +32,8 @@ void Player::click(int x, int y) {
 	_clickedPos[0] = x;
 	_clickedPos[1] = y;
 }
+void Player::setSpacePressed(bool pressed) { _spacePressed = pressed; }
+
 
 void	Player::setWinAligned() {
 	_winAligned = true;

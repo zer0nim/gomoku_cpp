@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "players/AIPlayer.hpp"
 #include "Game.hpp"
 #include "Node.hpp"
@@ -10,6 +11,11 @@ AIPlayer::~AIPlayer() {
 }
 
 void AIPlayer::move() {
+	if (game.gameInfo.pressSpaceBeforeAI) {
+		_spacePressed = false;
+		while (!_spacePressed)
+			usleep(1000);
+	}
 	#if DEBUG_RESET_GUI
 		game.getBoard().resetDebug();
 	#endif

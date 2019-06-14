@@ -4,7 +4,7 @@
 
 Game::Game() :
 	isQuit(false),
-	gameInfo{{false, false, true}, 0},
+	gameInfo{{false, false, true}, 0, SPACE_BEFORE_AI_MOVE},
 	_loadInProgress(true),
 	_finished(false),
 	_idPlayerAct(1) {
