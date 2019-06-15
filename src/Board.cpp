@@ -429,6 +429,7 @@ std::ostream & operator << (std::ostream &out, const Board &c) {
 MasterBoard::MasterBoard(Game &game)
 : Board(game), _remain_places(BOARD_SZ*BOARD_SZ) {
 	_softMode = false;
+	resetDebug();
 }
 
 void MasterBoard::resetDebug(int x, int y) {

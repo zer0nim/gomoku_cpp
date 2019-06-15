@@ -1,7 +1,7 @@
 NAME	= gomoku
 CPP		= clang++
 
-FLAGS	= -Wall -Wextra -std=c++11 -g3 -fsanitize=address
+FLAGS	= -Wall -Wextra -std=c++11 -Ofast
 # If os !== macos add pthread FLAGS
 UNAME_S := $(shell uname -s)
 ifneq ($(UNAME_S), Darwin)

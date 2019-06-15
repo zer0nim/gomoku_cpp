@@ -38,6 +38,9 @@ void Gui::eventMenu() {
 			if (game.gameInfo.difficulty >= game.getHeuristic().getMaxDifficulty())
 				game.gameInfo.difficulty = 0;
 		}
+		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S) {
+			game.gameInfo.pressSpaceBeforeAI = !game.gameInfo.pressSpaceBeforeAI;
+		}
 	}
 }
 
@@ -52,6 +55,9 @@ void Gui::eventGame() {
 		else if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Delete
 		|| event.key.code == sf::Keyboard::R))
 			game.getBoard().resetDebug();
+		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+			game.getPlayerAct().setSpacePressed(true);
+		}
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
@@ -113,7 +119,7 @@ void Gui::drawMenu() {
 		text.setString(txt);
 		text.setPosition(xwin, ywin);
 		_win->draw(text);
-		ywin += GUI_LINE_SPACE;
+		ywin += GUI_LINE_SPACE_GAME;
 	}
 	// draw player rectangle
 	int xwin = (GUI_WIN_W - GUI_BOARD_SZ) * 1.2;
@@ -125,20 +131,27 @@ void Gui::drawMenu() {
 	text.setString(txt);
 	text.setPosition(xwin, ywin);
 	_win->draw(text);
-	ywin += GUI_LINE_SPACE;
+	ywin += GUI_LINE_SPACE_MENU;
 	// change selected player
 	txt = "[Space] to change selected player";
 	text.setString(txt);
 	text.setPosition(xwin, ywin);
 	_win->draw(text);
-	ywin += GUI_LINE_SPACE;
-	// change selected player
+	ywin += GUI_LINE_SPACE_MENU;
+	// change difficulty
 	txt = "[D] difficulty: " + std::to_string(game.gameInfo.difficulty) +
 		  " (from 0 to " + std::to_string(game.getHeuristic().getMaxDifficulty()-1) + ")";
 	text.setString(txt);
 	text.setPosition(xwin, ywin);
 	_win->draw(text);
-	ywin += GUI_LINE_SPACE;
+	ywin += GUI_LINE_SPACE_MENU;
+	// press space before AI move
+	txt = static_cast<std::string>("[S] press space before AI can move (") +
+		((game.gameInfo.pressSpaceBeforeAI) ? "yes" : "no") + ")";
+	text.setString(txt);
+	text.setPosition(xwin, ywin);
+	_win->draw(text);
+	ywin += GUI_LINE_SPACE_MENU;
 }
 
 void Gui::drawGame() {
@@ -171,12 +184,12 @@ void Gui::drawGame() {
 		playerText.setString(game.getPlayer(i).getType());
 		playerText.setPosition(xwin, ywin);
 		_win->draw(playerText);
-		ywin += GUI_LINE_SPACE;
+		ywin += GUI_LINE_SPACE_GAME;
 		// player #
 		playerText.setString("Player " + std::to_string(i));
 		playerText.setPosition(xwin, ywin);
 		_win->draw(playerText);
-		ywin += GUI_LINE_SPACE;
+		ywin += GUI_LINE_SPACE_GAME;
 		// player nb stones
 		playerText.setString("Stones " + std::to_string(game.getPlayer(i).getNbStones()) + " " +
 			((game.getBoard().getRemainPlaces() < BOARD_SZ*BOARD_SZ)
@@ -184,20 +197,20 @@ void Gui::drawGame() {
 			: ""));
 		playerText.setPosition(xwin, ywin);
 		_win->draw(playerText);
-		ywin += GUI_LINE_SPACE;
+		ywin += GUI_LINE_SPACE_GAME;
 		// captured
 		playerText.setString("Captured: " + std::to_string(game.getPlayer(i).getNbDestroyedStones()) +
 							 "/" + std::to_string(NB_DESTROYED_VICTORY));
 		playerText.setPosition(xwin, ywin);
 		_win->draw(playerText);
-		ywin += GUI_LINE_SPACE;
+		ywin += GUI_LINE_SPACE_GAME;
 		// exec time
 		std::stringstream ss;
 		ss << std::fixed << std::setprecision(2) << game.getPlayer(i).getTimeLastMove() << 's' << std::endl;
 		playerText.setString(ss.str());
 		playerText.setPosition(xwin, ywin);
 		_win->draw(playerText);
-		ywin += GUI_LINE_SPACE;
+		ywin += GUI_LINE_SPACE_GAME;
 	}
 
 	// draw background
@@ -252,7 +265,7 @@ void Gui::drawGame() {
 					stone.setOutlineColor(sf::Color(GUI_COLOR_WIN));
 				else if (game.getBoard().isLastStone(x, y))
 					stone.setOutlineColor(sf::Color(GUI_COLOR_LAST_STONE));
-				#if DEBUG_SHOW_VULNERABILITY == true
+				#if DEBUG_SHOW_VULNERABILITY
 					else if (game.getBoard().isVul(x, y))
 						stone.setOutlineColor(sf::Color(GUI_COLOR_VULNERABILITY));
 				#endif

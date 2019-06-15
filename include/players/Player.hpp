@@ -11,6 +11,7 @@ class Player {
 		virtual ~Player();
 		void	moving();  // call this function at the player turn
 		void	click(int x, int y);
+		void	setSpacePressed(bool pressed);
 		uint	getColor() const;
 		void	incrNbDestroyedStones();
 		int		getNbDestroyedStones() const;
@@ -28,6 +29,7 @@ class Player {
 
 		int		_color;
 		int		_clickedPos[2];
+		bool	_spacePressed;
 		double	_timeLastMove;
 	private:
 		Player();

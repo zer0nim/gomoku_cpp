@@ -9,6 +9,7 @@
 struct GameInfo {
 	bool playerAI[3];  // 0: unused, 1: player1, 2: player2
 	int difficulty;
+	bool pressSpaceBeforeAI;
 };
 
 class Game {
