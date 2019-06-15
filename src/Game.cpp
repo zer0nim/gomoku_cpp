@@ -65,6 +65,8 @@ void Game::startMenu() {
 	getGui().setGuiType(GUI_TYPE_LOADING);
 	_loadInProgress = true;
 
+	if (getPlayerActId() == 2)
+		nextPlayer();
 	// while (_loadInProgress);
 
 	// set GUI to menu

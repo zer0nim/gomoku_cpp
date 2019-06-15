@@ -16,7 +16,8 @@
 
 #define GUI_DEFAULT_FONT "font/Roboto/Roboto-Regular.ttf"
 #define GUI_TEXT_SIZE (GUI_WIN_H*0.04)
-#define GUI_LINE_SPACE (GUI_TEXT_SIZE * 1.5)
+#define GUI_LINE_SPACE_MENU (GUI_TEXT_SIZE * 3)
+#define GUI_LINE_SPACE_GAME (GUI_TEXT_SIZE * 1.5)
 
 // all colors are in format RGBA
 #define GUI_COLOR_BG 0x252525FF
