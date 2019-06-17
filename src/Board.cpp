@@ -426,6 +426,29 @@ std::ostream & operator << (std::ostream &out, const Board &c) {
 	return out;
 }
 
+void	Board::printVuln() {
+	std::array<std::string, 2> color;
+
+	std::cout << '*';
+	for (int i = 0; i < BOARD_SZ; ++i)
+		std::cout << "---";
+	std::cout << '*' << std::endl;
+	for (int y = 0; y < BOARD_SZ; ++y) {
+		std::cout << '|';
+		for (int x = 0; x < BOARD_SZ; ++x) {
+			color = {{ C_EOC, C_EOC }};
+			if (this->isVul(x, y))
+				color = {{ C_CYAN, C_F_CYAN }};
+			std::cout << color[0] + color[1] + " . " + C_EOC;
+		}
+		std::cout << "|" << std::endl;
+	}
+	std::cout << '*';
+	for (int i = 0; i < BOARD_SZ; ++i)
+		std::cout << "---";
+	std::cout << '*' << std::endl;
+}
+
 MasterBoard::MasterBoard(Game &game)
 : Board(game), _remain_places(BOARD_SZ*BOARD_SZ) {
 	_softMode = false;

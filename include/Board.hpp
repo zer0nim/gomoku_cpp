@@ -55,6 +55,7 @@ class Board {
 		std::array<uint64_t, BOARD_SZ>	getContent() const;
 		std::array<int, 2>				getLastStone() const;
 		std::array<bool, 2>				getIsVulVict() const;
+		void							printVuln();
 
 		Game	&game;
 
