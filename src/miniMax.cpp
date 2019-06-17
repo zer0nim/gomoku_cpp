@@ -18,8 +18,11 @@ std::tuple<Node*, int> miniMax(Game &game, Node &node, int depth, bool maximize,
 /*
 min_max algorithm implementation
 */
-    if (depth == 0 || node.setChilds() == 0)
+    Stats::startStats("miniMax");
+    if (depth == 0 || node.setChilds() == 0) {
+        Stats::endStats("miniMax");
         return {&node, game.getHeuristic().heuristic(node)};
+    }
     int range;
     if (maximize) {
         int _max = - std::numeric_limits<int>::min();
@@ -30,8 +33,10 @@ min_max algorithm implementation
 			for (auto &child : childs) {
                 game.getHeuristic().heuristic(*child);
                 if (child->getHeuristic() != HEURIS_NOT_SET) {
-                    if (depth == game.getHeuristic().getVal("DEPTH") && child->isWin)
+                    if (depth == game.getHeuristic().getVal("DEPTH") && child->isWin) {
+                        Stats::endStats("miniMax");
                         return {child, game.getHeuristic().heuristic(node)};
+                    }
 					keepChilds.push(child);
 				}
 			}
@@ -73,13 +78,16 @@ min_max algorithm implementation
             if (beta <= alpha)
                 break;
         }
-        if (maxlst.empty())
+        if (maxlst.empty()) {
+            Stats::endStats("miniMax");
             return {&node, HEURIS_NOT_SET};
+        }
         #if MINMAX_RANDOM_CHOICE
             Node *_node = maxlst[static_cast<int>(std::rand() % maxlst.size())];
         #else
             Node *_node = maxlst[0];
 		#endif
+        Stats::endStats("miniMax");
         return {_node, _max};
     }
     else {  // minimize
@@ -126,13 +134,16 @@ min_max algorithm implementation
             if (beta <= alpha)
                 break;
         }
-        if (minlst.empty())
+        if (minlst.empty()) {
+            Stats::endStats("miniMax");
             return {&node, HEURIS_NOT_SET};
+        }
         #if MINMAX_RANDOM_CHOICE
             Node *_node = minlst[static_cast<int>(std::rand() % minlst.size())];
         #else
             Node *_node = minlst[0];
 		#endif
+        Stats::endStats("miniMax");
         return {_node, _min};
     }
 }

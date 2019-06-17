@@ -45,6 +45,7 @@ void	Game::checkWinner() {
 }
 
 void	Game::run() {
+    Stats::startStats("Game run");
 	while (!isQuit) {
 		if (!_loadInProgress) {
 			if (getGui().getGuiType() == GUI_TYPE_GAME) {
@@ -57,6 +58,7 @@ void	Game::run() {
 		}
 		_loadInProgress = false;
 	}
+    Stats::endStats("Game run");
 }
 
 void Game::startMenu() {

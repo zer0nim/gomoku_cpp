@@ -4,6 +4,7 @@
 # include "Game.hpp"
 # include "Node.hpp"
 # include "Heuristic.hpp"
+# include "utils/Stats.hpp"
 # include <tuple>
 # include <limits>
 

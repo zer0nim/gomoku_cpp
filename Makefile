@@ -1,7 +1,6 @@
 NAME	= gomoku
 CPP		= clang++
 
-# FLAGS	= -Wall -Wextra -std=c++11 -Ofast
 FLAGS	= -Wall -Wextra -std=c++11 -g3 -fsanitize=address
 # If os !== macos add pthread FLAGS
 UNAME_S := $(shell uname -s)
@@ -22,7 +21,8 @@ SRC		=	main.cpp \
 			players/AIPlayer.cpp \
 			Node.cpp \
 			Heuristic.cpp \
-			miniMax.cpp
+			miniMax.cpp \
+			utils/Stats.cpp
 
 HEAD	=	Game.hpp \
 			Board.hpp \
@@ -33,7 +33,8 @@ HEAD	=	Game.hpp \
 			players/AIPlayer.hpp \
 			Node.hpp \
 			Heuristic.hpp \
-			miniMax.hpp
+			miniMax.hpp \
+			utils/Stats.hpp
 
 LIBS_FLAGS = -L ~/.brew/lib -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network -rpath ~/.brew/lib
 

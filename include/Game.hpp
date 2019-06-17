@@ -4,6 +4,7 @@
 #include "Board.hpp"
 #include "gui/Gui.hpp"
 #include "players/Player.hpp"
+# include "utils/Stats.hpp"
 #include "Heuristic.hpp"
 
 struct GameInfo {
