@@ -198,7 +198,6 @@ int Heuristic::heuristic(Node &node) {
     Node *tmp = &node;
     while (tmp->getParent()) {
         nodeHist.push((struct sNodeHist){tmp->getX(), tmp->getY(), tmp->getStone()});
-        // tmp.is_stone_on_board = True
         #if ENABLE_KEEP_NODE_PERCENT
             break;
         #endif
