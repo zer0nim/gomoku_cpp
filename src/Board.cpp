@@ -5,7 +5,7 @@
 #include <algorithm>
 
 Board::Board(Game &game)
-: game(game), _softMode(true), _isVulVict{false, false} {
+: game(game), _softMode(true), _isVulVict({{false, false}}) {
 	_lastStone[0] = 0;
 	_lastStone[1] = 0;
 }

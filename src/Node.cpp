@@ -94,25 +94,6 @@ int		Node::setChilds() {
 	return _childs.size();
 }
 
-bool    Node::operator >(Node const &rhs) const {
-	return this->_heuristic > rhs.getHeuristic();
-}
-bool    Node::operator <(Node const &rhs) const {
-	return this->_heuristic < rhs.getHeuristic();
-}
-bool    Node::operator >=(Node const &rhs) const {
-	return this->_heuristic >= rhs.getHeuristic();
-}
-bool    Node::operator <=(Node const &rhs) const {
-	return this->_heuristic <= rhs.getHeuristic();
-}
-bool    Node::operator ==(Node const &rhs) const {
-	return this->_heuristic == rhs.getHeuristic();
-}
-bool    Node::operator !=(Node const &rhs) const {
-	return this->_heuristic != rhs.getHeuristic();
-}
-
 std::ostream & operator << (std::ostream &out, const Node &n) {
 	out << "(" << n.getX() << ":" << n.getY() << "->" << n.getHeuristic() << ")";
 	return out;
