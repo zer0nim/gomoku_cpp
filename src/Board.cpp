@@ -436,10 +436,26 @@ void	Board::printVuln() {
 	for (int y = 0; y < BOARD_SZ; ++y) {
 		std::cout << '|';
 		for (int x = 0; x < BOARD_SZ; ++x) {
+			char txt[] = " . ";
 			color = {{ C_EOC, C_EOC }};
-			if (this->isVul(x, y))
-				color = {{ C_CYAN, C_F_CYAN }};
-			std::cout << color[0] + color[1] + " . " + C_EOC;
+			if (this->get(x, y) == 1) {
+				color = {{ C_WHITE, C_F_RED }};
+				txt[0] = ' ';
+				txt[1] = ' ';
+				txt[2] = ' ';
+			}
+			else if (this->get(x, y) == 2) {
+				color = {{ C_RED, C_F_WHITE }};
+				txt[0] = ' ';
+				txt[1] = ' ';
+				txt[2] = ' ';
+			}
+			if (this->isVul(x, y)) {
+				txt[0] = 'X';
+				txt[1] = 'X';
+				txt[2] = 'X';
+			}
+			std::cout << color[0] + color[1] + txt + C_EOC;
 		}
 		std::cout << "|" << std::endl;
 	}
