@@ -3,6 +3,11 @@
 #include <queue>
 #include <cmath>
 
+struct CompareNode {
+	bool operator()(const Node* lhs, const Node* rhs) const {
+		return lhs->getHeuristic() > rhs->getHeuristic();
+	}
+};
 struct ReverseCompareNode {
 	bool operator()(const Node* lhs, const Node* rhs) const {
 		return lhs->getHeuristic() < rhs->getHeuristic();
@@ -80,7 +85,7 @@ min_max algorithm implementation
         std::vector<Node*>	minlst;
 		std::vector<Node*>	childs = node.getChilds();
         #if ENABLE_KEEP_NODE_PERCENT
-			std::priority_queue<Node*> keepChilds;
+            std::priority_queue<Node*, std::vector<Node*>, CompareNode> keepChilds;
 			for (auto &child : childs) {
                 game.getHeuristic().heuristic(*child);
                 if (child->getHeuristic() != HEURIS_NOT_SET) {
