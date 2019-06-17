@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "Game.hpp"
 #include "players/RealPlayer.hpp"
 #include "players/AIPlayer.hpp"
@@ -54,9 +55,7 @@ void	Game::run() {
 				}
 			}
 		}
-		if (!(getGui().getGuiType() == GUI_TYPE_LOADING)) {
-			_loadInProgress = false;
-		}
+		_loadInProgress = false;
 	}
 }
 
@@ -67,7 +66,9 @@ void Game::startMenu() {
 
 	if (getPlayerActId() == 2)
 		nextPlayer();
-	// while (_loadInProgress);
+	while (_loadInProgress) {
+		usleep(1000);
+	}
 
 	// set GUI to menu
 	getGui().setGuiType(GUI_TYPE_MENU);
