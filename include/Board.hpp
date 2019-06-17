@@ -70,7 +70,7 @@ class Board {
 		Board();
 
 		std::array<uint64_t, BOARD_SZ>	_content = {};
-		std::array<int, 2>				_lastStone;
+		std::array<int, 2>				_lastStone = {};
 		std::array<bool, 2>				_isVulVict = {};
 };
 

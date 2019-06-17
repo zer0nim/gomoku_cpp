@@ -55,7 +55,7 @@ Board	Node::getBoardCopy() const { return _board; }
 int		Node::getDepth() const { return _depth; }
 
 std::unordered_map<int, bool> Node::get_childs_coord() {
-	std::unordered_map<int, bool> testChilds;
+	std::unordered_map<int, bool> testChilds = {};
 	int nbSquareArround = game.getHeuristic().getVal("NB_SQUARE_ARROUND");
 
 	for (int y = 0; y < BOARD_SZ; ++y)

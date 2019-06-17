@@ -7,7 +7,7 @@
 #define NB_DESTROYED_VICTORY 10
 #define STONE_EMPTY 0
 
-#define ENABLE_KEEP_NODE_PERCENT true
+#define ENABLE_KEEP_NODE_PERCENT false
 #define USE_MAX_KEEP_NODE true // if True, use MAX_KEEP_NODE, else... no limit !
 
 #define MINMAX_RANDOM_CHOICE false // choose a random position if we have the choice

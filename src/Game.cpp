@@ -64,11 +64,11 @@ void Game::startMenu() {
 	getGui().setGuiType(GUI_TYPE_LOADING);
 	_loadInProgress = true;
 
-	if (getPlayerActId() == 2)
-		nextPlayer();
 	while (_loadInProgress) {
 		usleep(1000);
 	}
+	if (getPlayerActId() == 2)
+		nextPlayer();
 
 	// set GUI to menu
 	getGui().setGuiType(GUI_TYPE_MENU);
