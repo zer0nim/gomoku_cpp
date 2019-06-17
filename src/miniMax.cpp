@@ -69,7 +69,7 @@ min_max algorithm implementation
         if (maxlst.empty())
             return {&node, HEURIS_NOT_SET};
         #if MINMAX_RANDOM_CHOICE
-            Node *_node = random.choice(maxlst);
+            Node *_node = maxlst[static_cast<int>(std::rand() % maxlst.size())];
         #else
             Node *_node = maxlst[0];
 		#endif
@@ -120,7 +120,7 @@ min_max algorithm implementation
         if (minlst.empty())
             return {&node, HEURIS_NOT_SET};
         #if MINMAX_RANDOM_CHOICE
-            Node *_node = random.choice(minlst);
+            Node *_node = minlst[static_cast<int>(std::rand() % minlst.size())];
         #else
             Node *_node = minlst[0];
 		#endif
