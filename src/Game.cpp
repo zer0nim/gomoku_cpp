@@ -21,7 +21,7 @@ bool	Game::has_win(int id) {
 	if (getPlayer(id).getWinAligned()) {
 		for (int x=0; x < BOARD_SZ; x++)
 			for (int y=0; y < BOARD_SZ; y++)
-				if (OP_ST(getBoard().get(x, y)) == getPlayerActId())
+				if (getBoard().get(x, y) == OP_ST(id))
 					getBoard().setIsWin(x, y, false);  // disable win for the other player
 		std::cout << "Win with " << NB_ALIGNED_VICTORY << " or more stones aligned" << std::endl;
 		_finished = true;

@@ -279,14 +279,11 @@ int Heuristic::heuristic(Node &node) {
     tmp = node.getParent();
     int diff = 0;
     int div = 1;
-    // std::cout << val << "\n";
     while (tmp && tmp->getHeuristic() != HEURIS_NOT_SET) {
-        // std::cout << "\t" << node.getParent()->getHeuristic() << "\n";
         diff += node.getParent()->getHeuristic();
         div++;
         tmp = tmp->getParent();
     }
-    // std::cout << "\t-> " << (diff * getVal("DIFF_MULTIPLIER")) / div << "\n";
     val += (diff * getVal("DIFF_MULTIPLIER")) / div;
 
     node.setHeuristic(val);

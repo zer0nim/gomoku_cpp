@@ -14,6 +14,7 @@ class AIPlayer : public Player {
 	protected:
 		void move();
 	private:
+		bool moveBlockWin();  // if _isWinAligned -> block the ennemy
 		AIPlayer();
 };
 
