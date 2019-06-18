@@ -163,7 +163,7 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 	if (node.getBoard().isEmpty(x, y))
 		return ;
 
-    checkReturn["nb_stones"] += getMul(stone);
+    checkReturn["nb_stones"] += getMul(stone) * getVal("NB_STONES");
 	if (node.getBoard().checkVulnerability(x, y)) {
 		int mul = multiplier;
 		if (game.getPlayer(stone).getNbDestroyedStones() + 2 >= NB_DESTROYED_VICTORY)
@@ -231,12 +231,12 @@ int Heuristic::heuristic(Node &node) {
 
     std::size_t hashNode = node.getBoard().getHash();
     if (node.transpositionTable.find(hashNode) != node.transpositionTable.end()) {
-        // checkReturn = (*node.transpositionTable)[hashNode];
-        auto it = checkReturn.begin();
-        while (it != checkReturn.end()) {
-            checkReturn[it->first] += node.transpositionTable[hashNode][it->first];
-            it++;
-        }
+        checkReturn = node.transpositionTable[hashNode];
+        // auto it = checkReturn.begin();
+        // while (it != checkReturn.end()) {
+        //     checkReturn[it->first] += node.transpositionTable[hashNode][it->first];
+        //     it++;
+        // }
     }
     else {
         for (int x=0; x < BOARD_SZ; x++)
