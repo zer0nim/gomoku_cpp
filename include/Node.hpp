@@ -4,7 +4,6 @@
 #include "Board.hpp"
 #include <vector>
 #include <unordered_map>
-#include <unordered_map>
 #include <limits>
 
 #define HEURIS_NOT_SET std::numeric_limits<int>::min()

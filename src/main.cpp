@@ -1,11 +1,13 @@
 #include <iostream>
 #include <pthread.h>
 #include "Game.hpp"
+#include "utils/Stats.hpp"
 
 void *runThread(void *gameV) {
 	Game	*game = reinterpret_cast<Game *>(gameV);
 
-	game->run();
+	getStatsMVoid<Game>("game run", *game, &Game::run);
+	// game->run();
 	pthread_exit(NULL);
 }
 
@@ -22,5 +24,6 @@ int main(void) {
 
 	game.getGui().run();
 	pthread_cancel(threadT);
+	Stats::printStats();
 	return 0;
 }

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <unordered_map>
+#include "utils/Stats.hpp"
 #include "Define.hpp"
 
 #define NB_DIFFICULTY_LEVEL 3

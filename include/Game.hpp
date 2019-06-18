@@ -1,10 +1,10 @@
 #ifndef GAME_HPP
-#define GAME_HPP
+# define GAME_HPP
 
-#include "Board.hpp"
-#include "gui/Gui.hpp"
-#include "players/Player.hpp"
-#include "Heuristic.hpp"
+# include "Board.hpp"
+# include "gui/Gui.hpp"
+# include "players/Player.hpp"
+# include "Heuristic.hpp"
 
 struct GameInfo {
 	bool playerAI[3];  // 0: unused, 1: player1, 2: player2
