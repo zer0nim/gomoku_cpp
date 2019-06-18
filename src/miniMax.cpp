@@ -72,8 +72,7 @@ min_max algorithm implementation
 				Node *child = childs[i];
 			#endif
 
-			// std::tuple<Node*, int> childMin = miniMax(game, *child, depth-1, false, alpha, beta);
-			std::tuple<Node*, int> childMin = getStats<std::tuple<Node*, int>, Game &, Node &, int, bool, int, int>("miniMax", miniMax, game, *child, depth-1, false, alpha, beta);
+			std::tuple<Node*, int> childMin = miniMax(game, *child, depth-1, false, alpha, beta);
 			if (std::get<1>(childMin) == HEURIS_NOT_SET)
 				continue;
 			if (std::get<1>(childMin) > _max) {
@@ -128,8 +127,7 @@ min_max algorithm implementation
 				Node *child = childs[i];
 			#endif
 
-			// std::tuple<Node*, int> childMin = miniMax(game, *child, depth-1, true, alpha, beta);
-			std::tuple<Node*, int> childMin = getStats<std::tuple<Node*, int>, Game &, Node &, int, bool, int, int>("miniMax", miniMax, game, *child, depth-1, true, alpha, beta);
+			std::tuple<Node*, int> childMin = miniMax(game, *child, depth-1, true, alpha, beta);
 			if (std::get<1>(childMin) == HEURIS_NOT_SET)
 				continue;
 			if (std::get<1>(childMin) < _min) {
