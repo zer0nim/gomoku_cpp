@@ -58,6 +58,7 @@ void AIPlayer::move() {
 bool AIPlayer::moveBlockWin() {
 	int depth = std::min<int>(game.getHeuristic().getVal("DEPTH"), game.getBoard().getRemainPlaces());
 	Node node(game, OP_ST(game.getPlayerActId()), -1, -1, depth+1);
+	node.getBoard().setIsVulVict(false, false);
 	getStatsM<int, Node>("node setChilds", node, &Node::setChilds);
 	for (auto &child : node.getChilds()) {
 		game.getBoard().setMarkerColor(child->getX(), child->getY(), 0x00FF00FF);

@@ -397,6 +397,10 @@ this function put a stone and, if needed, destroy some stones
 std::array<uint64_t, BOARD_SZ>	Board::getContent() const { return _content; }
 std::array<int, 2>				Board::getLastStone() const { return _lastStone; }
 std::array<bool, 2>				Board::getIsVulVict() const { return _isVulVict; }
+void Board::setIsVulVict(bool vic1, bool vic2) {
+	_isVulVict[0] = vic1;
+	_isVulVict[1] = vic2;
+}
 
 // print the board (with colors)
 std::ostream & operator << (std::ostream &out, const Board &c) {
