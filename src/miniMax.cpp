@@ -14,6 +14,31 @@ struct ReverseCompareNode {
 	}
 };
 
+void updateBest(Game &game, Node &node, int depth, bool maximize, int &alpha, int &beta, int &_best, std::vector<Node*> &bestLst) {
+	std::tuple<Node*, int> childMin = miniMax(game, node, depth-1, !maximize, alpha, beta);
+	if (std::get<1>(childMin) == HEURIS_NOT_SET)
+		return;
+	if (maximize) {
+		if (std::get<1>(childMin) > _best) {
+			_best = std::get<1>(childMin);
+			bestLst.clear();
+			bestLst.push_back(std::get<0>(childMin));
+		}
+		else if (std::get<1>(childMin) == _best)
+			bestLst.push_back(std::get<0>(childMin));
+		alpha = std::max<float>(alpha, _best);
+	} else {
+		if (std::get<1>(childMin) < _best) {
+			_best = std::get<1>(childMin);
+			bestLst.clear();
+			bestLst.push_back(std::get<0>(childMin));
+		}
+		else if (std::get<1>(childMin) == _best)
+			bestLst.push_back(std::get<0>(childMin));
+		beta = std::min<float>(beta, _best);
+	}
+}
+
 std::tuple<Node*, int> miniMax(Game &game, Node &node, int depth, bool maximize, int alpha, int beta) {
 /*
 min_max algorithm implementation
@@ -29,8 +54,8 @@ min_max algorithm implementation
 		};
 	int range;
 	if (maximize) {
-		int _max = - std::numeric_limits<int>::min();
-		std::vector<Node*>	maxlst;
+		int _best = - std::numeric_limits<int>::min();
+		std::vector<Node*>	bestLst;
 		std::vector<Node*>  childs = node.getChilds();
 		#if ENABLE_KEEP_NODE_PERCENT
 			std::priority_queue<Node*, std::vector<Node*>, ReverseCompareNode> keepChilds;
@@ -72,32 +97,22 @@ min_max algorithm implementation
 				Node *child = childs[i];
 			#endif
 
-			std::tuple<Node*, int> childMin = miniMax(game, *child, depth-1, false, alpha, beta);
-			if (std::get<1>(childMin) == HEURIS_NOT_SET)
-				continue;
-			if (std::get<1>(childMin) > _max) {
-				_max = std::get<1>(childMin);
-				maxlst.clear();
-				maxlst.push_back(std::get<0>(childMin));
-			}
-			else if (std::get<1>(childMin) == _max)
-				maxlst.push_back(std::get<0>(childMin));
-			alpha = std::max<float>(alpha, _max);
-			if (beta <= alpha)
-				break;
+			updateBest(game, *child, depth, maximize, alpha, beta, _best, bestLst);
 		}
-		if (maxlst.empty())
+
+
+		if (bestLst.empty())
 			return {&node, HEURIS_NOT_SET};
 		#if MINMAX_RANDOM_CHOICE
-			Node *_node = maxlst[static_cast<int>(std::rand() % maxlst.size())];
+			Node *_node = bestLst[static_cast<int>(std::rand() % bestLst.size())];
 		#else
-			Node *_node = maxlst[0];
+			Node *_node = bestLst[0];
 		#endif
-		return {_node, _max};
+		return {_node, _best};
 	}
 	else {  // minimize
-		int _min = std::numeric_limits<int>::max();
-		std::vector<Node*>	minlst;
+		int _best = std::numeric_limits<int>::max();
+		std::vector<Node*>	bestLst;
 		std::vector<Node*>	childs = node.getChilds();
 		#if ENABLE_KEEP_NODE_PERCENT
 			std::priority_queue<Node*, std::vector<Node*>, CompareNode> keepChilds;
@@ -127,27 +142,15 @@ min_max algorithm implementation
 				Node *child = childs[i];
 			#endif
 
-			std::tuple<Node*, int> childMin = miniMax(game, *child, depth-1, true, alpha, beta);
-			if (std::get<1>(childMin) == HEURIS_NOT_SET)
-				continue;
-			if (std::get<1>(childMin) < _min) {
-				_min = std::get<1>(childMin);
-				minlst.clear();
-				minlst.push_back(std::get<0>(childMin));
-			}
-			else if (std::get<1>(childMin) == _min)
-				minlst.push_back(std::get<0>(childMin));
-			beta = std::min<float>(beta, _min);
-			if (beta <= alpha)
-				break;
+			updateBest(game, *child, depth, maximize, alpha, beta, _best, bestLst);
 		}
-		if (minlst.empty())
+		if (bestLst.empty())
 			return {&node, HEURIS_NOT_SET};
 		#if MINMAX_RANDOM_CHOICE
-			Node *_node = minlst[static_cast<int>(std::rand() % minlst.size())];
+			Node *_node = bestLst[static_cast<int>(std::rand() % bestLst.size())];
 		#else
-			Node *_node = minlst[0];
+			Node *_node = bestLst[0];
 		#endif
-		return {_node, _min};
+		return {_node, _best};
 	}
 }
