@@ -53,8 +53,8 @@ class Heuristic {
 			{"TWO", 10 / 2},  // BAA.
 			{"FREE_TWO", 20 / 2},  // .AA.
 			{"THREE", 39 / 3},  // BAAA.
-			{"FREE_THREE", 132 / 3},  // .AAA. .A.AA.
-			{"FOUR", 132 / 4},  // BAAAA.
+			{"FREE_THREE", 300 / 3},  // .AAA. .A.AA.
+			{"FOUR", 300 / 4},  // BAAAA.
 			{"FREE_FOUR", 1500 / 4},  // .AAAA.
 			{"WIN", 6000 / 5},  // AAAAA
 			{"VULNERABILITY", -35},  // BAA.

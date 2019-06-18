@@ -61,7 +61,6 @@ bool AIPlayer::moveBlockWin() {
 	node.getBoard().setIsVulVict(false, false);
 	getStatsM<int, Node>("node setChilds", node, &Node::setChilds);
 	for (auto &child : node.getChilds()) {
-		game.getBoard().setMarkerColor(child->getX(), child->getY(), 0x00FF00FF);
 		if (child->getBoard().isAllowed(child->getX(), child->getY(), child->getStone())) {
 			child->getBoard().putStone(child->getX(), child->getY(), child->getStone());
 			child->getBoard().check_winner();
