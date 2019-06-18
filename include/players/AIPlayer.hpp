@@ -2,6 +2,7 @@
 #define AI_PLAYER_HPP
 
 #include "players/Player.hpp"
+#include "utils/Stats.hpp"
 #include <iostream>
 
 class Game;

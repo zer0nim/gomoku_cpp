@@ -177,9 +177,7 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 }
 
 int Heuristic::heuristic(Node &node) {
-	Stats::startStats("heuristic");
 	if (node.getHeuristic() != HEURIS_NOT_SET) {
-		Stats::endStats("heuristic");
 		return node.getHeuristic();
 	}
 
@@ -227,7 +225,6 @@ int Heuristic::heuristic(Node &node) {
 		}
 		else {
 			node.setHeuristic(HEURIS_NOT_SET);
-			Stats::endStats("heuristic");
 			return HEURIS_NOT_SET;  // ERROR
 		}
 		i++;
@@ -281,7 +278,6 @@ int Heuristic::heuristic(Node &node) {
 		it++;
 	}
 	node.setHeuristic(val);
-	Stats::endStats("heuristic");
 	return val;
 }
 

@@ -24,30 +24,30 @@ void    Stats::printStats() {
     }
 }
 
-void	Stats::startStats(std::string funcName) {
-    if (Stats::stats.find(funcName) == Stats::stats.end()) {
+void	Stats::startStats(std::string name) {
+    if (Stats::stats.find(name) == Stats::stats.end()) {
         struct sStat stats;
         stats.nbCalls = 0;
         stats.totalExecTime = std::chrono::duration<double>(0);
         stats.avgExecTime = std::chrono::duration<double>(0);
         stats.minExecTime = std::chrono::duration<double>::max();
         stats.maxExecTime = std::chrono::duration<double>::min();
-        Stats::stats[funcName] = stats;
+        Stats::stats[name] = stats;
     }
-    ++(Stats::stats[funcName].nbCalls);
-    Stats::stats[funcName].startExecTime = std::chrono::high_resolution_clock::now();
+    ++(Stats::stats[name].nbCalls);
+    Stats::stats[name].startExecTime = std::chrono::high_resolution_clock::now();
 }
 
-void	Stats::endStats(std::string funcName) {
-    if (Stats::stats.find(funcName) == Stats::stats.end()
-    || Stats::stats[funcName].startExecTime == std::chrono::high_resolution_clock::time_point::min())
+void	Stats::endStats(std::string name) {
+    if (Stats::stats.find(name) == Stats::stats.end()
+    || Stats::stats[name].startExecTime == std::chrono::high_resolution_clock::time_point::min())
         return;
     std::chrono::duration<double> execTime = std::chrono::duration_cast<std::chrono::duration<double> >(
-        std::chrono::high_resolution_clock::now() - Stats::stats[funcName].startExecTime);
-    Stats::stats[funcName].totalExecTime += execTime;
-    Stats::stats[funcName].avgExecTime = Stats::stats[funcName].totalExecTime / Stats::stats[funcName].nbCalls;
-    Stats::stats[funcName].minExecTime = std::min(Stats::stats[funcName].minExecTime, execTime);
-    Stats::stats[funcName].maxExecTime = std::max(Stats::stats[funcName].maxExecTime, execTime);
+        std::chrono::high_resolution_clock::now() - Stats::stats[name].startExecTime);
+    Stats::stats[name].totalExecTime += execTime;
+    Stats::stats[name].avgExecTime = Stats::stats[name].totalExecTime / Stats::stats[name].nbCalls;
+    Stats::stats[name].minExecTime = std::min(Stats::stats[name].minExecTime, execTime);
+    Stats::stats[name].maxExecTime = std::max(Stats::stats[name].maxExecTime, execTime);
     // reset startExecTime
-    Stats::stats[funcName].startExecTime = std::chrono::high_resolution_clock::time_point::min();
+    Stats::stats[name].startExecTime = std::chrono::high_resolution_clock::time_point::min();
 }

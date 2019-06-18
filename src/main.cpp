@@ -6,7 +6,8 @@
 void *runThread(void *gameV) {
 	Game	*game = reinterpret_cast<Game *>(gameV);
 
-	game->run();
+	getStatsMVoid<Game>("game run", *game, &Game::run);
+	// game->run();
 	pthread_exit(NULL);
 }
 
