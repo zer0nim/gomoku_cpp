@@ -163,7 +163,7 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 	if (node.getBoard().isEmpty(x, y))
 		return ;
 
-    checkReturn["nb_stones"] += getMul(stone) * getVal("NB_STONES");
+    checkReturn["nb_stones"] += getMul(stone);
 	if (node.getBoard().checkVulnerability(x, y)) {
 		int mul = multiplier;
 		if (game.getPlayer(stone).getNbDestroyedStones() + 2 >= NB_DESTROYED_VICTORY)
@@ -210,7 +210,7 @@ int Heuristic::heuristic(Node &node) {
         nodeHist.pop();
         if (node.getBoard().isAllowed(nodeHistI.x, nodeHistI.y, nodeHistI.stone)) {
             int nbDestroyed = node.getBoard().putStone(nodeHistI.x, nodeHistI.y, nodeHistI.stone);
-            int mul = ((nodeHist.size()+1)>>1) - (i>>1) + 1;
+            int mul = std::max(2, getVal("LAST_MOVES_MAX_MULTIPLIER") - ((getVal("DEPTH")>>1) - ((node.getDepth()+1)>>1)));
             if (nbDestroyed > 0) {
                 mul = 1;
                 if (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + nbDestroyed >= NB_DESTROYED_VICTORY) {
@@ -231,12 +231,11 @@ int Heuristic::heuristic(Node &node) {
 
     std::size_t hashNode = node.getBoard().getHash();
     if (node.transpositionTable.find(hashNode) != node.transpositionTable.end()) {
-        checkReturn = node.transpositionTable[hashNode];
-        // auto it = checkReturn.begin();
-        // while (it != checkReturn.end()) {
-        //     checkReturn[it->first] += node.transpositionTable[hashNode][it->first];
-        //     it++;
-        // }
+        auto it = checkReturn.begin();
+        while (it != checkReturn.end()) {
+            checkReturn[it->first] += node.transpositionTable[hashNode][it->first];
+            it++;
+        }
     }
     else {
         for (int x=0; x < BOARD_SZ; x++)
@@ -276,6 +275,20 @@ int Heuristic::heuristic(Node &node) {
 		val += it->second;
 		it++;
 	}
+
+    tmp = node.getParent();
+    int diff = 0;
+    int div = 1;
+    // std::cout << val << "\n";
+    while (tmp && tmp->getHeuristic() != HEURIS_NOT_SET) {
+        // std::cout << "\t" << node.getParent()->getHeuristic() << "\n";
+        diff += node.getParent()->getHeuristic();
+        div++;
+        tmp = tmp->getParent();
+    }
+    // std::cout << "\t-> " << (diff * getVal("DIFF_MULTIPLIER")) / div << "\n";
+    val += (diff * getVal("DIFF_MULTIPLIER")) / div;
+
     node.setHeuristic(val);
 	return val;
 }

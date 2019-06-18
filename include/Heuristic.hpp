@@ -42,16 +42,18 @@ class Heuristic {
 			{"KEEP_NODE_PERCENT", 20},  // the percentage of node to keep (in minmax algo)
 			{"MIN_KEEP_NODE", 3},  // keep at least MIN_KEEP_NODE nodes (if the percentage return less than MIN_KEEP_NODE)
 			{"MAX_KEEP_NODE", 4},  // keep max MAX_KEEP_NODE nodes (if the percentage return more than MAX_KEEP_NODE)
+			{"DIFF_MULTIPLIER", 1},  // add to the heuristic the diif with the parent heuristic * DIFF_MULTIPLIER
+			{"LAST_MOVES_MAX_MULTIPLIER", 5},  // multiply the first move by 5, second 5, third 4, 4th 4, 5th 3, ... -> min 2
 			{"MULTIPLIER_POSITIVE", 1},  // used to count more the positive or negative action in heuristic
-			{"MULTIPLIER_NEGATIVE", -3},  // used to count more the positive or negative action in heuristic
+			{"MULTIPLIER_NEGATIVE", -2},  // used to count more the positive or negative action in heuristic
 
 			// value for multiplier
 			{"NB_STONES", 1},  // A
 			{"TWO", 10 / 2},  // BAA.
-			{"FREE_TWO", 15 / 2},  // .AA.
-			{"THREE", 30 / 3},  // BAAA.
-			{"FREE_THREE", 130 / 3},  // .AAA. .A.AA.
-			{"FOUR", 130 / 4},  // BAAAA.
+			{"FREE_TWO", 20 / 2},  // .AA.
+			{"THREE", 39 / 3},  // BAAA.
+			{"FREE_THREE", 132 / 3},  // .AAA. .A.AA.
+			{"FOUR", 132 / 4},  // BAAAA.
 			{"FREE_FOUR", 1500 / 4},  // .AAAA.
 			{"WIN", 6000 / 5},  // AAAAA
 			{"VULNERABILITY", -35},  // BAA.
