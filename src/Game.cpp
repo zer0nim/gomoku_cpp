@@ -19,15 +19,25 @@ Game::Game() :
 
 bool	Game::has_win(int id) {
 	if (getPlayer(id).getWinAligned()) {
+		for (int x=0; x < BOARD_SZ; x++)
+			for (int y=0; y < BOARD_SZ; y++)
+				if (OP_ST(getBoard().get(x, y)) == getPlayerActId())
+					getBoard().setIsWin(x, y, false);  // disable win for the other player
 		std::cout << "Win with " << NB_ALIGNED_VICTORY << " or more stones aligned" << std::endl;
 		_finished = true;
 	}
 	if (getPlayer(id).getNbDestroyedStones() >= NB_DESTROYED_VICTORY) {
+		for (int x=0; x < BOARD_SZ; x++)
+			for (int y=0; y < BOARD_SZ; y++)
+				if (getBoard().get(x, y) == getPlayerActId())
+					getBoard().setIsWin(x, y, true);
 		std::cout << "Win because of " << NB_DESTROYED_VICTORY << " stones destroyed" << std::endl;
 		_finished = true;
 	}
-	if (_finished)
+	if (_finished) {
+		getPlayer(id).setWinner(true);
 		std::cout << "player " << id << " has win" << std::endl;
+	}
 
 	return _finished;
 }
@@ -124,6 +134,7 @@ Player &Game::getPlayer(int id) const { return *_players[id - 1]; }
 Player &Game::getPlayerAct() const { return *_players[_idPlayerAct - 1]; }
 int Game::getPlayerActId() const { return _idPlayerAct; }
 Heuristic &Game::getHeuristic() const { return *_heuristic; }
+bool Game::isFinished() const { return _finished; }
 
 Game::~Game() {
 	delete _board;

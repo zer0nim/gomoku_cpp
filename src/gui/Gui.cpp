@@ -166,7 +166,13 @@ void Gui::drawGame() {
 		int xwin = (GUI_WIN_W - GUI_BOARD_SZ) * 0.1;
 		int ywin = GUI_WIN_H * 0.05 + (GUI_WIN_H/2) * (i-1);
 		playerRect.setFillColor(getColor(i));
-		if (game.getPlayerActId() == i)
+		if (game.isFinished()) {
+			if (game.getPlayer(i).isWinner())
+				playerRect.setOutlineColor(sf::Color(GUI_COLOR_WIN));
+			else
+				playerRect.setOutlineColor(sf::Color(GUI_COLOR_LOOSE));
+		}
+		else if (game.getPlayerActId() == i)
 			playerRect.setOutlineColor(sf::Color(GUI_COLOR_PLAYER_ACT));
 		else
 			playerRect.setOutlineColor(getRevColor(i));

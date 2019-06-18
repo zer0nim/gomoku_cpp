@@ -22,6 +22,7 @@ class Game {
 		Gui &getGui() const;
 		Heuristic &getHeuristic() const;
 		int getPlayerActId() const;
+		bool isFinished() const;
 		void startMenu();
 		void startGame();
 		void nextPlayer();
