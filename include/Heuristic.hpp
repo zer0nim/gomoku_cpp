@@ -63,15 +63,15 @@ class Heuristic {
 		};
 		std::unordered_map<std::string, int> _defValEasy{
 			// changes for easy mode
-			{"DEPTH", 1},
+			{"DEPTH", 2},
 			{"MULTIPLIER_POSITIVE", 1},
-			{"MULTIPLIER_NEGATIVE", -2}
+			{"MULTIPLIER_NEGATIVE", -1}
 		};
 		std::unordered_map<std::string, int> _defValNormal{
 			// changes for normal mode
-			{"DEPTH", 2},
-			{"VULNERABILITY", 0},
-			{"DESTROYED", 0}
+			{"VULNERABILITY", -50},
+			{"DESTROYED", 500},
+			{"DESTROY_VICTORY_ADDER", 15}
 		};
 		std::unordered_map<std::string, int> _defValHard{};  // the hard mode has the same parameters as the default mode
 		std::unordered_map<std::string, int> _difficultyVal[NB_DIFFICULTY_LEVEL];

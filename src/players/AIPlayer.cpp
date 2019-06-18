@@ -65,6 +65,7 @@ bool AIPlayer::moveBlockWin() {
 			child->getBoard().putStone(child->getX(), child->getY(), child->getStone());
 			child->getBoard().check_winner();
 			if (!child->getBoard().getIsVulVict()[OP_ST(game.getPlayerActId())-1]) {
+				child->getBoard().setIsVulVict(false, false);
 				game.getBoard().putStone(child->getX(), child->getY(), child->getStone());
 				return true;
 			}
