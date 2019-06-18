@@ -19,7 +19,11 @@ std::tuple<Node*, int> miniMax(Game &game, Node &node, int depth, bool maximize,
 min_max algorithm implementation
 */
 	if (depth == 0 || node.setChilds() == 0)
-		return {&node, game.getHeuristic().heuristic(node)};
+		return {
+			&node,
+			// game.getHeuristic().heuristic(node)
+			getStatsM<int, Heuristic, Node &>("heuristic", game.getHeuristic(), &Heuristic::heuristic, node)
+		};
 	int range;
 	if (maximize) {
 		int _max = - std::numeric_limits<int>::min();
@@ -28,10 +32,16 @@ min_max algorithm implementation
 		#if ENABLE_KEEP_NODE_PERCENT
 			std::priority_queue<Node*, std::vector<Node*>, ReverseCompareNode> keepChilds;
 			for (auto &child : childs) {
-				game.getHeuristic().heuristic(*child);
+				// game.getHeuristic().heuristic(*child);
+				getStatsM<int, Heuristic, Node &>("heuristic", game.getHeuristic(), &Heuristic::heuristic, *child);
+
 				if (child->getHeuristic() != HEURIS_NOT_SET) {
 					if (depth == game.getHeuristic().getVal("DEPTH") && child->isWin)
-						return {child, game.getHeuristic().heuristic(node)};
+						return {
+							child,
+							// game.getHeuristic().heuristic(node)
+							getStatsM<int, Heuristic, Node &>("heuristic", game.getHeuristic(), &Heuristic::heuristic, node)
+						};
 					keepChilds.push(child);
 				}
 			}
@@ -90,7 +100,9 @@ min_max algorithm implementation
 		#if ENABLE_KEEP_NODE_PERCENT
 			std::priority_queue<Node*, std::vector<Node*>, CompareNode> keepChilds;
 			for (auto &child : childs) {
-				game.getHeuristic().heuristic(*child);
+				// game.getHeuristic().heuristic(*child);
+				getStatsM<int, Heuristic, Node &>("heuristic", game.getHeuristic(), &Heuristic::heuristic, *child);
+
 				if (child->getHeuristic() != HEURIS_NOT_SET) {
 					keepChilds.push(child);
 				}

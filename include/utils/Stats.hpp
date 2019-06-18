@@ -44,7 +44,7 @@ void getStatsVoid(std::string name, void (&func)(Args...), Args... args) {
 // getStats for Member function ___________________
 
 template<typename RetT, typename ClassT, typename ...Args>
-void getStatsM(std::string name, ClassT &obj, RetT (ClassT::*func)(Args...), Args... args) {
+RetT getStatsM(std::string name, ClassT &obj, RetT (ClassT::*func)(Args...), Args... args) {
 	std::chrono::high_resolution_clock::time_point startExecTime = Stats::startStats(name);
 	RetT res = (obj.*func)(args...);
     Stats::endStats(name, startExecTime);
