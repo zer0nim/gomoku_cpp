@@ -18,7 +18,10 @@ std::tuple<Node*, int> miniMax(Game &game, Node &node, int depth, bool maximize,
 /*
 min_max algorithm implementation
 */
-	if (depth == 0 || node.setChilds() == 0)
+	if (depth == 0
+	// || node.setChilds() == 0
+	|| getStatsM<int, Node>("node setChilds", node, &Node::setChilds) == 0
+	)
 		return {
 			&node,
 			// game.getHeuristic().heuristic(node)
