@@ -206,8 +206,6 @@ std::tuple<Node*, int> miniMaxThr(Game &game, Node &node, int depth) {
 	for (size_t i = 0; i < fut_vec.size(); ++i) {
 		std::tuple<Node*, int> childMin = fut_vec[i].get();
 		Node *testNode = std::get<0>(childMin);
-		while (testNode->getParent() && testNode->getParent()->getParent())
-			testNode = testNode->getParent();
 
 		if (testNode->getHeuristic() == HEURIS_NOT_SET)
 			continue;
