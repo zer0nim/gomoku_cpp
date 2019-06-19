@@ -37,6 +37,7 @@ class Heuristic {
 		void checkStone(Node &node, int x, int y,
 			std::unordered_map<std::string, int> &checkReturn, int multiplier);
 
+		// [WARNING]: the values should not be 0
 		std::unordered_map<std::string, int> _defVal{
 			// global parameter
 			{"DEPTH", 4},  // the depth of the algorithm
@@ -47,7 +48,8 @@ class Heuristic {
 			{"DIFF_DIVISER", 20},  // add to the heuristic the diif with the parent heuristic * DIFF_MULTIPLIER
 			{"LAST_MOVES_MAX_MULTIPLIER", 3},  // multiply the first move by 5, second 5, third 4, 4th 4, 5th 3, ... -> min 2
 			{"MULTIPLIER_POSITIVE", 1},  // used to count more the positive or negative action in heuristic
-			{"MULTIPLIER_NEGATIVE", -1},  // used to count more the positive or negative action in heuristic
+			{"MULTIPLIER_NEGATIVE", -2},  // used to count more the positive or negative action in heuristic
+			{"ENABLE_DIFF", 1},  // enable (1) or disable (-1) diff usage in heuristic
 
 			// value for multiplier
 			{"NB_STONES", 1},  // A
@@ -55,7 +57,7 @@ class Heuristic {
 			{"FREE_TWO", 20 / 2},  // .AA.
 			{"THREE", 30 / 3},  // BAAA.
 			{"FREE_THREE", 900 / 3},  // .AAA. .A.AA.
-			{"FOUR", 400 / 4},  // BAAAA.
+			{"FOUR", 600 / 4},  // BAAAA.
 			{"FREE_FOUR", 1500 / 4},  // .AAAA.
 			{"WIN", 6000 / 5},  // AAAAA
 			{"VULNERABILITY", -35},  // BAA.
@@ -64,15 +66,16 @@ class Heuristic {
 		};
 		std::unordered_map<std::string, int> _defValEasy{
 			// changes for easy mode
-			{"DEPTH", _defVal["DEPTH"] - 2},
-			{"MULTIPLIER_POSITIVE", 1},
-			{"MULTIPLIER_NEGATIVE", -1}
+			{"LAST_MOVES_MAX_MULTIPLIER", 3},
+			{"FREE_THREE", 80 / 3},  // .AAA. .A.AA.
+			{"FOUR", 100 / 4},  // BAAAA.
 		};
 		std::unordered_map<std::string, int> _defValNormal{
 			// changes for normal mode
-			{"VULNERABILITY", _defVal["VULNERABILITY"] * 2},
-			{"DESTROYED", _defVal["DESTROYED"] * 2},
-			{"DESTROY_VICTORY_ADDER", 15}
+			{"LAST_MOVES_MAX_MULTIPLIER", 8},
+			{"MULTIPLIER_NEGATIVE", -1},
+			{"WIN", 8000 / 5},
+			{"ENABLE_DIFF", -1}
 		};
 		std::unordered_map<std::string, int> _defValHard{};  // the hard mode has the same parameters as the default mode
 		std::unordered_map<std::string, int> _difficultyVal[NB_DIFFICULTY_LEVEL];

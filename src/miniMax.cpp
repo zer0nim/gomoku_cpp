@@ -29,7 +29,7 @@ min_max algorithm implementation
 		};
 	int range;
 	if (maximize) {
-		int _max = - std::numeric_limits<int>::min();
+		int _max = std::numeric_limits<int>::min();
 		std::vector<Node*>	maxlst;
 		std::vector<Node*>  childs = node.getChilds();
 		#if ENABLE_KEEP_NODE_PERCENT

@@ -30,9 +30,9 @@ int Heuristic::getMul(Node &node, int stone) {
 	}
 	else {
 		if (game.getPlayerActId() == stone) {
-			return getVal("MULTIPLIER_POSITIVE");
+			return -getVal("MULTIPLIER_NEGATIVE");
 		}
-		return getVal("MULTIPLIER_NEGATIVE");
+		return -getVal("MULTIPLIER_POSITIVE");
 	}
 }
 
@@ -285,15 +285,17 @@ int Heuristic::heuristic(Node &node) {
 		it++;
 	}
 
-	// tmp = node.getParent();
-	// int diff = 0;
-	// int div = 1;
-	// while (tmp && tmp->getHeuristic() != HEURIS_NOT_SET) {
-	// 	diff += node.getParent()->getHeuristic();
-	// 	div++;
-	// 	tmp = tmp->getParent();
-	// }
-	// val += (diff / getVal("DIFF_DIVISER")) / div;
+	if (getVal("ENABLE_DIFF") == 1) {
+		tmp = node.getParent();
+		int diff = 0;
+		int div = 1;
+		while (tmp && tmp->getHeuristic() != HEURIS_NOT_SET) {
+			diff += node.getParent()->getHeuristic();
+			div++;
+			tmp = tmp->getParent();
+		}
+		val += (diff / getVal("DIFF_DIVISER")) / div;
+	}
 
 	node.setHeuristic(val);
 	return val;
