@@ -39,31 +39,31 @@ min_max algorithm implementation
 		std::vector<Node*>	maxlst;
 		std::vector<Node*>  childs = node.getChilds();
 		#if ENABLE_KEEP_NODE_PERCENT
-				std::priority_queue<Node*, std::vector<Node*>, ReverseCompareNode> keepChilds;
-				for (auto &child : childs) {
-					// game.getHeuristic().heuristic(*child);
-					getStatsM<int, Heuristic, Node &>("heuristic", game.getHeuristic(), &Heuristic::heuristic, *child);
+			std::priority_queue<Node*, std::vector<Node*>, ReverseCompareNode> keepChilds;
+			for (auto &child : childs) {
+				// game.getHeuristic().heuristic(*child);
+				getStatsM<int, Heuristic, Node &>("heuristic", game.getHeuristic(), &Heuristic::heuristic, *child);
 
-					if (child->getHeuristic() != HEURIS_NOT_SET) {
-						if (depth == game.getHeuristic().getVal("DEPTH") && child->isWin)
-							return {
-								child,
-								// game.getHeuristic().heuristic(node)
-								getStatsM<int, Heuristic, Node &>("heuristic", game.getHeuristic(), &Heuristic::heuristic, node)
-							};
-						keepChilds.push(child);
-					}
+				if (child->getHeuristic() != HEURIS_NOT_SET) {
+					if (depth == game.getHeuristic().getVal("DEPTH") && child->isWin)
+						return {
+							child,
+							// game.getHeuristic().heuristic(node)
+							getStatsM<int, Heuristic, Node &>("heuristic", game.getHeuristic(), &Heuristic::heuristic, node)
+						};
+					keepChilds.push(child);
 				}
-				range = std::max<int>(std::ceil(keepChilds.size() * (static_cast<float>(game.getHeuristic().getVal("KEEP_NODE_PERCENT")) / 100)), game.getHeuristic().getVal("MIN_KEEP_NODE"));
+			}
+			range = std::max<int>(std::ceil(keepChilds.size() * (static_cast<float>(game.getHeuristic().getVal("KEEP_NODE_PERCENT")) / 100)), game.getHeuristic().getVal("MIN_KEEP_NODE"));
 
-				if (range > static_cast<int>(keepChilds.size()))
-					range = keepChilds.size();
-				#if USE_MAX_KEEP_NODE
-					range = std::min<int>(range, game.getHeuristic().getVal("MAX_KEEP_NODE"));
-				#endif
-			#else
-				range = node.getChilds().size();
+			if (range > static_cast<int>(keepChilds.size()))
+				range = keepChilds.size();
+			#if USE_MAX_KEEP_NODE
+				range = std::min<int>(range, game.getHeuristic().getVal("MAX_KEEP_NODE"));
 			#endif
+		#else
+			range = node.getChilds().size();
+		#endif
 
 		for (int i = 0; i < range; ++i) {
 			#if ENABLE_KEEP_NODE_PERCENT
@@ -163,31 +163,31 @@ std::tuple<Node*, int> miniMaxThr(Game &game, Node &node, int depth) {
 	std::vector<Node*>  childs = node.getChilds();
 
 	#if ENABLE_KEEP_NODE_PERCENT
-			std::priority_queue<Node*, std::vector<Node*>, ReverseCompareNode> keepChilds;
-			for (auto &child : childs) {
-				// game.getHeuristic().heuristic(*child);
-				getStatsM<int, Heuristic, Node &>("heuristic", game.getHeuristic(), &Heuristic::heuristic, *child);
+		std::priority_queue<Node*, std::vector<Node*>, ReverseCompareNode> keepChilds;
+		for (auto &child : childs) {
+			// game.getHeuristic().heuristic(*child);
+			getStatsM<int, Heuristic, Node &>("heuristic", game.getHeuristic(), &Heuristic::heuristic, *child);
 
-				if (child->getHeuristic() != HEURIS_NOT_SET) {
-					if (depth == game.getHeuristic().getVal("DEPTH") && child->isWin)
-						return {
-							child,
-							// game.getHeuristic().heuristic(node)
-							getStatsM<int, Heuristic, Node &>("heuristic", game.getHeuristic(), &Heuristic::heuristic, node)
-						};
-					keepChilds.push(child);
-				}
+			if (child->getHeuristic() != HEURIS_NOT_SET) {
+				if (depth == game.getHeuristic().getVal("DEPTH") && child->isWin)
+					return {
+						child,
+						// game.getHeuristic().heuristic(node)
+						getStatsM<int, Heuristic, Node &>("heuristic", game.getHeuristic(), &Heuristic::heuristic, node)
+					};
+				keepChilds.push(child);
 			}
-			range = std::max<int>(std::ceil(keepChilds.size() * (static_cast<float>(game.getHeuristic().getVal("KEEP_NODE_PERCENT")) / 100)), game.getHeuristic().getVal("MIN_KEEP_NODE"));
+		}
+		range = std::max<int>(std::ceil(keepChilds.size() * (static_cast<float>(game.getHeuristic().getVal("KEEP_NODE_PERCENT")) / 100)), game.getHeuristic().getVal("MIN_KEEP_NODE"));
 
-			if (range > static_cast<int>(keepChilds.size()))
-				range = keepChilds.size();
-			#if USE_MAX_KEEP_NODE
-				range = std::min<int>(range, game.getHeuristic().getVal("MAX_KEEP_NODE"));
-			#endif
-		#else
-			range = node.getChilds().size();
+		if (range > static_cast<int>(keepChilds.size()))
+			range = keepChilds.size();
+		#if USE_MAX_KEEP_NODE
+			range = std::min<int>(range, game.getHeuristic().getVal("MAX_KEEP_NODE"));
 		#endif
+	#else
+		range = node.getChilds().size();
+	#endif
 
 	// To control async threads and their results
 	std::vector<std::future<std::tuple<Node*, int> >> fut_vec;
