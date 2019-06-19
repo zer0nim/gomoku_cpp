@@ -1,7 +1,8 @@
+#include <unistd.h>
+#include <algorithm>
 #include "players/RealPlayer.hpp"
 #include "Game.hpp"
 #include "Node.hpp"
-#include <algorithm>
 
 RealPlayer::RealPlayer(Game &game, int _color) : Player(game, _color) {
 }
@@ -30,6 +31,7 @@ void RealPlayer::move() {
 				_clickedPos[1] = -1;
 			}
 		}
+		usleep(1000);
 	}
 }
 

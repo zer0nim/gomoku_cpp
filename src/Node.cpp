@@ -55,7 +55,7 @@ Board	Node::getBoardCopy() const { return _board; }
 int		Node::getDepth() const { return _depth; }
 
 std::unordered_map<int, bool> Node::get_childs_coord() {
-	std::unordered_map<int, bool> testChilds;
+	std::unordered_map<int, bool> testChilds = {};
 	int nbSquareArround = game.getHeuristic().getVal("NB_SQUARE_ARROUND");
 
 	for (int y = 0; y < BOARD_SZ; ++y)
@@ -92,25 +92,6 @@ int		Node::setChilds() {
 		_childs.push_back(new Node(game, OP_ST(getStone()), x, y, _depth - 1, this, &transpositionTable));
 	}
 	return _childs.size();
-}
-
-bool    Node::operator >(Node const &rhs) const {
-	return this->_heuristic > rhs.getHeuristic();
-}
-bool    Node::operator <(Node const &rhs) const {
-	return this->_heuristic < rhs.getHeuristic();
-}
-bool    Node::operator >=(Node const &rhs) const {
-	return this->_heuristic >= rhs.getHeuristic();
-}
-bool    Node::operator <=(Node const &rhs) const {
-	return this->_heuristic <= rhs.getHeuristic();
-}
-bool    Node::operator ==(Node const &rhs) const {
-	return this->_heuristic == rhs.getHeuristic();
-}
-bool    Node::operator !=(Node const &rhs) const {
-	return this->_heuristic != rhs.getHeuristic();
 }
 
 std::ostream & operator << (std::ostream &out, const Node &n) {

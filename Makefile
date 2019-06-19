@@ -1,7 +1,7 @@
 NAME	= gomoku
 CPP		= clang++
 
-FLAGS	= -Wall -Wextra -std=c++11 -Ofast
+FLAGS	= -Wall -Wextra -std=c++11 -g3 -fsanitize=address
 # If os !== macos add pthread FLAGS
 UNAME_S := $(shell uname -s)
 ifneq ($(UNAME_S), Darwin)
@@ -19,9 +19,11 @@ SRC		=	main.cpp \
 			players/Player.cpp \
 			players/RealPlayer.cpp \
 			players/AIPlayer.cpp \
+			players/HybridePlayer.cpp \
 			Node.cpp \
 			Heuristic.cpp \
-			miniMax.cpp
+			miniMax.cpp \
+			utils/Stats.cpp
 
 HEAD	=	Game.hpp \
 			Board.hpp \
@@ -30,9 +32,11 @@ HEAD	=	Game.hpp \
 			players/Player.hpp \
 			players/RealPlayer.hpp \
 			players/AIPlayer.hpp \
+			players/HybridePlayer.hpp \
 			Node.hpp \
 			Heuristic.hpp \
-			miniMax.hpp
+			miniMax.hpp \
+			utils/Stats.hpp
 
 LIBS_FLAGS = -L ~/.brew/lib -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network -rpath ~/.brew/lib
 

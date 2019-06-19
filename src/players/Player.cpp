@@ -10,7 +10,8 @@ Player::Player(Game &game, int color) :
 	_timeLastMove(0),
 	_nbDestroyedStones(0),
 	_nbStones(0),
-	_winAligned(false) {
+	_winAligned(false),
+	_isWinner(false) {
 }
 
 Player::~Player() {
@@ -38,6 +39,9 @@ void Player::setSpacePressed(bool pressed) { _spacePressed = pressed; }
 void	Player::setWinAligned() {
 	_winAligned = true;
 }
+void	Player::setWinner(bool win) {
+	_isWinner = win;
+}
 
 uint	Player::getColor() const { return _color; }
 void	Player::incrNbDestroyedStones() { ++_nbDestroyedStones; }
@@ -52,3 +56,4 @@ void	Player::decrNbStones() {
 }
 int		Player::getNbStones() const { return _nbStones; }
 bool	Player::getWinAligned() const { return _winAligned; }
+bool	Player::isWinner() const { return _isWinner ; }

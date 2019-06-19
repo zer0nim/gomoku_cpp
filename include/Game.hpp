@@ -1,13 +1,16 @@
 #ifndef GAME_HPP
-#define GAME_HPP
+# define GAME_HPP
 
-#include "Board.hpp"
-#include "gui/Gui.hpp"
-#include "players/Player.hpp"
-#include "Heuristic.hpp"
+# include "Board.hpp"
+# include "gui/Gui.hpp"
+# include "players/Player.hpp"
+# include "Heuristic.hpp"
+
+# define NB_TYPE_PLAYER 3
 
 struct GameInfo {
-	bool playerAI[3];  // 0: unused, 1: player1, 2: player2
+	// value: 0->AI, 1->Real, 2->Hybride
+	int playerAI[3];  // 0: unused, 1: player1, 2: player2
 	int difficulty;
 	bool pressSpaceBeforeAI;
 };
@@ -22,6 +25,7 @@ class Game {
 		Gui &getGui() const;
 		Heuristic &getHeuristic() const;
 		int getPlayerActId() const;
+		bool isFinished() const;
 		void startMenu();
 		void startGame();
 		void nextPlayer();

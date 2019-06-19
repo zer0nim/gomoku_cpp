@@ -47,14 +47,16 @@ class Board {
 		bool	isFreeThreeDir(int x, int y, int stone, int addx, int addy);
 		bool	isAllowed(int x, int y, int stone);
 		bool								checkVulnerability(int x, int y);
-		void								check_winner();
+		void								check_winner(bool checkOnly=false);
 		std::vector< std::array<int, 2> >	checkDestroyable(int x, int y, int stone);
 		std::tuple<bool, bool>				checkAlignedDir(int x, int y, int stone, int addx, int addy, bool checkOnly=false);
 		bool								checkAligned(int x, int y, bool checkOnly=false);
 
 		std::array<uint64_t, BOARD_SZ>	getContent() const;
 		std::array<int, 2>				getLastStone() const;
+		void							setIsVulVict(bool vic1, bool vic2);
 		std::array<bool, 2>				getIsVulVict() const;
+		void							printVuln();
 
 		Game	&game;
 
@@ -70,7 +72,7 @@ class Board {
 		Board();
 
 		std::array<uint64_t, BOARD_SZ>	_content = {};
-		std::array<int, 2>				_lastStone;
+		std::array<int, 2>				_lastStone = {};
 		std::array<bool, 2>				_isVulVict = {};
 };
 

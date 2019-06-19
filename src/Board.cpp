@@ -5,7 +5,7 @@
 #include <algorithm>
 
 Board::Board(Game &game)
-: game(game), _softMode(true) {
+: game(game), _softMode(true), _isVulVict({{false, false}}) {
 	_lastStone[0] = 0;
 	_lastStone[1] = 0;
 }
@@ -96,7 +96,7 @@ check the vulnerability of one stone
 	return false;
 }
 
-void	Board::check_winner() {
+void	Board::check_winner(bool checkOnly) {
 	for (int y = 0; y < BOARD_SZ; ++y)
 		for (int x = 0; x < BOARD_SZ; ++x)
 			checkVulnerability(x, y);
@@ -105,7 +105,7 @@ void	Board::check_winner() {
 	for (int y = 0; y < BOARD_SZ; ++y)
 		for (int x = 0; x < BOARD_SZ; ++x)
 			if (GET_ST(_content, x, y) != 0)
-				tmpIsVulVict[GET_ST(_content, x, y) - 1] = tmpIsVulVict[GET_ST(_content, x, y) - 1] || checkAligned(x, y);
+				tmpIsVulVict[GET_ST(_content, x, y) - 1] = tmpIsVulVict[GET_ST(_content, x, y) - 1] || checkAligned(x, y, checkOnly);
 	_isVulVict = tmpIsVulVict;
 }
 
@@ -397,6 +397,10 @@ this function put a stone and, if needed, destroy some stones
 std::array<uint64_t, BOARD_SZ>	Board::getContent() const { return _content; }
 std::array<int, 2>				Board::getLastStone() const { return _lastStone; }
 std::array<bool, 2>				Board::getIsVulVict() const { return _isVulVict; }
+void Board::setIsVulVict(bool vic1, bool vic2) {
+	_isVulVict[0] = vic1;
+	_isVulVict[1] = vic2;
+}
 
 // print the board (with colors)
 std::ostream & operator << (std::ostream &out, const Board &c) {
@@ -424,6 +428,45 @@ std::ostream & operator << (std::ostream &out, const Board &c) {
 	out << '*' << std::endl;
 
 	return out;
+}
+
+void	Board::printVuln() {
+	std::array<std::string, 2> color;
+
+	std::cout << '*';
+	for (int i = 0; i < BOARD_SZ; ++i)
+		std::cout << "---";
+	std::cout << '*' << std::endl;
+	for (int y = 0; y < BOARD_SZ; ++y) {
+		std::cout << '|';
+		for (int x = 0; x < BOARD_SZ; ++x) {
+			char txt[] = " . ";
+			color = {{ C_EOC, C_EOC }};
+			if (this->get(x, y) == 1) {
+				color = {{ C_WHITE, C_F_RED }};
+				txt[0] = ' ';
+				txt[1] = ' ';
+				txt[2] = ' ';
+			}
+			else if (this->get(x, y) == 2) {
+				color = {{ C_RED, C_F_WHITE }};
+				txt[0] = ' ';
+				txt[1] = ' ';
+				txt[2] = ' ';
+			}
+			if (this->isVul(x, y)) {
+				txt[0] = 'X';
+				txt[1] = 'X';
+				txt[2] = 'X';
+			}
+			std::cout << color[0] + color[1] + txt + C_EOC;
+		}
+		std::cout << "|" << std::endl;
+	}
+	std::cout << '*';
+	for (int i = 0; i < BOARD_SZ; ++i)
+		std::cout << "---";
+	std::cout << '*' << std::endl;
 }
 
 MasterBoard::MasterBoard(Game &game)

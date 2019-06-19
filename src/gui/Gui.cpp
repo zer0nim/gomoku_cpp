@@ -31,7 +31,9 @@ void Gui::eventMenu() {
 			game.nextPlayer();
 		}
 		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::A) {
-			game.gameInfo.playerAI[game.getPlayerActId()] = !game.gameInfo.playerAI[game.getPlayerActId()];
+			game.gameInfo.playerAI[game.getPlayerActId()]++;
+			if (game.gameInfo.playerAI[game.getPlayerActId()] >= NB_TYPE_PLAYER)
+				game.gameInfo.playerAI[game.getPlayerActId()] = 0;
 		}
 		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::D) {
 			game.gameInfo.difficulty += 1;
@@ -112,10 +114,12 @@ void Gui::drawMenu() {
 		text.setFillColor(getRevColor(i));
 		std::string txt;
 		// AI or Player
-		if (game.gameInfo.playerAI[i])
+		if (game.gameInfo.playerAI[i] == 0)
 			txt = "[A] AI";
-		else
+		else if (game.gameInfo.playerAI[i] == 1)
 			txt = "[A] Real player";
+		else
+			txt = "[A] Hybride";
 		text.setString(txt);
 		text.setPosition(xwin, ywin);
 		_win->draw(text);
@@ -166,7 +170,13 @@ void Gui::drawGame() {
 		int xwin = (GUI_WIN_W - GUI_BOARD_SZ) * 0.1;
 		int ywin = GUI_WIN_H * 0.05 + (GUI_WIN_H/2) * (i-1);
 		playerRect.setFillColor(getColor(i));
-		if (game.getPlayerActId() == i)
+		if (game.isFinished()) {
+			if (game.getPlayer(i).isWinner())
+				playerRect.setOutlineColor(sf::Color(GUI_COLOR_WIN));
+			else
+				playerRect.setOutlineColor(sf::Color(GUI_COLOR_LOOSE));
+		}
+		else if (game.getPlayerActId() == i)
 			playerRect.setOutlineColor(sf::Color(GUI_COLOR_PLAYER_ACT));
 		else
 			playerRect.setOutlineColor(getRevColor(i));

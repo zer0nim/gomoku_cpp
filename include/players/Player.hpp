@@ -22,6 +22,8 @@ class Player {
 		void	decrNbStones();
 		int		getNbStones() const;
 		bool	getWinAligned() const;
+		void	setWinner(bool win);
+		bool	isWinner() const;
 
 		Game	&game;
 	protected:
@@ -36,6 +38,7 @@ class Player {
 		int		_nbDestroyedStones;
 		int		_nbStones;
 		bool	_winAligned;
+		bool	_isWinner;
 };
 
 #endif

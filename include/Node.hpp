@@ -4,7 +4,6 @@
 #include "Board.hpp"
 #include <vector>
 #include <unordered_map>
-#include <unordered_map>
 #include <limits>
 
 #define HEURIS_NOT_SET std::numeric_limits<int>::min()
@@ -37,13 +36,6 @@ this class store a possible move for the ai minMax algorithm
 		Game		&game;
 		bool		isWin;
 		std::unordered_map<std::size_t, std::unordered_map<std::string, int>> transpositionTable;
-
-		bool    operator>(Node const &rhs) const;
-        bool    operator<(Node const &rhs) const;
-        bool    operator>=(Node const &rhs) const;
-        bool    operator<=(Node const &rhs) const;
-        bool    operator==(Node const &rhs) const;
-        bool    operator!=(Node const &rhs) const;
 	private:
 		std::unordered_map<int, bool>	get_childs_coord();
 
