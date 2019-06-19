@@ -63,13 +63,13 @@ class Heuristic {
 			{"WIN", 6000 / 5},  // AAAAA
 			{"VULNERABILITY", -35},  // BAA.
 			{"DESTROYED", 250},  // BAA. -> B..B
-			{"DESTROY_VICTORY_ADDER", 10}  // if this is the last destroyed stone, mul this stone by DESTROY_VICTORY_ADDER
+			{"DESTROY_VICTORY_ADDER", 10},  // if this is the last destroyed stone, mul this stone by DESTROY_VICTORY_ADDER
 		};
 		std::unordered_map<std::string, int> _defValEasy{
 			// changes for easy mode
-			{"LAST_MOVES_MAX_MULTIPLIER", 3},
-			{"FREE_THREE", 80 / 3},  // .AAA. .A.AA.
-			{"FOUR", 100 / 4},  // BAAAA.
+			{"VULNERABILITY", -50},
+			{"DESTROYED", 500},
+			{"DESTROY_VICTORY_ADDER", 20},
 		};
 		std::unordered_map<std::string, int> _defValNormal{
 			// changes for normal mode
