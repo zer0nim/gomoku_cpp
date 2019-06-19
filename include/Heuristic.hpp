@@ -74,9 +74,8 @@ class Heuristic {
 		std::unordered_map<std::string, int> _defValNormal{
 			// changes for normal mode
 			{"LAST_MOVES_MAX_MULTIPLIER", 8},
+			{"MULTIPLIER_POSITIVE", 2},
 			{"MULTIPLIER_NEGATIVE", -1},
-			{"WIN", 8000 / 5},
-			{"ENABLE_DIFF", -1}
 		};
 		std::unordered_map<std::string, int> _defValHard{};  // the hard mode has the same parameters as the default mode
 		std::unordered_map<std::string, int> _difficultyVal[NB_DIFFICULTY_LEVEL];
