@@ -16,19 +16,17 @@ void HybridePlayer::move() {
 	_spacePressed = false;
 	int x = -1;
 	int y = -1;
-	std::tuple<int, int> putStonePos = {-1, -1};
+	std::array<int, 2> putStonePos = {{-1, -1}};
 	while (!game.isQuit && game.getGui().getGuiType() == GUI_TYPE_GAME) {
 		if (_spacePressed) {
 			_spacePressed = false;
-			if (std::get<0>(putStonePos) == -1) {
+			if (putStonePos[0] == -1) {
 				putStonePos = moveAI();
-				if (std::get<0>(putStonePos) >= 0) {
-					game.getBoard().setMarkerColor(std::get<0>(putStonePos), std::get<1>(putStonePos), GUI_COLOR_MARKER_HELP);
-				}
+				game.getBoard().setMarkerColor(putStonePos[0], putStonePos[1], GUI_COLOR_MARKER_HELP);
 			}
 			else {
-				game.getBoard().setMarkerColor(std::get<0>(putStonePos), std::get<1>(putStonePos));
-				game.getBoard().putStone(std::get<0>(putStonePos), std::get<1>(putStonePos), game.getPlayerActId());
+				game.getBoard().setMarkerColor(putStonePos[0], putStonePos[1]);
+				game.getBoard().putStone(putStonePos[0], putStonePos[1], game.getPlayerActId());
 				break;
 			}
 		}
@@ -38,6 +36,9 @@ void HybridePlayer::move() {
 			x = _clickedPos[0];
 			y = _clickedPos[1];
 			if (game.getBoard().isAllowed(x, y, game.getPlayerActId())) {
+				if (putStonePos[0] >= 0) {
+					game.getBoard().setMarkerColor(putStonePos[0], putStonePos[1]);
+				}
 				game.getBoard().putStone(x, y, game.getPlayerActId());
 				break;
 			}
