@@ -24,4 +24,6 @@
 
 #define DEBUG_RESET_GUI DEBUG_SEARCH_ZONE || DEBUG_ANTICIPATION || DEBUG_KEEP_NODE_PERCENT
 
+#define NB_STONES(game) ((BOARD_SZ * BOARD_SZ) - game.getBoard().getRemainPlaces())
+
 #endif
