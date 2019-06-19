@@ -19,22 +19,22 @@ void AIPlayer::move() {
 			usleep(1000);
 		}
 	}
-	std::tuple<int, int> putStonePos = moveAI();
-	game.getBoard().putStone(std::get<0>(putStonePos), std::get<1>(putStonePos), game.getPlayerActId());
+	std::array<int, 2> putStonePos = moveAI();
+	game.getBoard().putStone(putStonePos[0], putStonePos[1], game.getPlayerActId());
 }
 
-std::tuple<int, int> AIPlayer::moveAI() {
+std::array<int, 2> AIPlayer::moveAI() {
 	#if DEBUG_RESET_GUI
 		game.getBoard().resetDebug();
 	#endif
 	// put the first stone in the middle
 	if (game.getBoard().getRemainPlaces() == BOARD_SZ*BOARD_SZ)
-		return {BOARD_SZ / 2, BOARD_SZ / 2};
+		return {{BOARD_SZ / 2, BOARD_SZ / 2}};
 	else {
 		if (game.getBoard().getIsVulVict()[OP_ST(game.getPlayerActId())-1]) {
 			// if the other player has 5 stones aligned, try to block his alignement
-			std::tuple<int, int> putStonePos = moveBlockWin();
-			if (std::get<0>(putStonePos) >= 0)
+			std::array<int, 2> putStonePos = moveBlockWin();
+			if (putStonePos[0] >= 0)
 				return putStonePos;
 		}
 
@@ -55,27 +55,25 @@ std::tuple<int, int> AIPlayer::moveAI() {
 			#endif
 			nodeRes = nodeRes->getParent();
 		}
-		return {nodeRes->getX(), nodeRes->getY()};
+		return {{nodeRes->getX(), nodeRes->getY()}};
 	}
-	return {-1, -1};
+	return {{-1, -1}};
 }
 
-std::tuple<int, int> AIPlayer::moveBlockWin() {
+std::array<int, 2> AIPlayer::moveBlockWin() {
 	int depth = std::min<int>(game.getHeuristic().getVal("DEPTH"), game.getBoard().getRemainPlaces());
 	Node node(game, OP_ST(game.getPlayerActId()), -1, -1, depth+1);
-	node.getBoard().setIsVulVict(false, false);
 	getStatsM<int, Node>("node setChilds", node, &Node::setChilds);
 	for (auto &child : node.getChilds()) {
 		if (child->getBoard().isAllowed(child->getX(), child->getY(), child->getStone())) {
 			child->getBoard().putStone(child->getX(), child->getY(), child->getStone());
-			child->getBoard().check_winner();
+			child->getBoard().check_winner(true);
 			if (!child->getBoard().getIsVulVict()[OP_ST(game.getPlayerActId())-1]) {
-				child->getBoard().setIsVulVict(false, false);
-				return {child->getX(), child->getY()};
+				return {{child->getX(), child->getY()}};
 			}
 		}
 	}
-	return {-1, -1};
+	return {{-1, -1}};
 }
 
 std::string AIPlayer::getType() const { return "AI"; }

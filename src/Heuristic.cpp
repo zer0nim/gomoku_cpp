@@ -218,7 +218,7 @@ int Heuristic::heuristic(Node &node) {
 					if (game.getPlayerActId() == nodeHistI.stone)
 						node.isWin = true;
 				}
-				checkReturn["nbDestroyed"] += mul * (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(nodeHistI.stone);
+				checkReturn["nb_destroyed"] += mul * (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(nodeHistI.stone);
 			}
 			checkStone(node, nodeHistI.x, nodeHistI.y, checkReturn, mul);
 		}
@@ -269,6 +269,7 @@ int Heuristic::heuristic(Node &node) {
 	checkReturn["nb_vulnerable"] *= getVal("VULNERABILITY");
 	checkReturn["nb_destroyed"] *= getVal("DESTROYED");
 
+
 	int val = 0;
 	auto it = checkReturn.begin();
 	while (it != checkReturn.end()) {
@@ -284,7 +285,7 @@ int Heuristic::heuristic(Node &node) {
 		div++;
 		tmp = tmp->getParent();
 	}
-	val += (diff * getVal("DIFF_MULTIPLIER")) / div;
+	val += (diff / getVal("DIFF_DIVISER")) / div;
 
 	node.setHeuristic(val);
 	return val;

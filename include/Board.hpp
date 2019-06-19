@@ -47,7 +47,7 @@ class Board {
 		bool	isFreeThreeDir(int x, int y, int stone, int addx, int addy);
 		bool	isAllowed(int x, int y, int stone);
 		bool								checkVulnerability(int x, int y);
-		void								check_winner();
+		void								check_winner(bool checkOnly=false);
 		std::vector< std::array<int, 2> >	checkDestroyable(int x, int y, int stone);
 		std::tuple<bool, bool>				checkAlignedDir(int x, int y, int stone, int addx, int addy, bool checkOnly=false);
 		bool								checkAligned(int x, int y, bool checkOnly=false);

@@ -124,7 +124,7 @@ min_max algorithm implementation
 					keepChilds.push(child);
 				}
 			}
-			range = std::max<int>(std::ceil(keepChilds.size() * (game.getHeuristic().getVal("KEEP_NODE_PERCENT") / 100)), game.getHeuristic().getVal("MIN_KEEP_NODE"));
+			range = std::max<int>(std::ceil(keepChilds.size() * (static_cast<float>(game.getHeuristic().getVal("KEEP_NODE_PERCENT")) / 100)), game.getHeuristic().getVal("MIN_KEEP_NODE"));
 			if (range > static_cast<int>(keepChilds.size()))
 				range = keepChilds.size();
 			#if USE_MAX_KEEP_NODE

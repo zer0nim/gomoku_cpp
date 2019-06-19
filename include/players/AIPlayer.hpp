@@ -14,9 +14,9 @@ class AIPlayer : public Player {
 		std::string getType() const;
 	protected:
 		void move();
-		std::tuple<int, int> moveAI();
+		std::array<int, 2> moveAI();
 	private:
-		std::tuple<int, int> moveBlockWin();  // if _isWinAligned -> block the ennemy
+		std::array<int, 2> moveBlockWin();  // if _isWinAligned -> block the ennemy
 		AIPlayer();
 };
 
