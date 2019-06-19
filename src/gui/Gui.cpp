@@ -5,15 +5,14 @@
 
 Gui::Gui(Game &game) :
 	game(game),
-	_typeGui(GUI_TYPE_MENU)
-{
+	_typeGui(GUI_TYPE_MENU) {
 	Gui::init();
 }
 
 void Gui::init() {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
-	_win = new sf::RenderWindow(sf::VideoMode(GUI_WIN_W, GUI_WIN_H), "Gomoku", sf::Style::Default, settings);
+	_win = new sf::RenderWindow(sf::VideoMode(GUI_WIN_W, GUI_WIN_H), "Gomoku", sf::Style::Titlebar | sf::Style::Close, settings);
 	if (!_font.loadFromFile(GUI_DEFAULT_FONT))
 		exit(EXIT_FAILURE);
 }
@@ -250,6 +249,37 @@ void Gui::drawGame() {
 			float ywin = step*0.5 - step/7.5 + step * y;
 			point.setPosition(xwin, ywin);
 			_win->draw(point);
+		}
+	}
+
+	// draw line and column numbers
+	sf::Text textNumber;
+	textNumber.setFont(_font);
+	textNumber.setCharacterSize(GUI_TEXT_SIZE_NUMBER);
+	textNumber.setFillColor(sf::Color(0x000000FF));
+	float xText = GUI_BOARD_START_X;
+	float yText = 0;
+	for (int i=0; i < BOARD_SZ; i++) {
+		int tmpX = GUI_BOARD_START_X + step / 5 + i * step;
+		int tmpY = step / 5 + i * step;
+		textNumber.setString(std::to_string(i));
+		if (i != 0) {
+			textNumber.setPosition(xText, tmpY);
+			_win->draw(textNumber);
+		}
+		if (i != BOARD_SZ - 1) {
+			textNumber.setPosition(xText + GUI_BOARD_SZ - step * 0.4, tmpY);
+			_win->draw(textNumber);
+		}
+		else {
+			textNumber.setPosition(xText + GUI_BOARD_SZ - step * 0.4, tmpY + step * 0.3);
+			_win->draw(textNumber);
+		}
+		textNumber.setPosition(tmpX, yText);
+		_win->draw(textNumber);
+		if (i != BOARD_SZ - 1) {
+			textNumber.setPosition(tmpX, yText + GUI_BOARD_SZ - step * 0.4);
+			_win->draw(textNumber);
 		}
 	}
 
