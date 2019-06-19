@@ -21,11 +21,19 @@ int Heuristic::getVal(std::string name) {
 		std::cout << "invalid parameter " << name << std::endl;
 	return retVal;
 }
-int Heuristic::getMul(int stone) {
-	if (game.getPlayerActId() == stone) {
-		return getVal("MULTIPLIER_POSITIVE");
+int Heuristic::getMul(Node &node, int stone) {
+	if (node.getStone() == stone) {
+		if (game.getPlayerActId() == stone) {
+			return getVal("MULTIPLIER_POSITIVE");
+		}
+		return getVal("MULTIPLIER_NEGATIVE");
 	}
-	return getVal("MULTIPLIER_NEGATIVE");
+	else {
+		if (game.getPlayerActId() == stone) {
+			return getVal("MULTIPLIER_POSITIVE");
+		}
+		return getVal("MULTIPLIER_NEGATIVE");
+	}
 }
 
 void Heuristic::checkAlignedDir(Node &node, int x, int y, int stone, int addx, int addy,
@@ -127,32 +135,32 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 	if (nbAligned >= NB_ALIGNED_VICTORY) {  // AAAAA
 		if (game.getPlayerActId() == stone)
 			node.isWin = true;
-		checkReturn["nb_win"] += multiplier * getMul(stone);
+		checkReturn["nb_win"] += multiplier * getMul(node, stone);
 	}
 	else if (nbAligned >= 4) {
 		if (freeSide[0] + freeSide[1] == 2)  // .AAAA.
-			checkReturn["nb_free_four"] += multiplier * getMul(stone);
+			checkReturn["nb_free_four"] += multiplier * getMul(node, stone);
 		else if (freeSide[0] + freeSide[1] == 1)  // BAAAA.
-			checkReturn["nb_four"] += multiplier * getMul(stone);
+			checkReturn["nb_four"] += multiplier * getMul(node, stone);
 	}
 	else if (nbAligned >= 3) {
 		if (freeSide[0] + freeSide[1] == 2)  // .AAA.
-			checkReturn["nb_free_three"] += multiplier * getMul(stone);
+			checkReturn["nb_free_three"] += multiplier * getMul(node, stone);
 		else if (freeSide[0] + freeSide[1] == 1)  // BAAA.
-			checkReturn["nb_three"] += multiplier * getMul(stone);
+			checkReturn["nb_three"] += multiplier * getMul(node, stone);
 	}
 	else if (nbAligned >= 2) {
 		if (freeSide[0] + freeSide[1] == 2)  // .AA.
-			checkReturn["nb_free_two"] += multiplier * getMul(stone);
+			checkReturn["nb_free_two"] += multiplier * getMul(node, stone);
 		else if (freeSide[0] + freeSide[1] == 1)  // BAA.
-			checkReturn["nb_two"] += multiplier * getMul(stone);
+			checkReturn["nb_two"] += multiplier * getMul(node, stone);
 	}
 	else if (nbAlmostAligned >= 4) {  // AA.AA  AAA.AA
-		checkReturn["nb_four"] += multiplier * getMul(stone);
+		checkReturn["nb_four"] += multiplier * getMul(node, stone);
 	}
 	else if (nbAlmostAligned == 3) {
 		if (freeSide[0] + freeSide[1] == 2)  // .A.AA.  .AAA.
-			checkReturn["nb_free_three"] += multiplier * getMul(stone);
+			checkReturn["nb_free_three"] += multiplier * getMul(node, stone);
 	}
 }
 
@@ -163,12 +171,12 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 	if (node.getBoard().isEmpty(x, y))
 		return ;
 
-	checkReturn["nb_stones"] += getMul(stone);
+	checkReturn["nb_stones"] += getMul(node, stone);
 	if (node.getBoard().checkVulnerability(x, y)) {
 		int mul = multiplier;
 		if (game.getPlayer(stone).getNbDestroyedStones() + 2 >= NB_DESTROYED_VICTORY)
 			mul *= getVal("DESTROY_VICTORY_ADDER");
-		checkReturn["nb_vulnerable"] += mul * (game.getPlayer(stone).getNbDestroyedStones() + 1) * getMul(stone);
+		checkReturn["nb_vulnerable"] += mul * (game.getPlayer(stone).getNbDestroyedStones() + 1) * getMul(node, stone);
 	}
 	checkAlignedDir(node, x, y, stone, -1, 0, checkReturn, multiplier);
 	checkAlignedDir(node, x, y, stone, 0, 1, checkReturn, multiplier);
@@ -218,7 +226,7 @@ int Heuristic::heuristic(Node &node) {
 					if (game.getPlayerActId() == nodeHistI.stone)
 						node.isWin = true;
 				}
-				checkReturn["nb_destroyed"] += mul * (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(nodeHistI.stone);
+				checkReturn["nb_destroyed"] += mul * (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(node, nodeHistI.stone);
 			}
 			checkStone(node, nodeHistI.x, nodeHistI.y, checkReturn, mul);
 		}
@@ -277,15 +285,15 @@ int Heuristic::heuristic(Node &node) {
 		it++;
 	}
 
-	tmp = node.getParent();
-	int diff = 0;
-	int div = 1;
-	while (tmp && tmp->getHeuristic() != HEURIS_NOT_SET) {
-		diff += node.getParent()->getHeuristic();
-		div++;
-		tmp = tmp->getParent();
-	}
-	val += (diff / getVal("DIFF_DIVISER")) / div;
+	// tmp = node.getParent();
+	// int diff = 0;
+	// int div = 1;
+	// while (tmp && tmp->getHeuristic() != HEURIS_NOT_SET) {
+	// 	diff += node.getParent()->getHeuristic();
+	// 	div++;
+	// 	tmp = tmp->getParent();
+	// }
+	// val += (diff / getVal("DIFF_DIVISER")) / div;
 
 	node.setHeuristic(val);
 	return val;
