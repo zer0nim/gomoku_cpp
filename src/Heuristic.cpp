@@ -218,7 +218,8 @@ int Heuristic::heuristic(Node &node) {
 		nodeHist.pop();
 		if (node.getBoard().isAllowed(nodeHistI.x, nodeHistI.y, nodeHistI.stone)) {
 			int nbDestroyed = node.getBoard().putStone(nodeHistI.x, nodeHistI.y, nodeHistI.stone);
-			int mul = std::max(2, getVal("LAST_MOVES_MAX_MULTIPLIER") - ((getVal("DEPTH")>>1) - ((node.getDepth()+1)>>1)));
+			int mul = std::max(2, getVal("LAST_MOVES_MAX_MULTIPLIER") - ((getVal("DEPTH")>>1) - ((node.getDepth()+1)>>1))) * std::max(NB_STONES(game) / getVal("NB_STONES_DIVISER"), 1);
+			std::cout << mul << std::endl;
 			if (nbDestroyed > 0) {
 				mul = 1;
 				if (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + nbDestroyed >= NB_DESTROYED_VICTORY) {
@@ -284,6 +285,7 @@ int Heuristic::heuristic(Node &node) {
 		val += it->second;
 		it++;
 	}
+	val = static_cast<int>(static_cast<float>(val * 100) / NB_STONES(game));
 
 	if (getVal("ENABLE_DIFF") == 1) {
 		tmp = node.getParent();
