@@ -63,14 +63,12 @@ std::array<int, 2> AIPlayer::moveAI() {
 std::array<int, 2> AIPlayer::moveBlockWin() {
 	int depth = std::min<int>(game.getHeuristic().getVal("DEPTH"), game.getBoard().getRemainPlaces());
 	Node node(game, OP_ST(game.getPlayerActId()), -1, -1, depth+1);
-	node.getBoard().setIsVulVict(false, false);
 	getStatsM<int, Node>("node setChilds", node, &Node::setChilds);
 	for (auto &child : node.getChilds()) {
 		if (child->getBoard().isAllowed(child->getX(), child->getY(), child->getStone())) {
 			child->getBoard().putStone(child->getX(), child->getY(), child->getStone());
-			child->getBoard().check_winner();
+			child->getBoard().check_winner(true);
 			if (!child->getBoard().getIsVulVict()[OP_ST(game.getPlayerActId())-1]) {
-				child->getBoard().setIsVulVict(false, false);
 				return {{child->getX(), child->getY()}};
 			}
 		}

@@ -40,11 +40,11 @@ class Heuristic {
 			// global parameter
 			{"DEPTH", 4},  // the depth of the algorithm
 			{"NB_SQUARE_ARROUND", 1},  // the number of squares arround taked pos to limit search zone
-			{"KEEP_NODE_PERCENT", 20},  // the percentage of node to keep (in minmax algo)
+			{"KEEP_NODE_PERCENT", 10},  // the percentage of node to keep (in minmax algo)
 			{"MIN_KEEP_NODE", 3},  // keep at least MIN_KEEP_NODE nodes (if the percentage return less than MIN_KEEP_NODE)
-			{"MAX_KEEP_NODE", 4},  // keep max MAX_KEEP_NODE nodes (if the percentage return more than MAX_KEEP_NODE)
-			{"DIFF_MULTIPLIER", 1},  // add to the heuristic the diif with the parent heuristic * DIFF_MULTIPLIER
-			{"LAST_MOVES_MAX_MULTIPLIER", 5},  // multiply the first move by 5, second 5, third 4, 4th 4, 5th 3, ... -> min 2
+			{"MAX_KEEP_NODE", 5},  // keep max MAX_KEEP_NODE nodes (if the percentage return more than MAX_KEEP_NODE)
+			{"DIFF_DIVISER", 20},  // add to the heuristic the diif with the parent heuristic * DIFF_MULTIPLIER
+			{"LAST_MOVES_MAX_MULTIPLIER", 3},  // multiply the first move by 5, second 5, third 4, 4th 4, 5th 3, ... -> min 2
 			{"MULTIPLIER_POSITIVE", 1},  // used to count more the positive or negative action in heuristic
 			{"MULTIPLIER_NEGATIVE", -2},  // used to count more the positive or negative action in heuristic
 
@@ -52,25 +52,25 @@ class Heuristic {
 			{"NB_STONES", 1},  // A
 			{"TWO", 10 / 2},  // BAA.
 			{"FREE_TWO", 20 / 2},  // .AA.
-			{"THREE", 39 / 3},  // BAAA.
-			{"FREE_THREE", 300 / 3},  // .AAA. .A.AA.
-			{"FOUR", 300 / 4},  // BAAAA.
+			{"THREE", 30 / 3},  // BAAA.
+			{"FREE_THREE", 900 / 3},  // .AAA. .A.AA.
+			{"FOUR", 400 / 4},  // BAAAA.
 			{"FREE_FOUR", 1500 / 4},  // .AAAA.
 			{"WIN", 6000 / 5},  // AAAAA
 			{"VULNERABILITY", -35},  // BAA.
-			{"DESTROYED", 150},  // BAA. -> B..B
+			{"DESTROYED", 250},  // BAA. -> B..B
 			{"DESTROY_VICTORY_ADDER", 10}  // if this is the last destroyed stone, mul this stone by DESTROY_VICTORY_ADDER
 		};
 		std::unordered_map<std::string, int> _defValEasy{
 			// changes for easy mode
-			{"DEPTH", 2},
+			{"DEPTH", _defVal["DEPTH"] - 2},
 			{"MULTIPLIER_POSITIVE", 1},
 			{"MULTIPLIER_NEGATIVE", -1}
 		};
 		std::unordered_map<std::string, int> _defValNormal{
 			// changes for normal mode
-			{"VULNERABILITY", -50},
-			{"DESTROYED", 500},
+			{"VULNERABILITY", _defVal["VULNERABILITY"] * 2},
+			{"DESTROYED", _defVal["DESTROYED"] * 2},
 			{"DESTROY_VICTORY_ADDER", 15}
 		};
 		std::unordered_map<std::string, int> _defValHard{};  // the hard mode has the same parameters as the default mode
