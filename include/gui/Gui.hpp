@@ -16,6 +16,7 @@
 
 #define GUI_DEFAULT_FONT "font/Roboto/Roboto-Regular.ttf"
 #define GUI_TEXT_SIZE (GUI_WIN_H*0.04)
+#define GUI_TEXT_SIZE_NUMBER (GUI_WIN_H*0.02)
 #define GUI_LINE_SPACE_MENU (GUI_TEXT_SIZE * 3)
 #define GUI_LINE_SPACE_GAME (GUI_TEXT_SIZE * 1.5)
 
