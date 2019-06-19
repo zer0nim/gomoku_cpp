@@ -173,9 +173,9 @@ std::unordered_map<std::string, int> &checkReturn, int multiplier) {
 
 	checkReturn["nb_stones"] += getMul(node, stone);
 	if (node.getBoard().checkVulnerability(x, y)) {
-		int mul = multiplier * (game.getPlayer(stone).getNbDestroyedStones() + 1);
+		int mul = multiplier + (game.getPlayer(stone).getNbDestroyedStones() + 1);
 		if (game.getPlayer(stone).getNbDestroyedStones() + 2 >= NB_DESTROYED_VICTORY)
-			mul *= getVal("DESTROY_VICTORY_ADDER");
+			mul += getVal("DESTROY_VICTORY_ADDER");
 		checkReturn["nb_vulnerable"] += mul * (game.getPlayer(stone).getNbDestroyedStones() + 1) * getMul(node, stone);
 	}
 	checkAlignedDir(node, x, y, stone, -1, 0, checkReturn, multiplier);
@@ -220,9 +220,9 @@ int Heuristic::heuristic(Node &node) {
 			int nbDestroyed = node.getBoard().putStone(nodeHistI.x, nodeHistI.y, nodeHistI.stone);
 			int mul = std::max(2, getVal("LAST_MOVES_MAX_MULTIPLIER") - ((getVal("DEPTH")>>1) - ((node.getDepth()+1)>>1))) * std::max(NB_STONES(game) / getVal("NB_STONES_DIVISER"), 1);
 			if (nbDestroyed > 0) {
-				mul = 1;
+				mul = game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + nbDestroyed;
 				if (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + nbDestroyed >= NB_DESTROYED_VICTORY) {
-					mul = getVal("DESTROY_VICTORY_ADDER");
+					mul += getVal("DESTROY_VICTORY_ADDER");
 					if (game.getPlayerActId() == nodeHistI.stone)
 						node.isWin = true;
 				}
