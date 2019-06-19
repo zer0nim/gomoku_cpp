@@ -11,4 +11,6 @@
 std::tuple<Node*, int> miniMax(Game &game, Node &node, int depth, bool maximize=true,
 	int alpha=std::numeric_limits<int>::min(), int beta=std::numeric_limits<int>::max());
 
+std::tuple<Node*, int> miniMaxThr(Game &game, Node &node, int depth);
+
 #endif

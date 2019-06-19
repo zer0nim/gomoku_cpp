@@ -41,7 +41,7 @@ std::array<int, 2> AIPlayer::moveAI() {
 		int depth = std::min<int>(game.getHeuristic().getVal("DEPTH"), game.getBoard().getRemainPlaces());
 		Node node(game, OP_ST(game.getPlayerActId()), -1, -1, depth+1);
 		// std::tuple<Node*, int> move = miniMax(game, node, depth);
-		std::tuple<Node*, int> move = getStats<std::tuple<Node*, int>, Game &, Node &, int, bool, int, int>("miniMax", miniMax, game, node, depth, true, std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+		std::tuple<Node*, int> move = getStats<std::tuple<Node*, int>, Game &, Node &, int>("miniMaxThr", miniMaxThr, game, node, depth);
 
 		Node *nodeRes = std::get<0>(move);
 		#if DEBUG_ANTICIPATION
