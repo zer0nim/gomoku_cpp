@@ -36,8 +36,6 @@ min_max algorithm implementation
 	std::vector<Node*>  childs = node.getChilds();
 
 	if (maximize) {
-		std::vector<Node*>	maxlst;
-		std::vector<Node*>  childs = node.getChilds();
 		#if ENABLE_KEEP_NODE_PERCENT
 			std::priority_queue<Node*, std::vector<Node*>, ReverseCompareNode> keepChilds;
 			for (auto &child : childs) {
