@@ -1,21 +1,26 @@
 #include <unistd.h>
-#include <algorithm>
-#include "players/RealPlayer.hpp"
+#include "players/HybridePlayer.hpp"
 #include "Game.hpp"
 #include "Node.hpp"
 
-RealPlayer::RealPlayer(Game &game, int _color) : Player(game, _color) {
+HybridePlayer::HybridePlayer(Game &game, int color) : AIPlayer(game, color) {
 }
 
-RealPlayer::~RealPlayer() {
+HybridePlayer::~HybridePlayer() {
 }
 
-void RealPlayer::move() {
+void HybridePlayer::move() {
+
 	_clickedPos[0] = -1;
 	_clickedPos[1] = -1;
+	_spacePressed = false;
 	int x = -1;
 	int y = -1;
 	while (!game.isQuit && game.getGui().getGuiType() == GUI_TYPE_GAME) {
+		if (_spacePressed) {
+			moveAI();
+			break;
+		}
 		if (_clickedPos[0] >= 0 && _clickedPos[1] >= 0) {
 			if (x != -1 || y != -1)
 				game.getBoard().setMarkerColor(x, y);
@@ -35,4 +40,4 @@ void RealPlayer::move() {
 	}
 }
 
-std::string RealPlayer::getType() const { return "Real Player"; }
+std::string HybridePlayer::getType() const { return "Hybride"; }

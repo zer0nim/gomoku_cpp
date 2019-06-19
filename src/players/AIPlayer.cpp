@@ -19,6 +19,10 @@ void AIPlayer::move() {
 			usleep(1000);
 		}
 	}
+	moveAI();
+}
+
+void AIPlayer::moveAI() {
 	#if DEBUG_RESET_GUI
 		game.getBoard().resetDebug();
 	#endif

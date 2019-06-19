@@ -2,10 +2,11 @@
 #include "Game.hpp"
 #include "players/RealPlayer.hpp"
 #include "players/AIPlayer.hpp"
+#include "players/HybridePlayer.hpp"
 
 Game::Game() :
 	isQuit(false),
-	gameInfo{{false, false, true}, 0, SPACE_BEFORE_AI_MOVE},
+	gameInfo{{-1, 1, 0}, 0, SPACE_BEFORE_AI_MOVE},
 	_loadInProgress(true),
 	_finished(false),
 	_idPlayerAct(1) {
@@ -95,20 +96,27 @@ void Game::startGame() {
 
 	// create new player 1
 	delete _players[0];
-	if (gameInfo.playerAI[1])  // AI
+	if (gameInfo.playerAI[1] == 0) { // AI
 		_players[0] = new AIPlayer(*this, GUI_COLOR_1);
-	else  // real
+	}
+	else if (gameInfo.playerAI[1] == 1) { // real
 		_players[0] = new RealPlayer(*this, GUI_COLOR_1);
+	}
+	else { // hybride
+		_players[0] = new HybridePlayer(*this, GUI_COLOR_1);
+	}
 
 	if (getPlayerActId() == 2)
 		nextPlayer();
 
 	// create new player 2
 	delete _players[1];
-	if (gameInfo.playerAI[2])  // AI
+	if (gameInfo.playerAI[2] == 0)  // AI
 		_players[1] = new AIPlayer(*this, GUI_COLOR_2);
-	else  // real
+	else if (gameInfo.playerAI[2] == 1)  // real
 		_players[1] = new RealPlayer(*this, GUI_COLOR_2);
+	else  // hybride
+		_players[1] = new HybridePlayer(*this, GUI_COLOR_2);
 
 	// set difficulty
 	getHeuristic().setDifficulty(gameInfo.difficulty);

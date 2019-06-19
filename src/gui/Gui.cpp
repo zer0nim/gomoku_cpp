@@ -31,7 +31,9 @@ void Gui::eventMenu() {
 			game.nextPlayer();
 		}
 		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::A) {
-			game.gameInfo.playerAI[game.getPlayerActId()] = !game.gameInfo.playerAI[game.getPlayerActId()];
+			game.gameInfo.playerAI[game.getPlayerActId()]++;
+			if (game.gameInfo.playerAI[game.getPlayerActId()] >= NB_TYPE_PLAYER)
+				game.gameInfo.playerAI[game.getPlayerActId()] = 0;
 		}
 		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::D) {
 			game.gameInfo.difficulty += 1;
@@ -112,10 +114,12 @@ void Gui::drawMenu() {
 		text.setFillColor(getRevColor(i));
 		std::string txt;
 		// AI or Player
-		if (game.gameInfo.playerAI[i])
+		if (game.gameInfo.playerAI[i] == 0)
 			txt = "[A] AI";
-		else
+		else if (game.gameInfo.playerAI[i] == 1)
 			txt = "[A] Real player";
+		else
+			txt = "[A] Hybride";
 		text.setString(txt);
 		text.setPosition(xwin, ywin);
 		_win->draw(text);
