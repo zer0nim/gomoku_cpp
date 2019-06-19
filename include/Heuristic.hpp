@@ -47,9 +47,9 @@ class Heuristic {
 			{"MAX_KEEP_NODE", 5},  // keep max MAX_KEEP_NODE nodes (if the percentage return more than MAX_KEEP_NODE)
 			{"DIFF_DIVISER", 20},  // add to the heuristic the diif with the parent heuristic * DIFF_MULTIPLIER
 			{"LAST_MOVES_MAX_MULTIPLIER", 3},  // multiply the first move by 5, second 5, third 4, 4th 4, 5th 3, ... -> min 2
-			{"NB_STONES_DIVISER", 3},  // divide with NB_STONES to calc some data like last_move_multiplier
+			{"NB_STONES_DIVISER", 5},  // divide with NB_STONES to calc some data like last_move_multiplier
 			{"MULTIPLIER_POSITIVE", 1},  // used to count more the positive or negative action in heuristic
-			{"MULTIPLIER_NEGATIVE", -2},  // used to count more the positive or negative action in heuristic
+			{"MULTIPLIER_NEGATIVE", -5},  // used to count more the positive or negative action in heuristic
 			{"ENABLE_DIFF", 1},  // enable (1) or disable (-1) diff usage in heuristic
 
 			// value for multiplier
@@ -57,7 +57,7 @@ class Heuristic {
 			{"TWO", 10 / 2},  // BAA.
 			{"FREE_TWO", 20 / 2},  // .AA.
 			{"THREE", 30 / 3},  // BAAA.
-			{"FREE_THREE", 900 / 3},  // .AAA. .A.AA.
+			{"FREE_THREE", 600 / 3},  // .AAA. .A.AA.
 			{"FOUR", 600 / 4},  // BAAAA.
 			{"FREE_FOUR", 1500 / 4},  // .AAAA.
 			{"WIN", 6000 / 5},  // AAAAA
