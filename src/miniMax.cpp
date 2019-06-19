@@ -90,6 +90,8 @@ min_max algorithm implementation
 			else if (std::get<1>(childMin) == _best)
 				bestLst.push_back(std::get<0>(childMin));
 			alpha = std::max<float>(alpha, _best);
+			if (beta <= alpha)
+				break;
 		}
 	}
 	else {  // minimize
@@ -132,6 +134,8 @@ min_max algorithm implementation
 			else if (std::get<1>(childMin) == _best)
 				bestLst.push_back(std::get<0>(childMin));
 			beta = std::min<float>(beta, _best);
+			if (beta <= alpha)
+				break;
 		}
 	}
 
