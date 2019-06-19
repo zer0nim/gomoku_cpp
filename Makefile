@@ -19,6 +19,7 @@ SRC		=	main.cpp \
 			players/Player.cpp \
 			players/RealPlayer.cpp \
 			players/AIPlayer.cpp \
+			players/HybridePlayer.cpp \
 			Node.cpp \
 			Heuristic.cpp \
 			miniMax.cpp \
@@ -31,6 +32,7 @@ HEAD	=	Game.hpp \
 			players/Player.hpp \
 			players/RealPlayer.hpp \
 			players/AIPlayer.hpp \
+			players/HybridePlayer.hpp \
 			Node.hpp \
 			Heuristic.hpp \
 			miniMax.hpp \
