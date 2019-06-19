@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <queue>
 #include <cmath>
+#include <future>
+#include <vector>
 
 struct CompareNode {
 	bool operator()(const Node* lhs, const Node* rhs) const {
@@ -142,8 +144,6 @@ min_max algorithm implementation
 }
 
 std::tuple<Node*, int> miniMaxThr(Game &game, Node &node, int depth) {
-
-
 	if (getStatsM<int, Node>("node setChilds", node, &Node::setChilds) == 0)
 		return {
 			&node,
@@ -183,6 +183,9 @@ std::tuple<Node*, int> miniMaxThr(Game &game, Node &node, int depth) {
 			range = node.getChilds().size();
 		#endif
 
+	// To control async threads and their results
+	std::vector<std::future<std::tuple<Node*, int> >> fut_vec;
+
 	for (int i = 0; i < range; ++i) {
 		#if ENABLE_KEEP_NODE_PERCENT
 			Node *child = keepChilds.top();
@@ -195,18 +198,26 @@ std::tuple<Node*, int> miniMaxThr(Game &game, Node &node, int depth) {
 		#else
 			Node *child = childs[i];
 		#endif
+		fut_vec.push_back(std::async(std::launch::async, miniMax, std::ref(game), std::ref(*child), depth-1, false,
+			std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
+	}
 
-		// update _best
-		std::tuple<Node*, int> childMin = miniMax(game, *child, depth-1, false);
-		if (std::get<1>(childMin) == HEURIS_NOT_SET)
+	// Wait all results from async threads
+	for (size_t i = 0; i < fut_vec.size(); ++i) {
+		std::tuple<Node*, int> childMin = fut_vec[i].get();
+		Node *testNode = std::get<0>(childMin);
+		while (testNode->getParent() && testNode->getParent()->getParent())
+			testNode = testNode->getParent();
+
+		if (testNode->getHeuristic() == HEURIS_NOT_SET)
 			continue;
-		if (std::get<1>(childMin) > _best) {
-			_best = std::get<1>(childMin);
+		if (testNode->getHeuristic() > _best) {
+			_best = testNode->getHeuristic();
 			bestLst.clear();
-			bestLst.push_back(std::get<0>(childMin));
+			bestLst.push_back(testNode);
 		}
-		else if (std::get<1>(childMin) == _best)
-			bestLst.push_back(std::get<0>(childMin));
+		else if (testNode->getHeuristic() == _best)
+			bestLst.push_back(testNode);
 	}
 
 	if (bestLst.empty())
