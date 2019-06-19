@@ -16,10 +16,21 @@ void HybridePlayer::move() {
 	_spacePressed = false;
 	int x = -1;
 	int y = -1;
+	std::tuple<int, int> putStonePos = {-1, -1};
 	while (!game.isQuit && game.getGui().getGuiType() == GUI_TYPE_GAME) {
 		if (_spacePressed) {
-			moveAI();
-			break;
+			_spacePressed = false;
+			if (std::get<0>(putStonePos) == -1) {
+				putStonePos = moveAI();
+				if (std::get<0>(putStonePos) >= 0) {
+					game.getBoard().setMarkerColor(std::get<0>(putStonePos), std::get<1>(putStonePos), GUI_COLOR_MARKER_HELP);
+				}
+			}
+			else {
+				game.getBoard().setMarkerColor(std::get<0>(putStonePos), std::get<1>(putStonePos));
+				game.getBoard().putStone(std::get<0>(putStonePos), std::get<1>(putStonePos), game.getPlayerActId());
+				break;
+			}
 		}
 		if (_clickedPos[0] >= 0 && _clickedPos[1] >= 0) {
 			if (x != -1 || y != -1)
