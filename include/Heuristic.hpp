@@ -68,8 +68,8 @@ class Heuristic {
 		std::unordered_map<std::string, int> _defValEasy{
 			// changes for easy mode
 			{"LAST_MOVES_MAX_MULTIPLIER", 3},
-			{"FREE_THREE", 80 / 3},  // .AAA. .A.AA.
-			{"FOUR", 100 / 4},  // BAAAA.
+			{"FREE_THREE", 80 / 3},
+			{"FOUR", 100 / 4},
 		};
 		std::unordered_map<std::string, int> _defValNormal{
 			// changes for normal mode

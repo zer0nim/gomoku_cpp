@@ -27,4 +27,8 @@
 
 #define NB_STONES(game) ((BOARD_SZ * BOARD_SZ) - game.getBoard().getRemainPlaces())
 
+// default players -> 0->AI, 1->Real, 2->Hybride
+#define PLAYER1_TYPE 0
+#define PLAYER2_TYPE 0
+
 #endif
