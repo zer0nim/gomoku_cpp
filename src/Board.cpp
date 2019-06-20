@@ -32,8 +32,6 @@ int Board::get(int x, int y) const {
 }
 void Board::set(int x, int y, int stone) {
 	SET_ST(_content, x, y, stone);
-	_lastStone[0] = x;
-	_lastStone[1] = y;
 }
 bool Board::isVul(int x, int y) const {
 	return GET_VUL(_content, x, y);
@@ -355,9 +353,9 @@ this function check if it's allowed (empty place, no free-threes, ...)
 	nbFreeThree += isFreeThreeDir(x, y, stone, -1, 1) ? 1 : 0;
 
 	if (nbFreeThree >= 2) {
-		set(x, y, stone);
+		SET_ST(_content, x, y, stone);
 		bool check_aligned = checkAligned(x, y, true); // if true => double three
-		set(x, y, 0);
+		SET_ST(_content, x, y, 0);
 		return check_aligned;
 	}
 	return true;
@@ -371,7 +369,9 @@ this function put a stone and, if needed, destroy some stones
 	if (x >= BOARD_SZ || y >= BOARD_SZ)
 		throw OutOfRangeException();
 
-	set(x, y, stone);
+	SET_ST(_content, x, y, stone);
+	_lastStone[0] = x;
+	_lastStone[1] = y;
 	if (!_softMode) {
 		reinterpret_cast<MasterBoard*>(this)->decrRemainPlaces();
 		game.getPlayer(stone).incrNbStones();
@@ -380,7 +380,7 @@ this function put a stone and, if needed, destroy some stones
 	// destroy some stones if needed
 	std::vector< std::array<int, 2> > destroyed = checkDestroyable(x, y, stone);
 	for (std::array<int, 2> dest : destroyed) {
-		set(dest[0], dest[1], 0);
+		SET_ST(_content, dest[0], dest[1], 0);
 		if (!_softMode) {
 			reinterpret_cast<MasterBoard*>(this)->incrRemainPlaces();
 			game.getPlayer(stone).incrNbDestroyedStones();
