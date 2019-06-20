@@ -11,6 +11,7 @@
 #define USE_MAX_KEEP_NODE true // if True, use MAX_KEEP_NODE, else... no limit !
 
 #define MINMAX_RANDOM_CHOICE false // choose a random position if we have the choice
+#define THR_DEPTH 1 // number of depth using thread in minimax algorithm
 
 // GAMEPLAY
 #define SPACE_BEFORE_AI_MOVE false  // press space before AI can move
@@ -25,5 +26,9 @@
 #define DEBUG_RESET_GUI DEBUG_SEARCH_ZONE || DEBUG_ANTICIPATION || DEBUG_KEEP_NODE_PERCENT
 
 #define NB_STONES(game) ((BOARD_SZ * BOARD_SZ) - game.getBoard().getRemainPlaces())
+
+// default players -> 0->AI, 1->Real, 2->Hybride
+#define PLAYER1_TYPE 2
+#define PLAYER2_TYPE 0
 
 #endif
