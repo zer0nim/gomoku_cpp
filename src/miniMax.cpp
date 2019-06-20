@@ -79,8 +79,8 @@ min_max algorithm implementation
 			#endif
 
 			if (thrDepth > 0) {
-				fut_vec.push_back(std::async(std::launch::async, miniMax, std::ref(game), std::ref(*child), depth-1, thrDepth-1, false,
-					std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
+				fut_vec.push_back(std::async(std::launch::async, miniMax, std::ref(game), std::ref(*child), depth-1,
+					thrDepth-1, false, std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
 			} else {
 				// update _best
 				std::tuple<Node*, int> childMin = miniMax(game, *child, depth-1, thrDepth-1, !maximize, alpha, beta);
@@ -128,8 +128,8 @@ min_max algorithm implementation
 			#endif
 
 			if (thrDepth > 0) {
-				fut_vec.push_back(std::async(std::launch::async, miniMax, std::ref(game), std::ref(*child), depth-1, thrDepth-1, false,
-					std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
+				fut_vec.push_back(std::async(std::launch::async, miniMax, std::ref(game), std::ref(*child), depth-1,
+					thrDepth-1, true, std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
 			} else {
 				// update _best
 				std::tuple<Node*, int> childMin = miniMax(game, *child, depth-1, thrDepth-1, !maximize, alpha, beta);
@@ -165,6 +165,12 @@ min_max algorithm implementation
 			}
 			else if (testNode->getHeuristic() == _best)
 				bestLst.push_back(testNode);
+			if (maximize)
+				alpha = std::max<float>(alpha, _best);
+			else
+				beta = std::min<float>(beta, _best);
+			if (beta <= alpha)
+				break;
 		}
 	}
 
