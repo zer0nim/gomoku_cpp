@@ -322,7 +322,14 @@ void Gui::drawGame() {
 				stone.setPosition(xwin, ywin);
 				_win->draw(stone);
 			}
-			if (game.getBoard().getMarkerColor(x, y) != 0) {
+			if (game.getBoard().getIsDestroyed(x, y)) {
+				float xwin = GUI_BOARD_START_X + step*0.5 - step/6 + step * x;
+				float ywin = step*0.5 - step/6 + step * y;
+				marker.setFillColor(sf::Color(GUI_COLOR_DESTROYED));
+				marker.setPosition(xwin, ywin);
+				_win->draw(marker);
+			}
+			else if (game.getBoard().getMarkerColor(x, y) != 0) {
 				float xwin = GUI_BOARD_START_X + step*0.5 - step/6 + step * x;
 				float ywin = step*0.5 - step/6 + step * y;
 				marker.setFillColor(sf::Color(game.getBoard().getMarkerColor(x, y)));

@@ -13,7 +13,7 @@ class AIPlayer : public Player {
 		~AIPlayer();
 		std::string getType() const;
 	protected:
-		void move();
+		std::array<int, 2> move();
 		std::array<int, 2> moveAI();
 	private:
 		std::array<int, 2> moveBlockWin();  // if _isWinAligned -> block the ennemy

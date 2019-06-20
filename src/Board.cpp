@@ -382,6 +382,7 @@ this function put a stone and, if needed, destroy some stones
 	for (std::array<int, 2> dest : destroyed) {
 		SET_ST(_content, dest[0], dest[1], 0);
 		if (!_softMode) {
+			game.getBoard().setIsDestroyed(dest[0], dest[1], true);
 			reinterpret_cast<MasterBoard*>(this)->incrRemainPlaces();
 			game.getPlayer(stone).incrNbDestroyedStones();
 			game.getPlayer(OP_ST(stone)).decrNbStones();
@@ -476,7 +477,6 @@ MasterBoard::MasterBoard(Game &game)
 }
 
 void MasterBoard::resetDebug(int x, int y) {
-	_isWin[y][x] = false;
 	_markerColor[y][x] = 0;
 	_markerTxt[y][x].txt = "";
 	_markerTxt[y][x].color = 0;
@@ -489,6 +489,16 @@ void MasterBoard::resetDebug() {
 
 void MasterBoard::setIsWin(int x, int y, bool val) {
 	_isWin[y][x] = val;
+}
+void MasterBoard::setIsDestroyed(int x, int y, bool val) {
+	_isDestroyed[y][x] = val;
+}
+void MasterBoard::resetIsDestroyed() {
+	for (int x=0; x < BOARD_SZ; x++) {
+		for (int y=0; y < BOARD_SZ; y++) {
+			setIsDestroyed(x, y, false);
+		}
+	}
 }
 void MasterBoard::setMarkerColor(int x, int y, int val) {
 	_markerColor[y][x] = val;
@@ -506,19 +516,11 @@ void MasterBoard::setMarkerTxt(int x, int y, std::string txt) {
 void MasterBoard::setMarkerTxt(int x, int y) {
 	setMarkerTxt(x, y, 0, 0);
 }
-bool MasterBoard::getIsWin(int x, int y) const {
-	return _isWin[y][x];
-}
-int MasterBoard::getMarkerColor(int x, int y) const {
-	return _markerColor[y][x];
-}
-struct markerTxt MasterBoard::getMarkerTxt(int x, int y) const {
-	return _markerTxt[y][x];
-}
-void	MasterBoard::incrRemainPlaces() {
-	_remain_places = _remain_places + 1 < BOARD_SZ*BOARD_SZ ? _remain_places + 1 : BOARD_SZ*BOARD_SZ;
-}
-void	MasterBoard::decrRemainPlaces() {
-	_remain_places = _remain_places - 1 > 0 ? _remain_places - 1: 0;
-}
-int	MasterBoard::getRemainPlaces() const { return _remain_places; }
+
+bool				MasterBoard::getIsWin(int x, int y) const { return _isWin[y][x]; }
+bool				MasterBoard::getIsDestroyed(int x, int y) const { return _isDestroyed[y][x]; }
+int					MasterBoard::getMarkerColor(int x, int y) const { return _markerColor[y][x]; }
+struct markerTxt	MasterBoard::getMarkerTxt(int x, int y) const { return _markerTxt[y][x]; }
+void				MasterBoard::incrRemainPlaces() { _remain_places = _remain_places + 1 < BOARD_SZ*BOARD_SZ ? _remain_places + 1 : BOARD_SZ*BOARD_SZ; }
+void				MasterBoard::decrRemainPlaces() { _remain_places = _remain_places - 1 > 0 ? _remain_places - 1: 0; }
+int					MasterBoard::getRemainPlaces() const { return _remain_places; }

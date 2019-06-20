@@ -13,7 +13,7 @@ class HybridePlayer : public AIPlayer {
 		~HybridePlayer();
 		std::string getType() const;
 	protected:
-		void move();
+		std::array<int, 2> move();
 	private:
 		HybridePlayer();
 };

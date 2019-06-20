@@ -9,7 +9,7 @@ HybridePlayer::HybridePlayer(Game &game, int color) : AIPlayer(game, color) {
 HybridePlayer::~HybridePlayer() {
 }
 
-void HybridePlayer::move() {
+std::array<int, 2> HybridePlayer::move() {
 
 	_clickedPos[0] = -1;
 	_clickedPos[1] = -1;
@@ -26,8 +26,7 @@ void HybridePlayer::move() {
 			}
 			else {
 				game.getBoard().setMarkerColor(putStonePos[0], putStonePos[1]);
-				game.getBoard().putStone(putStonePos[0], putStonePos[1], game.getPlayerActId());
-				break;
+				return {{putStonePos[0], putStonePos[1]}};
 			}
 		}
 		if (_clickedPos[0] >= 0 && _clickedPos[1] >= 0) {
@@ -39,8 +38,7 @@ void HybridePlayer::move() {
 				if (putStonePos[0] >= 0) {
 					game.getBoard().setMarkerColor(putStonePos[0], putStonePos[1]);
 				}
-				game.getBoard().putStone(x, y, game.getPlayerActId());
-				break;
+				return {{x, y}};
 			}
 			else {
 				game.getBoard().setMarkerColor(x, y, 0xFF0000FF);
@@ -50,6 +48,7 @@ void HybridePlayer::move() {
 		}
 		usleep(1000);
 	}
+	return {{-1, -1}};
 }
 
 std::string HybridePlayer::getType() const { return "Hybride"; }

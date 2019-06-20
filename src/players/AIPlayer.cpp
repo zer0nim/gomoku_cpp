@@ -10,17 +10,17 @@ AIPlayer::AIPlayer(Game &game, int color) : Player(game, color) {
 AIPlayer::~AIPlayer() {
 }
 
-void AIPlayer::move() {
+std::array<int, 2> AIPlayer::move() {
 	if (game.gameInfo.pressSpaceBeforeAI) {
 		_spacePressed = false;
 		while (!game.isQuit && !_spacePressed) {
 			if (game.getGui().getGuiType() != GUI_TYPE_GAME)
-				return;
+				return {{-1, -1}};
 			usleep(1000);
 		}
 	}
 	std::array<int, 2> putStonePos = moveAI();
-	game.getBoard().putStone(putStonePos[0], putStonePos[1], game.getPlayerActId());
+	return {{putStonePos[0], putStonePos[1]}};
 }
 
 std::array<int, 2> AIPlayer::moveAI() {

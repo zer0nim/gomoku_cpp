@@ -19,14 +19,21 @@ Player::~Player() {
 
 void Player::moving() {
 	auto startTime = std::chrono::system_clock::now();
-	move();
+	std::array<int, 2> movingPos = move();
+	if (movingPos[0] == -1)
+		return;
+	else {
+		game.getBoard().resetIsDestroyed();
+		game.getBoard().putStone(movingPos[0], movingPos[1], game.getPlayerActId());
+	}
 	auto endTime = std::chrono::system_clock::now();
 	std::chrono::duration<double> execTime = endTime - startTime;
 	_timeLastMove = execTime.count();
 }
 
-void Player::move() {
+std::array<int, 2> Player::move() {
 	std::cout << "base move" << std::endl;
+	return {{-1, -1}};
 }
 
 void Player::click(int x, int y) {

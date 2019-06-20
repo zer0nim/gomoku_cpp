@@ -10,7 +10,7 @@ RealPlayer::RealPlayer(Game &game, int _color) : Player(game, _color) {
 RealPlayer::~RealPlayer() {
 }
 
-void RealPlayer::move() {
+std::array<int, 2> RealPlayer::move() {
 	_clickedPos[0] = -1;
 	_clickedPos[1] = -1;
 	int x = -1;
@@ -22,8 +22,7 @@ void RealPlayer::move() {
 			x = _clickedPos[0];
 			y = _clickedPos[1];
 			if (game.getBoard().isAllowed(x, y, game.getPlayerActId())) {
-				game.getBoard().putStone(x, y, game.getPlayerActId());
-				break;
+				return {{x, y}};
 			}
 			else {
 				game.getBoard().setMarkerColor(x, y, 0xFF0000FF);
@@ -33,6 +32,7 @@ void RealPlayer::move() {
 		}
 		usleep(1000);
 	}
+	return {{-1, -1}};
 }
 
 std::string RealPlayer::getType() const { return "Real Player"; }

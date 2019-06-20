@@ -12,7 +12,7 @@ class RealPlayer : public Player {
 		~RealPlayer();
 		std::string getType() const;
 	protected:
-		void move();
+		std::array<int, 2> move();
 	private:
 		RealPlayer();
 };

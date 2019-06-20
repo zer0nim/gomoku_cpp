@@ -27,7 +27,7 @@ class Player {
 
 		Game	&game;
 	protected:
-		virtual void move();  // this function is called by moving (redefined in child)
+		virtual std::array<int, 2> move();  // this function is called by moving (redefined in child)
 
 		int		_color;
 		int		_clickedPos[2];

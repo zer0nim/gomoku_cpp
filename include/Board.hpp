@@ -83,6 +83,8 @@ class MasterBoard : public Board {
 		MasterBoard(Game &game);
 		// setter
 		void	setIsWin(int x, int y, bool val);
+		void	setIsDestroyed(int x, int y, bool val);
+		void	resetIsDestroyed();
 		void	setMarkerColor(int x, int y, int val);
 		void	setMarkerColor(int x, int y);  // reset
 		void	setMarkerTxt(int x, int y, std::string txt, int color);
@@ -92,6 +94,7 @@ class MasterBoard : public Board {
 		void	decrRemainPlaces();
 		// getter
 		bool				getIsWin(int x, int y) const;
+		bool				getIsDestroyed(int x, int y) const;
 		int					getMarkerColor(int x, int y) const;
 		struct markerTxt	getMarkerTxt(int x, int y) const;
 		int					getRemainPlaces() const;
@@ -102,6 +105,7 @@ class MasterBoard : public Board {
 
 		int	_remain_places;
 		std::array< std::array<bool, BOARD_SZ> , BOARD_SZ> _isWin = {};
+		std::array< std::array<bool, BOARD_SZ> , BOARD_SZ> _isDestroyed = {};
 		std::array< std::array<int, BOARD_SZ> , BOARD_SZ> _markerColor = {};
 		std::array< std::array<struct markerTxt, BOARD_SZ> , BOARD_SZ> _markerTxt = {};
 };
