@@ -83,7 +83,7 @@ min_max algorithm implementation
 
 			if (thrDepth > 0) {
 				fut_vec.push_back(std::async(std::launch::async, miniMax, std::ref(game), std::ref(*child), depth-1,
-					thrDepth-1, false, std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
+					thrDepth-1, false, alpha, beta));
 			} else {
 				// update _best
 				std::tuple<Node*, int> childMin = miniMax(game, *child, depth-1, thrDepth-1, !maximize, alpha, beta);
@@ -132,7 +132,7 @@ min_max algorithm implementation
 
 			if (thrDepth > 0) {
 				fut_vec.push_back(std::async(std::launch::async, miniMax, std::ref(game), std::ref(*child), depth-1,
-					thrDepth-1, true, std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
+					thrDepth-1, true, alpha, beta));
 			} else {
 				// update _best
 				std::tuple<Node*, int> childMin = miniMax(game, *child, depth-1, thrDepth-1, !maximize, alpha, beta);
