@@ -1,6 +1,20 @@
 NAME	= gomoku
 CPP		= clang++
 
+SIZE = 1200
+SIZE_VAR = -DGUI_WIN_W
+BOARD_SZ = 19
+BOARD_SZ_VAR = -DBOARD_SZ
+NB_ALIGNED_VICTORY = 5
+NB_ALIGNED_VICTORY_VAR = -DNB_ALIGNED_VICTORY
+NB_DESTROYED_VICTORY = 10
+NB_DESTROYED_VICTORY_VAR = -DNB_DESTROYED_VICTORY
+
+VAR_ARGS =	$(SIZE_VAR)=$(SIZE) \
+			$(BOARD_SZ_VAR)=$(BOARD_SZ) \
+			$(NB_ALIGNED_VICTORY_VAR)=$(NB_ALIGNED_VICTORY) \
+			$(NB_DESTROYED_VICTORY_VAR)=$(NB_DESTROYED_VICTORY)
+
 # FLAGS	= -Wall -Wextra -std=c++11 -g3 -fsanitize=address
 FLAGS	= -Wall -Wextra -std=c++11 -Ofast
 # If os !== macos add pthread FLAGS
@@ -65,10 +79,15 @@ all: $(NAME)
 $(NAME): $(OBJ_PATH) $(OBJP)
 	@printf $(CYAN)"-> create program : $(NAME)\n"$(NORMAL)
 	@$(CPP) $(FLAGS) -o $(NAME) $(OBJP) $(LIBS_FLAGS)
+	@printf "Make with these parameters:\n"
+	@printf "\tSIZE = $(SIZE)\n"
+	@printf "\tBOARD_SZ = $(BOARD_SZ)\n"
+	@printf "\tNB_ALIGNED_VICTORY = $(NB_ALIGNED_VICTORY)\n"
+	@printf "\tNB_DESTROYED_VICTORY = $(NB_DESTROYED_VICTORY)\n"
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(HEADP)
 	@printf $(YELLOW)"-> $<\n"$(NORMAL)
-	@$(CPP) $(FLAGS) -c $< -o $@ $(INCP) -I ~/.brew/Cellar/sfml/2.5.1/include/
+	@$(CPP) $(FLAGS) -c $< -o $@ $(INCP) $(VAR_ARGS) -I ~/.brew/Cellar/sfml/2.5.1/include/
 
 $(OBJ_PATH):
 	@mkdir -p $(dir $(OBJP))
@@ -79,9 +98,19 @@ clean:
 fclean: clean
 	@rm -f $(NAME)
 
-re: fclean all
+re:
+	@make fclean
+	@make all
 
 exec: all
 	@./$(NAME)
+
+help:
+	@printf "Help:\n"
+	@printf "\tTo change the size of the win: SIZE ($(SIZE))\n"
+	@printf "\tTo change the size of the board (max 21): BOARD_SZ ($(BOARD_SZ))\n"
+	@printf "\tTo change the number of stone to align to win: NB_ALIGNED_VICTORY ($(NB_ALIGNED_VICTORY))\n"
+	@printf "\tTo change the number of stone to destroy to win: NB_DESTROYED_VICTORY ($(NB_DESTROYED_VICTORY))\n"
+	@printf $(BOLD)"/!\ If you change a parameter, remake all the project\n"$(NORMAL)
 
 .PHONY: all re clean fclean exec
