@@ -13,7 +13,7 @@ AIPlayer::~AIPlayer() {
 void AIPlayer::move() {
 	if (game.gameInfo.pressSpaceBeforeAI) {
 		_spacePressed = false;
-		while (!_spacePressed) {
+		while (!game.isQuit && !_spacePressed) {
 			if (game.getGui().getGuiType() != GUI_TYPE_GAME)
 				return;
 			usleep(1000);

@@ -30,6 +30,9 @@ min_max algorithm implementation
 			getStatsM<int, Heuristic, Node &>("heuristic", game.getHeuristic(), &Heuristic::heuristic, node)
 		};
 
+	if (game.isQuit)  // force quit minimax
+		return {&node, HEURIS_NOT_SET};
+
 	int range;
 	int _best = (maximize)? std::numeric_limits<int>::min() : std::numeric_limits<int>::max();
 	std::vector<Node*>	bestLst;

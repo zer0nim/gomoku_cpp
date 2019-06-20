@@ -23,7 +23,7 @@ int main(void) {
 	}
 
 	game.getGui().run();
-	pthread_cancel(threadT);
+	pthread_join(threadT, NULL);  // waiting for the thread to finish
 	Stats::printStats();
 	return 0;
 }
