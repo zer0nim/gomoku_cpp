@@ -121,11 +121,11 @@ void Game::startGame() {
 	// set difficulty
 	getHeuristic().setDifficulty(gameInfo.difficulty);
 
-	// set the GUI to game
-	getGui().setGuiType(GUI_TYPE_GAME);
-
 	// reset end of the game
 	_finished = false;
+
+	// set the GUI to game
+	getGui().setGuiType(GUI_TYPE_GAME);
 }
 
 void Game::nextPlayer() {

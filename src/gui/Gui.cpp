@@ -21,10 +21,13 @@ void Gui::eventMenu() {
 	sf::Event event;
 	while (_win->pollEvent(event)) {
 		if (event.type == sf::Event::Closed
-		|| (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
+		|| (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)) {
 			quit();
+			return ;
+		}
 		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
 			game.startGame();
+			return ;
 		}
 		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
 			game.nextPlayer();
@@ -49,13 +52,18 @@ void Gui::eventGame() {
 	sf::Event event;
 	while (_win->pollEvent(event)) {
 		if (event.type == sf::Event::Closed
-		|| (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
+		|| (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)) {
 			quit();
-		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return)
+			return ;
+		}
+		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
 			game.startMenu();
+			return ;
+		}
 		else if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Delete
-		|| event.key.code == sf::Keyboard::R))
+		|| event.key.code == sf::Keyboard::R)) {
 			game.getBoard().resetDebug();
+		}
 		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
 			game.getPlayerAct().setSpacePressed(true);
 		}
