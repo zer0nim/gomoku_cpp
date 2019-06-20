@@ -59,8 +59,8 @@ class Heuristic {
 			{"THREE", 30 / 3},  // BAAA.
 			{"FREE_THREE", 600 / 3},  // .AAA. .A.AA.
 			{"FOUR", 600 / 4},  // BAAAA.
-			{"FREE_FOUR", 1500 / 4},  // .AAAA.
-			{"WIN", 6000 / 5},  // AAAAA
+			{"FREE_FOUR", 2000 / 4},  // .AAAA.
+			{"WIN", 8000 / 5},  // AAAAA
 			{"VULNERABILITY", -35},  // BAA.
 			{"DESTROYED", 250},  // BAA. -> B..B
 			{"DESTROY_VICTORY_ADDER", 10},  // if this is the last destroyed stone, mul this stone by DESTROY_VICTORY_ADDER
@@ -73,9 +73,9 @@ class Heuristic {
 		};
 		std::unordered_map<std::string, int> _defValNormal{
 			// changes for normal mode
-			{"LAST_MOVES_MAX_MULTIPLIER", 8},
-			{"MULTIPLIER_POSITIVE", 2},
-			{"MULTIPLIER_NEGATIVE", -1},
+			{"LAST_MOVES_MAX_MULTIPLIER", 4},
+			{"MULTIPLIER_POSITIVE", 1},
+			{"MULTIPLIER_NEGATIVE", -2},
 		};
 		std::unordered_map<std::string, int> _defValHard{};  // the hard mode has the same parameters as the default mode
 		std::unordered_map<std::string, int> _difficultyVal[NB_DIFFICULTY_LEVEL];

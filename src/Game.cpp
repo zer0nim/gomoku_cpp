@@ -6,7 +6,7 @@
 
 Game::Game() :
 	isQuit(false),
-	gameInfo{{-1, PLAYER1_TYPE, PLAYER2_TYPE}, 0, SPACE_BEFORE_AI_MOVE},
+	gameInfo{{-1, PLAYER1_TYPE, PLAYER2_TYPE}, DEFAULT_DIFFICULTY, SPACE_BEFORE_AI_MOVE},
 	_loadInProgress(true),
 	_finished(false),
 	_idPlayerAct(1) {
