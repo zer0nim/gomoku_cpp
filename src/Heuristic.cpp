@@ -206,12 +206,41 @@ int Heuristic::heuristic(Node &node) {
 	Node *tmp = &node;
 	while (tmp->getParent()) {
 		nodeHist.push((struct sNodeHist){tmp->getX(), tmp->getY(), tmp->getStone()});
+		if (node.getBoard().get(tmp->getX(), tmp->getY()) == STONE_EMPTY) {
+			node.getBoard().set(tmp->getX(), tmp->getY(), tmp->getStone());
+		}
+		else {
+			node.setHeuristic(HEURIS_NOT_SET);
+			return HEURIS_NOT_SET;  // ERROR
+		}
 		#if ENABLE_KEEP_NODE_PERCENT
 			break;
 		#endif
 		tmp = tmp->getParent();
 	}
 
+	std::size_t hashNode = node.getBoard().getHash();
+	if (node.transpositionTable.find(hashNode) != node.transpositionTable.end()) {
+		auto it = checkReturn.begin();
+		while (it != checkReturn.end()) {
+			checkReturn[it->first] += node.transpositionTable[hashNode][it->first];
+			it++;
+		}
+	}
+	else {
+		for (int x=0; x < BOARD_SZ; x++)
+			for (int y=0; y < BOARD_SZ; y++)
+				checkStone(node, x, y, checkReturn, 1);
+		node.transpositionTable[hashNode] = checkReturn;
+	}
+
+	while (tmp->getParent()) {
+		node.getBoard().set(tmp->getX(), tmp->getY(), STONE_EMPTY);
+		#if ENABLE_KEEP_NODE_PERCENT
+			break;
+		#endif
+		tmp = tmp->getParent();
+	}
 	int i = 0;
 	while (!nodeHist.empty()) {
 		struct sNodeHist nodeHistI = nodeHist.top();
@@ -235,21 +264,6 @@ int Heuristic::heuristic(Node &node) {
 			return HEURIS_NOT_SET;  // ERROR
 		}
 		i++;
-	}
-
-	std::size_t hashNode = node.getBoard().getHash();
-	if (node.transpositionTable.find(hashNode) != node.transpositionTable.end()) {
-		auto it = checkReturn.begin();
-		while (it != checkReturn.end()) {
-			checkReturn[it->first] += node.transpositionTable[hashNode][it->first];
-			it++;
-		}
-	}
-	else {
-		for (int x=0; x < BOARD_SZ; x++)
-			for (int y=0; y < BOARD_SZ; y++)
-				checkStone(node, x, y, checkReturn, 1);
-		node.transpositionTable[hashNode] = checkReturn;
 	}
 
 	#if DEBUG_PRINT_HEURISTIC_VAL
