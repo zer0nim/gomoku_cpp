@@ -194,23 +194,16 @@ int Heuristic::heuristic(Node &node) {
 		{"nb_destroyed", 0}
 	};
 
-	std::stack<struct sNodeHist> nodeHist{};
-	Node *tmp = &node;
-	while (tmp->getParent()) {
-		nodeHist.push((struct sNodeHist){tmp->getX(), tmp->getY(), tmp->getStone()});
-		if (node.getBoard().get(tmp->getX(), tmp->getY()) == STONE_EMPTY) {
-			node.getBoard().set(tmp->getX(), tmp->getY(), tmp->getStone());
-		}
-		else {
-			node.setHeuristic(HEURIS_NOT_SET);
-			return HEURIS_NOT_SET;  // ERROR
-		}
-		#if ENABLE_KEEP_NODE_PERCENT
-			break;
-		#endif
-		tmp = tmp->getParent();
+	// put a stone in the right place
+	if (node.getBoard().get(node.getX(), node.getY()) == STONE_EMPTY) {
+		node.getBoard().set(node.getX(), node.getY(), node.getStone());
+	}
+	else {
+		node.setHeuristic(HEURIS_NOT_SET);
+		return HEURIS_NOT_SET;  // ERROR
 	}
 
+	// get the heuristic with all stones on this configuration
 	std::size_t hashNode = node.getBoard().getHash();
 	if (node.transpositionTable.find(hashNode) != node.transpositionTable.end()) {
 		auto it = checkReturn.begin();
@@ -226,36 +219,25 @@ int Heuristic::heuristic(Node &node) {
 		node.transpositionTable[hashNode] = checkReturn;
 	}
 
-	while (tmp->getParent()) {
-		node.getBoard().set(tmp->getX(), tmp->getY(), STONE_EMPTY);
-		#if ENABLE_KEEP_NODE_PERCENT
-			break;
-		#endif
-		tmp = tmp->getParent();
-	}
-	int i = 0;
-	while (!nodeHist.empty()) {
-		struct sNodeHist nodeHistI = nodeHist.top();
-		nodeHist.pop();
-		if (node.getBoard().isAllowed(nodeHistI.x, nodeHistI.y, nodeHistI.stone)) {
-			int nbDestroyed = node.getBoard().putStone(nodeHistI.x, nodeHistI.y, nodeHistI.stone);
-			int mul = std::max(2, getVal("LAST_MOVES_MAX_MULTIPLIER") - ((getVal("DEPTH")>>1) - ((node.getDepth()+1)>>1))) * std::max(NB_STONES(game) / getVal("NB_STONES_DIVISER"), 1);
-			if (nbDestroyed > 0) {
-				mul = game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + nbDestroyed;
-				if (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + nbDestroyed >= NB_DESTROYED_VICTORY) {
-					mul += getVal("DESTROY_VICTORY_ADDER");
-					if (game.getPlayerActId() == nodeHistI.stone)
-						node.isWin = true;
-				}
-				checkReturn["nb_destroyed"] += mul * (game.getPlayer(nodeHistI.stone).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(nodeHistI.stone);
+	node.getBoard().set(node.getX(), node.getY(), STONE_EMPTY);
+
+	if (node.getBoard().isAllowed(node.getX(), node.getY(), node.getStone())) {
+		int nbDestroyed = node.getBoard().putStone(node.getX(), node.getY(), node.getStone());
+		int mul = std::max(2, getVal("LAST_MOVES_MAX_MULTIPLIER") - ((getVal("DEPTH")>>1) - ((node.getDepth()+1)>>1))) * std::max(NB_STONES(game) / getVal("NB_STONES_DIVISER"), 1);
+		if (nbDestroyed > 0) {
+			mul = game.getPlayer(node.getStone()).getNbDestroyedStones() + nbDestroyed;
+			if (game.getPlayer(node.getStone()).getNbDestroyedStones() + nbDestroyed >= NB_DESTROYED_VICTORY) {
+				mul += getVal("DESTROY_VICTORY_ADDER");
+				if (game.getPlayerActId() == node.getStone())
+					node.isWin = true;
 			}
-			checkStone(node, nodeHistI.x, nodeHistI.y, checkReturn, mul);
+			checkReturn["nb_destroyed"] += mul * (game.getPlayer(node.getStone()).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(node.getStone());
 		}
-		else {
-			node.setHeuristic(HEURIS_NOT_SET);
-			return HEURIS_NOT_SET;  // ERROR
-		}
-		i++;
+		checkStone(node, node.getX(), node.getY(), checkReturn, mul);
+	}
+	else {
+		node.setHeuristic(HEURIS_NOT_SET);
+		return HEURIS_NOT_SET;  // ERROR
 	}
 
 	#if DEBUG_PRINT_HEURISTIC_VAL
@@ -293,7 +275,7 @@ int Heuristic::heuristic(Node &node) {
 	val = static_cast<int>(static_cast<float>(val * 100) / NB_STONES(game));
 
 	if (getVal("ENABLE_DIFF") == 1) {
-		tmp = node.getParent();
+		Node *tmp = node.getParent();
 		int diff = 0;
 		int div = 1;
 		while (tmp && tmp->getHeuristic() != HEURIS_NOT_SET) {
