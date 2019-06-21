@@ -12,12 +12,6 @@
 class Game;
 class Node;
 
-struct sNodeHist {
-	int x;
-	int y;
-	int stone;
-};
-
 class Heuristic {
 	public:
 		Heuristic(Game &_game);
