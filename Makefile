@@ -1,7 +1,7 @@
 NAME	= gomoku
 CPP		= clang++
 
-SIZE = 1200
+SIZE = 1000
 SIZE_VAR = -DGUI_WIN_W
 BOARD_SZ = 19
 BOARD_SZ_VAR = -DBOARD_SZ
