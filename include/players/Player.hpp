@@ -2,6 +2,7 @@
 #define PLAYER_HPP
 
 #include <iostream>
+#include <array>
 
 class Game;
 
