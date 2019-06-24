@@ -195,7 +195,7 @@ int Heuristic::heuristic(Node &node) {
 	};
 
 	// put a stone in the right place
-	if (node.getBoard().get(node.getX(), node.getY()) == STONE_EMPTY) {
+	if (node.getBoard().isAllowed(node.getX(), node.getY(), node.getStone())) {
 		node.getBoard().set(node.getX(), node.getY(), node.getStone());
 	}
 	else {
@@ -219,26 +219,18 @@ int Heuristic::heuristic(Node &node) {
 		node.transpositionTable[hashNode] = checkReturn;
 	}
 
-	node.getBoard().set(node.getX(), node.getY(), STONE_EMPTY);
-
-	if (node.getBoard().isAllowed(node.getX(), node.getY(), node.getStone())) {
-		int nbDestroyed = node.getBoard().putStone(node.getX(), node.getY(), node.getStone());
-		int mul = std::max(2, getVal("LAST_MOVES_MAX_MULTIPLIER") - ((getVal("DEPTH")>>1) - ((node.getDepth()+1)>>1))) * std::max(NB_STONES(game) / getVal("NB_STONES_DIVISER"), 1);
-		if (nbDestroyed > 0) {
-			mul = game.getPlayer(node.getStone()).getNbDestroyedStones() + nbDestroyed;
-			if (game.getPlayer(node.getStone()).getNbDestroyedStones() + nbDestroyed >= NB_DESTROYED_VICTORY) {
-				mul += getVal("DESTROY_VICTORY_ADDER");
-				if (game.getPlayerActId() == node.getStone())
-					node.isWin = true;
-			}
-			checkReturn["nb_destroyed"] += mul * (game.getPlayer(node.getStone()).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(node.getStone());
+	int nbDestroyed = node.getBoard().putStone(node.getX(), node.getY(), node.getStone());
+	int mul = std::max(2, getVal("LAST_MOVES_MAX_MULTIPLIER") - ((getVal("DEPTH")>>1) - ((node.getDepth()+1)>>1))) * std::max(NB_STONES(game) / getVal("NB_STONES_DIVISER"), 1);
+	if (nbDestroyed > 0) {
+		mul = game.getPlayer(node.getStone()).getNbDestroyedStones() + nbDestroyed;
+		if (game.getPlayer(node.getStone()).getNbDestroyedStones() + nbDestroyed >= NB_DESTROYED_VICTORY) {
+			mul += getVal("DESTROY_VICTORY_ADDER");
+			if (game.getPlayerActId() == node.getStone())
+				node.isWin = true;
 		}
-		checkStone(node, node.getX(), node.getY(), checkReturn, mul);
+		checkReturn["nb_destroyed"] += mul * (game.getPlayer(node.getStone()).getNbDestroyedStones() + 1) * mul * nbDestroyed * getMul(node.getStone());
 	}
-	else {
-		node.setHeuristic(HEURIS_NOT_SET);
-		return HEURIS_NOT_SET;  // ERROR
-	}
+	checkStone(node, node.getX(), node.getY(), checkReturn, mul);
 
 	#if DEBUG_PRINT_HEURISTIC_VAL
 		std::cout << "heuristic:" << std::endl;
