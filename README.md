@@ -1,8 +1,9 @@
 # gomoku_cpp [[42](https://www.42.fr/) project]
 ![easy-gif](gifs/game-easy.gif)
+
 The same as [gomoku](https://github.com/tnicolas42/gomoku) but with c++
 
-More informations on the [subject](https://github.com/zer0nim/gomoku_cpp/blob/master/gomoku.pdf).
+More informations on the [subject](gomoku.pdf).
 
 Let's try to use c++ instead of python to go faster 🚀
 
@@ -66,7 +67,7 @@ In Hybride mode, you play like with RealPlayer but if you press space once, you 
 Black plays first, and players alternate in placing a stone of their color on an empty intersection.
 - You can remove a pair of your opponent’s stones from the board by flanking them with your own stones.
 - No double-threes : It is forbidden to play a move that introduces two free-three
-alignments, which would guarantee a win by alignment. (see on the [subject](https://github.com/zer0nim/gomoku_cpp/blob/master/gomoku.pdf))
+alignments, which would guarantee a win by alignment. (see on the [subject](gomoku.pdf))
 Victory:
 - Get an unbroken row of five stones horizontally, vertically, or diagonally.
 - Remove 10 oponent stones.
@@ -74,9 +75,10 @@ Victory:
 ![game](imgs/game-empty.png)
 
 The game is divised in 2 part:
-Information band                |  Board
-:------------------------------:|:------------------------------:
-![info](imgs/game-leftMenu.png) | ![game](imgs/game-board.png)
+Information band
+![info](imgs/game-leftMenu.png)
+Board
+![game](imgs/game-board.png)
 
 
 #### Example in hard mode AI vs AI
