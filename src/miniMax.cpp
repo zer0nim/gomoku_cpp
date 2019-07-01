@@ -23,6 +23,7 @@ min_max algorithm implementation
 	if (depth == 0
 	// || node.setChilds() == 0
 	|| getStatsM<int, Node>("node setChilds", node, &Node::setChilds) == 0
+	|| node.isWin
 	)
 		return {
 			&node,
