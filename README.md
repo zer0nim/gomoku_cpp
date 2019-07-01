@@ -76,9 +76,13 @@ Victory:
 ![game](imgs/game-empty.png)
 
 The game is divised in 2 part:
+
 Information band
+
 ![info](imgs/game-leftMenu.png)
+
 Board
+
 ![game](imgs/game-board.png)
 
 
