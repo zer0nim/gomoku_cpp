@@ -68,6 +68,7 @@ Black plays first, and players alternate in placing a stone of their color on an
 - You can remove a pair of your opponent’s stones from the board by flanking them with your own stones.
 - No double-threes : It is forbidden to play a move that introduces two free-three
 alignments, which would guarantee a win by alignment. (see on the [subject](gomoku.pdf))
+
 Victory:
 - Get an unbroken row of five stones horizontally, vertically, or diagonally.
 - Remove 10 oponent stones.
