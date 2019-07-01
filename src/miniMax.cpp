@@ -56,13 +56,7 @@ min_max algorithm implementation
 				keepChilds.push(child);
 			}
 		}
-		range = std::max<int>(std::ceil(keepChilds.size() * (static_cast<float>(game.getHeuristic().getVal("KEEP_NODE_PERCENT")) / 100)), game.getHeuristic().getVal("MIN_KEEP_NODE"));
-
-		if (range > static_cast<int>(keepChilds.size()))
-			range = keepChilds.size();
-		#if USE_MAX_KEEP_NODE
-			range = std::min<int>(range, game.getHeuristic().getVal("MAX_KEEP_NODE"));
-		#endif
+		range = std::min(game.getHeuristic().getVal("MAX_KEEP_NODE"), std::max(game.getHeuristic().getVal("MIN_KEEP_NODE"), std::min<int>(keepChilds.size(), depth)));
 
 		for (int i = 0; i < range; ++i) {
 			Node *child = keepChilds.top();
@@ -103,12 +97,7 @@ min_max algorithm implementation
 			if (child->getHeuristic() != HEURIS_NOT_SET)
 				keepChilds.push(child);
 		}
-		range = std::max<int>(std::ceil(keepChilds.size() * (static_cast<float>(game.getHeuristic().getVal("KEEP_NODE_PERCENT")) / 100)), game.getHeuristic().getVal("MIN_KEEP_NODE"));
-		if (range > static_cast<int>(keepChilds.size()))
-			range = keepChilds.size();
-		#if USE_MAX_KEEP_NODE
-			range = std::min<int>(range, game.getHeuristic().getVal("MAX_KEEP_NODE"));
-		#endif
+		range = std::min(game.getHeuristic().getVal("MAX_KEEP_NODE"), std::max(game.getHeuristic().getVal("MIN_KEEP_NODE"), std::min<int>(keepChilds.size(), depth)));
 
 		for (int i = 0; i < range; ++i) {
 			Node *child = keepChilds.top();

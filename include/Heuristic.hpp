@@ -36,8 +36,7 @@ class Heuristic {
 			// global parameter
 			{"DEPTH", 6},  // the depth of the algorithm
 			{"NB_SQUARE_ARROUND", 1},  // the number of squares arround taked pos to limit search zone
-			{"KEEP_NODE_PERCENT", 10},  // the percentage of node to keep (in minmax algo)
-			{"MIN_KEEP_NODE", 3},  // keep at least MIN_KEEP_NODE nodes (if the percentage return less than MIN_KEEP_NODE)
+			{"MIN_KEEP_NODE", 1},  // keep at least MIN_KEEP_NODE nodes (if the percentage return less than MIN_KEEP_NODE)
 			{"MAX_KEEP_NODE", 5},  // keep max MAX_KEEP_NODE nodes (if the percentage return more than MAX_KEEP_NODE)
 			{"DIFF_DIVISER", 20},  // add to the heuristic the diif with the parent heuristic * DIFF_MULTIPLIER
 			{"LAST_MOVES_MAX_MULTIPLIER", 4},  // multiply the first move by 5, second 5, third 4, 4th 4, 5th 3, ... -> min 2
