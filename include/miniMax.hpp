@@ -5,6 +5,7 @@
 # include "Node.hpp"
 # include "Heuristic.hpp"
 # include "utils/Stats.hpp"
+# include "ThreadPool.hpp"
 # include <tuple>
 # include <limits>
 

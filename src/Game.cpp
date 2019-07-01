@@ -16,6 +16,7 @@ Game::Game() :
 	_players[1] = new Player(*this, GUI_COLOR_2);
 	_heuristic = new Heuristic(*this);
 	gameInfo.difficulty = getHeuristic().getDifficulty();
+	_pool = new ThreadPool(8);
 }
 
 bool	Game::has_win(int id) {
@@ -143,10 +144,12 @@ Player &Game::getPlayerAct() const { return *_players[_idPlayerAct - 1]; }
 int Game::getPlayerActId() const { return _idPlayerAct; }
 Heuristic &Game::getHeuristic() const { return *_heuristic; }
 bool Game::isFinished() const { return _finished; }
+ThreadPool &Game::getPool() const { return *_pool; }
 
 Game::~Game() {
 	delete _board;
 	delete _gui;
 	delete _players[0];
 	delete _players[1];
+	delete _pool;
 }

@@ -51,7 +51,9 @@ HEAD	=	Game.hpp \
 			Node.hpp \
 			Heuristic.hpp \
 			miniMax.hpp \
-			utils/Stats.hpp
+			utils/Stats.hpp \
+			SafeQueue.hpp \
+			ThreadPool.hpp
 
 LIBS_FLAGS = -L ~/.brew/lib -lsfml-system -lsfml-window -lsfml-graphics -lsfml-network -rpath ~/.brew/lib
 
