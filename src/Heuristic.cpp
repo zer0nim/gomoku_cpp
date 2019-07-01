@@ -195,13 +195,11 @@ int Heuristic::heuristic(Node &node) {
 	};
 
 	// put a stone in the right place
-	if (node.getBoard().isAllowed(node.getX(), node.getY(), node.getStone())) {
-		node.getBoard().set(node.getX(), node.getY(), node.getStone());
-	}
-	else {
+	if (!node.getBoard().isAllowed(node.getX(), node.getY(), node.getStone())) {
 		node.setHeuristic(HEURIS_NOT_SET);
 		return HEURIS_NOT_SET;  // ERROR
 	}
+	int nbDestroyed = node.getBoard().putStone(node.getX(), node.getY(), node.getStone());
 
 	// get the heuristic with all stones on this configuration
 	std::size_t hashNode = node.getBoard().getHash();
@@ -219,7 +217,6 @@ int Heuristic::heuristic(Node &node) {
 		node.transpositionTable[hashNode] = checkReturn;
 	}
 
-	int nbDestroyed = node.getBoard().putStone(node.getX(), node.getY(), node.getStone());
 	int mul = std::max(2, getVal("LAST_MOVES_MAX_MULTIPLIER") - ((getVal("DEPTH")>>1) - ((node.getDepth()+1)>>1))) * std::max(NB_STONES(game) / getVal("NB_STONES_DIVISER"), 1);
 	if (nbDestroyed > 0) {
 		mul = game.getPlayer(node.getStone()).getNbDestroyedStones() + nbDestroyed;
