@@ -5,6 +5,7 @@
 # include "gui/Gui.hpp"
 # include "players/Player.hpp"
 # include "Heuristic.hpp"
+# include "ThreadPool.hpp"
 
 # define NB_TYPE_PLAYER 3
 
@@ -24,6 +25,7 @@ class Game {
 		MasterBoard &getBoard() const;
 		Gui &getGui() const;
 		Heuristic &getHeuristic() const;
+		ThreadPool &getPool() const;
 		int getPlayerActId() const;
 		bool isFinished() const;
 		void startMenu();
@@ -42,6 +44,7 @@ class Game {
 		Heuristic	*_heuristic;
 		std::array<Player *, 2>	_players;
 		int			_idPlayerAct;  // 1 or 2 -> players[idPlayerAct-1]
+		ThreadPool	*_pool;
 
 		bool		has_win(int id);
 		void		checkWinner();

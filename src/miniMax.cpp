@@ -69,7 +69,7 @@ min_max algorithm implementation
 			#endif
 
 			if (thrDepth > 0) {
-				fut_vec.push_back(std::async(std::launch::async, miniMax, std::ref(game), std::ref(*child), depth-1,
+				fut_vec.push_back(game.getPool().enqueue(&miniMax, std::ref(game), std::ref(*child), depth-1,
 					thrDepth-1, false, alpha, beta));
 			} else {
 				// update _best
@@ -105,7 +105,7 @@ min_max algorithm implementation
 			keepChilds.pop();
 
 			if (thrDepth > 0) {
-				fut_vec.push_back(std::async(std::launch::async, miniMax, std::ref(game), std::ref(*child), depth-1,
+				fut_vec.push_back(game.getPool().enqueue(&miniMax, std::ref(game), std::ref(*child), depth-1,
 					thrDepth-1, true, alpha, beta));
 			} else {
 				// update _best
