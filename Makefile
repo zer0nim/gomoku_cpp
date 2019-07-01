@@ -15,8 +15,8 @@ VAR_ARGS =	$(SIZE_VAR)=$(SIZE) \
 			$(NB_ALIGNED_VICTORY_VAR)=$(NB_ALIGNED_VICTORY) \
 			$(NB_DESTROYED_VICTORY_VAR)=$(NB_DESTROYED_VICTORY)
 
-# FLAGS	= -Wall -Wextra -std=c++11 -g3 -fsanitize=address
-FLAGS	= -Wall -Wextra -std=c++11 -Ofast
+# FLAGS	= -Wall -Wextra -Werror -std=c++11 -g3 -fsanitize=address
+FLAGS	= -Wall -Wextra -Werror -std=c++11 -Ofast
 # If os !== macos add pthread FLAGS
 UNAME_S := $(shell uname -s)
 ifneq ($(UNAME_S), Darwin)
