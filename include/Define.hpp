@@ -15,7 +15,7 @@
 
 #define USE_MAX_KEEP_NODE true // if True, use MAX_KEEP_NODE, else... no limit !
 
-#define MINMAX_RANDOM_CHOICE false // choose a random position if we have the choice
+#define MINMAX_RANDOM_CHOICE true // choose a random position if we have the choice
 #define THR_DEPTH 1 // number of depth using thread in minimax algorithm
 
 // GAMEPLAY
