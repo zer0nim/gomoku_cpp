@@ -1,11 +1,17 @@
 # gomoku_cpp [[42](https://www.42.fr/) project]
+
+## Project
+#### The goal of this project is to make an AI capable of beating human players at [Gomoku](wikipedia.org/wiki/Gomoku).
+
+Gomoku is a strategy board game traditionally played on a Go board with stones of two different colors.
+
+Two players take turns placing stones of their color on an intersection of the board, and the game ends when one player manages to align five stones.
+
+There are a great many additional rules to Gomoku aimed at making the game fairer (regular Gomoku is proven to be unfair, a perfect first player wins 100% of the time) and more interesting, we will see them later.
+
+> We first worked on a [Python version](https://github.com/tnicolas42/gomoku), but to go faster we moved to C++ 🚀
+
 ![easy-gif](gifs/game-easy.gif)
-
-The same as [gomoku](https://github.com/tnicolas42/gomoku) but with c++
-
-More informations on the [subject](gomoku.pdf).
-
-Let's try to use c++ instead of python to go faster 🚀
 
 ## Make the project
 
@@ -67,7 +73,7 @@ In Hybride mode, you play like with RealPlayer but if you press space once, you 
 Black plays first, and players alternate in placing a stone of their color on an empty intersection.
 - You can remove a pair of your opponent’s stones from the board by flanking them with your own stones.
 - No double-threes : It is forbidden to play a move that introduces two free-three
-alignments, which would guarantee a win by alignment. (see on the [subject](gomoku.pdf))
+alignments, which would guarantee a win by alignment.
 
 Victory:
 - Get an unbroken row of five stones horizontally, vertically, or diagonally.
@@ -89,3 +95,6 @@ Board
 #### Example in hard mode AI vs AI
 ![easy-gif](gifs/game-hard.gif)
 
+---
+
+See more on the school [subject](gomoku.pdf).
